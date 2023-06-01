@@ -8,9 +8,15 @@
         </div>
         <div class="menu">
             <ul>
-                <li><a href="#">Beranda</a></li>
-                <li><a href="#">Kursus</a></li>
-                <li><a href="#">Tentang kami</a></li>
+                <li>
+                    <router-link to="/">Beranda</router-link>
+                  </li>
+                  <li>
+                    <router-link to="/course">Kursus</router-link>
+                  </li>
+                  <li>
+                    <router-link to="/about">Tentang Kami</router-link>
+                  </li>
             </ul>
         </div>
         <div class="account">
