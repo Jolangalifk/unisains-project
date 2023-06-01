@@ -93,7 +93,6 @@
     color: black;
     font-size: 18px;
     font-weight: 600;
-    margin-top: 28px;
     margin-right: 20px;
 }
 

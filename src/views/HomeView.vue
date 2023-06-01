@@ -135,7 +135,6 @@ import Footer from '../components/Footer.vue'
       </div>
     </div>
     <div class="start-learn">
-      <div class="bg"></div>
       <div class="wrapper">
         <div class="image">
           <img src="@/assets/image/ilustration3.png" alt="">
@@ -280,6 +279,19 @@ import Footer from '../components/Footer.vue'
   width: 100%;
   height: 100%;
   border-radius: 0 0 100px 100px;
+  animation: rotate-horizontal 10s infinite linear;
+  transform-origin: center;
+}
+
+
+@keyframes rotate-horizontal {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 
@@ -686,6 +698,10 @@ import Footer from '../components/Footer.vue'
   flex-direction: row;
   align-items: center;
   background-color: white;
+  background-image: url('@/assets/image/background-page.png');
+  background-repeat: no-repeat;
+  background-position: bottom;
+  background-size: 100% 50%;
 }
 
 .start-learn .wrapper {
@@ -781,13 +797,5 @@ import Footer from '../components/Footer.vue'
   height: 50px;
   margin-top: 8px;
   margin-right: 10px;
-}
-
-.start-learn .bg {
-  width: 100%;
-  height: 50%;
-  margin-top: 500px;
-  position: absolute;
-  background-image: url('@/assets/image/background-page.png');
 }
 </style>
