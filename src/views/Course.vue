@@ -97,10 +97,16 @@ import CardMain from '../components/CardMain.vue'
                 <button class="explore">Jelajahi Astronomi</button>
             </div>
             <div class="card-main">
-                <CardMain />
-                <CardMain />
-                <CardMain />
-                <CardMain />
+                <div class="card-scroll">
+                    <CardMain />
+                    <CardMain />
+                    <CardMain />
+                    <CardMain />
+                    <CardMain />
+                    <CardMain />
+                    <CardMain />
+                    <CardMain />
+                </div>
             </div>
         </div>
         <div class="list-course">
@@ -112,10 +118,17 @@ import CardMain from '../components/CardMain.vue'
                 <button class="explore">Jelajahi Biologi</button>
             </div>
             <div class="card-main">
-                <CardMain />
-                <CardMain />
-                <CardMain />
-                <CardMain />
+                <div class="card-scroll">
+                    <CardMain />
+                    <CardMain />
+                    <CardMain />
+                    <CardMain />
+                    <CardMain />
+                    <CardMain />
+                    <CardMain />
+                    <CardMain />
+                </div>
+            
             </div>
         </div>
         <Footer />
@@ -435,5 +448,14 @@ import CardMain from '../components/CardMain.vue'
     flex-direction: row;
     align-items: center;
     padding-top: 50px;
+    overflow-x: scroll;
+    white-space: nowrap;
+}
+
+.card-scroll {
+    display: inline-block;
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
 }
 </style>
