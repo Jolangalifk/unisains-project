@@ -50,6 +50,7 @@
     color: white;
     margin-top: 50px;
     font-weight: normal;
+    text-align: justify;
 }
 
 .information h3 {

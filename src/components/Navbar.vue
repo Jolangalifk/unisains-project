@@ -4,19 +4,21 @@
 <template>
     <div class="navbar">
         <div class="logo">
-            <img src="@/assets/icon/unisains-logo-dark.svg" alt="">
+            <button>
+                <router-link to="/"><img src="@/assets/icon/unisains-logo-dark.svg" alt=""></router-link>
+            </button>
         </div>
         <div class="menu">
             <ul>
                 <li>
                     <router-link to="/">Beranda</router-link>
-                  </li>
-                  <li>
+                </li>
+                <li>
                     <router-link to="/course">Kursus</router-link>
-                  </li>
-                  <li>
+                </li>
+                <li>
                     <router-link to="/about">Tentang Kami</router-link>
-                  </li>
+                </li>
             </ul>
         </div>
         <div class="account">
@@ -40,6 +42,12 @@
 
 .logo {
     width: 10%;
+}
+
+.logo button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
 }
 
 .logo img {
