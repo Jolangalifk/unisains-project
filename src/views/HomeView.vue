@@ -93,7 +93,7 @@ import Footer from '../components/Footer.vue'
           <h3>Biologi: Astronomi</h3>
           <div class="button">
             <button>
-              <p>Lihat kursus</p>
+              <router-link to="/course">Lihat kursus</router-link>
             </button>
           </div>
         </div>
@@ -104,7 +104,7 @@ import Footer from '../components/Footer.vue'
           <h3>Biologi: Anatomi</h3>
           <div class="button">
             <button>
-              <p>Lihat kursus</p>
+              <router-link to="/course">Lihat kursus</router-link>
             </button>
           </div>
         </div>
@@ -145,7 +145,7 @@ import Footer from '../components/Footer.vue'
             lainnya dengan mempelajari kursus yang ada disini ya!</p>
           <div class="button">
             <button>
-              <router-link to="/register">Mulai!</router-link>
+              <router-link to="/course">Mulai!</router-link>
               <img src="@/assets/icon/arrow-right-orange.svg" alt="">
             </button>
           </div>
@@ -350,6 +350,7 @@ import Footer from '../components/Footer.vue'
   font-weight: normal;
   color: black;
   line-height: 1.5;
+  text-align: justify;
 }
 
 .features {
@@ -536,6 +537,7 @@ import Footer from '../components/Footer.vue'
   color: white;
   line-height: 1.5;
   margin-top: 25px;
+  text-align: justify;
 }
 
 .popular-course .two-course {
@@ -607,9 +609,10 @@ import Footer from '../components/Footer.vue'
   align-items: center;
   margin-left: 30px;
   margin-bottom: 30px;
+  cursor: pointer;
 }
 
-.popular-course .course .button p {
+.popular-course .course .button a {
   width: 100%;
   font-size: 18px;
   font-weight: 600;
@@ -617,6 +620,7 @@ import Footer from '../components/Footer.vue'
   text-align: center;
   font-family: poppins;
   background-color: transparent;
+  text-decoration: none;
 }
 
 .popular-course .course button {
@@ -661,6 +665,7 @@ import Footer from '../components/Footer.vue'
   line-height: 1.5;
   margin-top: 25px;
   margin-bottom: 20px;
+  text-align: justify;
 }
 
 .practical .step {
@@ -751,6 +756,7 @@ import Footer from '../components/Footer.vue'
   line-height: 1.5;
   margin-top: 25px;
   margin-bottom: 20px;
+  text-align: justify;
 }
 
 .start-learn .wrapper .text .button {
@@ -775,6 +781,7 @@ import Footer from '../components/Footer.vue'
   background-color: transparent;
   border: none;
   display: flex;
+  cursor: pointer;
 }
 
 .start-learn .wrapper .text .button button a {
