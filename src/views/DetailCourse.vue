@@ -20,9 +20,9 @@ import CardMain from '../components/CardMain.vue'
                     </button>
                 </div>
                 <p class="cover">Kursus ini meliputi:</p>
-                <p class="item">Dapet sertifikat tanah</p>
-                <p class="item">Dapet sertifikat tanah</p>
-                <p class="item">Dapet sertifikat tanah</p>
+                <p class="item">1. Dapet sertifikat tanah</p>
+                <p class="item">2. Dapet sertifikat tanah</p>
+                <p class="item">3. Dapet sertifikat tanah</p>
             </div>
             <div class="info">
                 <div class="text">
@@ -31,9 +31,9 @@ import CardMain from '../components/CardMain.vue'
                 </div>
                 <div class="material">
                     <p class="cover">Apa yang akan Anda pelajari</p>
-                    <p class="item">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus nibh.</p>
-                    <p class="item">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus nibh.</p>
-                    <p class="item">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus nibh.</p>
+                    <p class="item">a. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus nibh.</p>
+                    <p class="item">b. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus nibh.</p>
+                    <p class="item">c. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus nibh.</p>
                 </div>
             </div>
         </div>
@@ -41,14 +41,12 @@ import CardMain from '../components/CardMain.vue'
             <p>Konten kursus :</p>
             <p>3 Modul - 30 Materi - Total durasi 2j 15m</p>
             <ModulCourse />
-            <ModulCourse />
-            <ModulCourse />
         </div>
         <div class="condition">
             <p class="wrapper">Persyaratan</p>
-            <p class="item">Mac atau Windows</p>
-            <p class="item">Mempunyai HP yang support Augmented Reality (AR)</p>
-            <p class="item">Pemahaman dasar tentang anatomi</p>
+            <p class="item">1. Mac atau Windows</p>
+            <p class="item">2. Mempunyai HP yang support Augmented Reality (AR)</p>
+            <p class="item">3. Pemahaman dasar tentang anatomi</p>
         </div>
         <div class="rating-course">
             <h3>4.7 course rating . 11K ratings</h3>
@@ -56,8 +54,10 @@ import CardMain from '../components/CardMain.vue'
                 <div class="rate1">
                     <RatingCourse />
                     <RatingCourse />
+                    <RatingCourse />
                 </div>
                 <div class="rate2">
+                    <RatingCourse />
                     <RatingCourse />
                     <RatingCourse />
                 </div>
@@ -70,8 +70,10 @@ import CardMain from '../components/CardMain.vue'
                 <CardMain />
                 <CardMain />
                 <CardMain />
+                <CardMain />
             </div>
             <div class="cat2">
+                <CardMain />
                 <CardMain />
                 <CardMain />
                 <CardMain />
@@ -144,8 +146,8 @@ import CardMain from '../components/CardMain.vue'
 .preview .button .favorit {
     width: 85px;
     height: 70px;
-    background-color: #c1c1c1;
-    color: #F08A5D;
+    background-color: white;
+    border: 1px solid #c1c1c1;
     font-size: 18px;
     font-weight: 600;
 }
@@ -174,7 +176,7 @@ import CardMain from '../components/CardMain.vue'
 }
 
 .info {
-    width: 1100px;
+    width: 80%;
     height: 700px;
     margin-right: 200px;
     display: flex;
@@ -221,8 +223,8 @@ import CardMain from '../components/CardMain.vue'
 }
 
 .modul-course {
-    width: 79%;
-    height: 500px;
+    width: 80%;
+    height: 600px;
     display: flex;
     flex-direction: column;
     margin-left: 200px;
@@ -232,7 +234,7 @@ import CardMain from '../components/CardMain.vue'
     font-size: 20px;
     font-weight: 600;
     color: #000000;
-    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 .modul-course .wrapper {
@@ -244,7 +246,7 @@ import CardMain from '../components/CardMain.vue'
 }
 
 .condition {
-    width: 79%;
+    width: 80%;
     height: 200px;
     display: flex;
     flex-direction: column;
@@ -268,7 +270,7 @@ import CardMain from '../components/CardMain.vue'
 }
 
 .rating-course {
-    width: 1060px;
+    width: 80%;
     height: 820px;
     display: flex;
     flex-direction: column;
@@ -286,11 +288,27 @@ import CardMain from '../components/CardMain.vue'
 }
 
 .rating-course .wrapper-review {
-    width: 1050px;
-    height: 600px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-right: 100px;
+}
+
+.rating-course .wrapper-review .rate1 {
+    width: 100%;
+    height: 300px;
     display: flex;
     flex-direction: row;
-    align-items: center;
+    padding-right: 30px;
+}
+
+.rating-course .wrapper-review .rate2 {
+    width: 100%;
+    height: 300px;
+    display: flex;
+    flex-direction: row;
+    padding-right: 30px;
 }
 
 .rating-course .show {
@@ -357,13 +375,11 @@ import CardMain from '../components/CardMain.vue'
 }
 
 .more-course {
-    width: 1200px;
-    height: 950px;
+    width: 80%;
+    height: 850px;
     display: flex;
     flex-direction: column;
     margin-left: 200px;
-    border: 1px solid #c1c1c1;
-    border-radius: 20px;
     margin-bottom: 100px;
 }
 
@@ -371,24 +387,26 @@ import CardMain from '../components/CardMain.vue'
     font-size: 30px;
     font-weight: 600;
     color: #000000;
-    margin: 30px 0 20px 30px;
+    margin: 30px 0 20px 0;
 }
 
 .more-course .cat1 {
     width: 100%;
-    height: 400px;
-    margin-top: 20px;
-    margin-left: 10px;
+    height: 380px;
     display: flex;
     flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
 }
 
 .more-course .cat2 {
     width: 100%;
-    height: 400px;
-    margin-top: 20px;
-    margin-left: 10px;
+    height: 380px;
     display: flex;
     flex-direction: row;
+    align-items: center;
+    justify-content: center;
 }
+
 </style>
