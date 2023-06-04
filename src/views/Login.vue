@@ -64,8 +64,9 @@ export default {
                 console.log(result);
                 if (result.status === 200 && result.data) {
                     alert('Login berhasil');
-                    localStorage.setItem('user-info', JSON.stringify(result.data.token));
-                    this.$router.push('/home');
+                    localStorage.setItem('user-info', JSON.stringify(result.data));
+                    localStorage.setItem('token', JSON.stringify(result.data.token));
+                    this.$router.push('/');
                 }
             } catch (error) {
                 console.error(error);

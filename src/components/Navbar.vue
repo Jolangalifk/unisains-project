@@ -1,4 +1,26 @@
-<script>
+<script setup>
+
+import { ref, onMounted } from 'vue'
+const isLoggedIn = ref(false)
+const username = ref('')
+
+onMounted(async () => {
+    isLoggedIn.value = checkUserloginStatus()
+
+    function checkUserloginStatus() {
+        // get token
+        const token = localStorage.getItem('token')
+        return token ? true : false
+    }
+
+    const userInfo = localStorage.getItem('user-info')
+    if (userInfo) {
+        username.value = JSON.parse(userInfo)
+    }
+
+    console.log(isLoggedIn.value)
+})
+
 </script>
 
 <template>
@@ -21,7 +43,26 @@
                 </li>
             </ul>
         </div>
-        <div class="account">
+        <div class="account-after-login" v-if="isLoggedIn">
+            <button class="search btn">
+                <router-link to="/search">
+                    <img src="@/assets/icon/search-icon.svg" alt="">
+                </router-link>
+            </button>
+            <button class="cart btn">
+                <router-link to="/cart">
+                    <img src="@/assets/icon/cart-icon.svg" alt="">
+                </router-link>
+            </button>
+            <button class="profile btn">
+                <router-link to="/profile">
+                    <div class="avatar">
+                        <img src="@/assets/image/profile-ex.png" alt="">
+                    </div>
+                </router-link>
+            </button>
+        </div>
+        <div class="account-before-login" v-else>
             <button class="login"><router-link to="/login">Masuk</router-link></button>
             <button class="register"><router-link to="/register">Daftar</router-link></button>
         </div>
@@ -78,14 +119,20 @@
     font-weight: 600;
 }
 
-.account {
+.account-after-login {
     width: 16%;
     display: flex;
     justify-content: space-between;
 }
 
-.account button {
-    width: 120px;
+.account-after-login .btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.account-after-login button {
+    width: 50px;
     height: 50px;
     border-radius: 50px;
     cursor: pointer;
@@ -93,7 +140,7 @@
     font-family: poppins;
 }
 
-.account .login {
+.account-after-login .search {
     background-color: transparent;
     display: flex;
     color: black;
@@ -102,7 +149,7 @@
     padding-left: 30px;
 }
 
-.account .login a {
+.account-after-login .search a {
     text-decoration: none;
     color: black;
     font-size: 18px;
@@ -110,7 +157,86 @@
     margin-right: 20px;
 }
 
-.account .register {
+.account-after-login .cart {
+    background-color: transparent;
+    display: flex;
+    color: black;
+    border: none;
+    align-items: center;
+    padding-left: 30px;
+}
+
+.account-after-login .cart a {
+    text-decoration: none;
+    color: black;
+    font-size: 18px;
+    font-weight: 600;
+    margin-right: 20px;
+}
+
+.account-after-login .profile {
+    background-color: transparent;
+    display: flex;
+    color: black;
+    border: none;
+    align-items: center;
+    padding-left: 30px;
+}
+
+.account-after-login .profile a {
+    text-decoration: none;
+    color: black;
+    font-size: 18px;
+    font-weight: 600;
+    margin-right: 20px;
+}
+
+.account-after-login .avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50px;
+    overflow: hidden;
+}
+
+.account-after-login .avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.account-before-login {
+    width: 16%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.account-before-login button {
+    width: 120px;
+    height: 50px;
+    border-radius: 50px;
+    cursor: pointer;
+    outline: none;
+    font-family: poppins;
+}
+
+.account-before-login .login {
+    background-color: transparent;
+    display: flex;
+    color: black;
+    border: none;
+    align-items: center;
+    padding-left: 30px;
+}
+
+.account-before-login .login a {
+    text-decoration: none;
+    color: black;
+    font-size: 18px;
+    font-weight: 600;
+    margin-right: 20px;
+}
+
+.account-before-login .register {
     background-color: black;
     display: flex;
     color: white;
@@ -119,7 +245,7 @@
     padding-left: 30px;
 }
 
-.account .register a {
+.account-before-login .register a {
     text-decoration: none;
     color: white;
     font-size: 18px;
