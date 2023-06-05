@@ -77,8 +77,7 @@ import Footer from '../components/Footer.vue'
           </div>
           <h3>Jolang Alif Khan</h3>
           <h4>JABATAN</h4>
-          <p>“Lorem ipsum dolor sit amet consectetur. Ullamcorper cursus dictum dolor auctor. Vitae eget pellentesque id
-            nunc nisi gravida”.</p>
+          <p>“Unisains sangat cocok untuk membantu menambah pengetahuanmu tentang sains. ditambah dengan fitur menarik, tentu akan membuatmu semakin tertarik”.</p>
         </div>
       </div>
     </div>
@@ -300,7 +299,6 @@ import Footer from '../components/Footer.vue'
   width: 100%;
   height: 980px;
   display: flex;
-  flex-direction: row;
   align-items: center;
   justify-content: center;
 }
