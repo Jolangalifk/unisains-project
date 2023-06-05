@@ -140,7 +140,7 @@ import Footer from '../components/Footer.vue'
   width: 750px;
   height: 750px;
   position: absolute;
-  top: 40.8%;
+  top: 49.7%;
   left: 60%;
   transform: translate(-50%, -50%);
 }
