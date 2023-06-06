@@ -15,7 +15,21 @@
                     <div class="form-group">
                         <label for="Password"></label>
                         <img src="@/assets/icon/password-icon.svg" alt="">
-                        <input type="password" placeholder="Masukkan Password" v-model="password">
+                        <input :type="showPassword ? 'text' : 'password'" placeholder="Masukkan Password" v-model="password">
+                        <button class="toggle-password" @click="togglePasswordVisibility">
+                            <img
+                            class="toggle-password-icon"
+                            src="../assets/icon/eye-outline.svg"
+                            v-if="!showPassword"
+                            alt=""
+                          />
+                          <img
+                            class="toggle-password-icon"
+                            src="../assets/icon/eye-off-outline.svg"
+                            v-if="showPassword"
+                            alt=""
+                          />
+                          </button>
                     </div>
                     <button type="submit" class="button-login">Login</button>
                 </form>
@@ -52,6 +66,7 @@ export default {
         return {
             email: '',
             password: '',
+            showPassword: false,
         }
     },
     methods: {
@@ -73,6 +88,14 @@ export default {
         }
 
     },
+    methods: {
+    async Login() {
+        // kode login
+    },
+    togglePasswordVisibility() {
+        this.showPassword = !this.showPassword; // Membalikkan nilai status
+    },
+},
 }
 </script>
 
@@ -329,4 +352,25 @@ button h3 {
     width: 100%;
     height: 100vh;
 }
+
+.toggle-password {
+    position: relative;
+  }
+  
+  .toggle-password-icon {
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    padding: 0;
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  
+  .toggle-password-icon {
+    width: 24px;
+    height: 24px;
+  }
+
 </style>
