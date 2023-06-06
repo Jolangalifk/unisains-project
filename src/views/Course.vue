@@ -4,7 +4,6 @@ import Footer from '../components/Footer.vue'
 import CardMain from '../components/CardMain.vue'
 import Modal from '../components/Modal.vue'
 
-
 </script>
 
 <template>
@@ -124,12 +123,12 @@ import Modal from '../components/Modal.vue'
                 <div class="card-scroll">
                     <CardMain />
                     <CardMain />
-                    <!-- <CardMain />
                     <CardMain />
                     <CardMain />
                     <CardMain />
                     <CardMain />
-                    <CardMain /> -->
+                    <CardMain />
+                    <CardMain />
                 </div>
             </div>
         </div>
@@ -454,8 +453,11 @@ import Modal from '../components/Modal.vue'
     white-space: nowrap;
 }
 
+.card-main::-webkit-scrollbar {
+    display: none;
+}
+
 .card-scroll {
-    display: inline-block;
     padding: 10px;
     display: flex;
     flex-direction: row;

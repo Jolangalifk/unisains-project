@@ -2,7 +2,7 @@
     <div>
         <div v-for="item in items" :key="item.id" @click="toggleAccordion(item.id)"
             :class="{ 'accordion-item': true, 'active': item.id === activeItem }">
-            <div class="accordion-header">{{ item.title }}</div>
+            <div class="accordion-header"><p>{{ item.title }}</p></div>
             <div class="accordion-content" v-show="item.id === activeItem">
                 {{ item.content }}
                 <div v-if="item.additionalInfo">
@@ -22,7 +22,7 @@ export default {
             items: [
                 {
                     id: 1,
-                    title: 'Modul 1 - Az',
+                    title: 'Modul 1 - Az', 
                     content: 'Content 1',
                     additionalInfo: 'Additional Info 1'
                 },
@@ -57,13 +57,19 @@ export default {
 .accordion-header {
     width: 100%;
     height: 100px;
-    font-size: 24px;
-    font-weight: 600;
     padding: 10px;
     cursor: pointer;
     background-color: #6A2C70;
     color: white;
     border-radius: 20px;
+    display: flex;
+    align-items: center;
+}
+
+.accordion-header p {
+    margin-left: 20px;
+    font-size: 24px;
+    font-weight: 600;
 }
 
 .accordion-content {
