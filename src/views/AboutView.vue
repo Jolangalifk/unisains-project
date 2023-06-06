@@ -261,6 +261,7 @@ import Footer from '../components/Footer.vue'
   margin: 20px;
   background-color: #F08A5D;
   border-radius: 30px;
+  background-image: url('@/assets/image/background-page.png');
 }
 
 .image {
