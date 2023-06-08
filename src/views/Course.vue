@@ -2,6 +2,8 @@
 import Navbar from '../components/Navbar.vue'
 import Footer from '../components/Footer.vue'
 import CardMain from '../components/CardMain.vue'
+import Modal from '../components/Modal.vue'
+
 </script>
 
 <template>
@@ -97,10 +99,16 @@ import CardMain from '../components/CardMain.vue'
                 <button class="explore">Jelajahi Astronomi</button>
             </div>
             <div class="card-main">
-                <CardMain />
-                <CardMain />
-                <CardMain />
-                <CardMain />
+                <div class="card-scroll">
+                    <CardMain />
+                    <CardMain />
+                    <CardMain />
+                    <CardMain />
+                    <CardMain />
+                    <CardMain />
+                    <CardMain />
+                    <CardMain />
+                </div>
             </div>
         </div>
         <div class="list-course">
@@ -109,13 +117,19 @@ import CardMain from '../components/CardMain.vue'
                 <p>Ikuti salah atu kursus Biologi dan pelajari apa saja yang ada didalamnya. Anda akan belajar mulai dari
                     mempelajari materi hingga tantangan atau quizz yang akan diberikan ketika selesai mempelajarinya. Pilih
                     dari berbagai kursus yang menarik.</p>
-                <button class="explore">Jelajahi Biologi</button>
+                <!-- <button class="explore">Jelajahi Biologi</button> -->
             </div>
             <div class="card-main">
-                <CardMain />
-                <CardMain />
-                <CardMain />
-                <CardMain />
+                <div class="card-scroll">
+                    <CardMain />
+                    <CardMain />
+                    <CardMain />
+                    <CardMain />
+                    <CardMain />
+                    <CardMain />
+                    <CardMain />
+                    <CardMain />
+                </div>
             </div>
         </div>
         <Footer />
@@ -435,5 +449,17 @@ import CardMain from '../components/CardMain.vue'
     flex-direction: row;
     align-items: center;
     padding-top: 50px;
+    overflow-x: scroll;
+    white-space: nowrap;
+}
+
+.card-main::-webkit-scrollbar {
+    display: none;
+}
+
+.card-scroll {
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
 }
 </style>
