@@ -1,18 +1,22 @@
 <script setup>
-
 import { ref, onMounted } from 'vue'
+import Logout from './Logout.vue';
+
 const isLoggedIn = ref(false)
 const username = ref('')
 const showProfileMenu = ref(false)
+const showPopup = ref(false)
 
 const toggleProfileMenu = () => {
     showProfileMenu.value = !showProfileMenu.value;
 };
 
-const hideProfileMenu = () => {
-    showProfileMenu.value = false;
+const logout = () => {
+    console.log('Melakukan logout...');
+    // Logika logout di sini
+    // Setelah logout, Anda dapat mengarahkan pengguna ke halaman lain jika diperlukan
+    showPopup.value = true;
 };
-
 
 onMounted(async () => {
     isLoggedIn.value = checkUserloginStatus()
@@ -109,11 +113,12 @@ onMounted(async () => {
                             <div class="profile-info">
                                 <ul>
                                     <li><router-link to="/bantuan">Bantuan</router-link></li>
-                                    <li><router-link to="/keluar">Keluar Akun</router-link></li>
+                                    <li><span @click="logout">Keluar</span></li>
                                 </ul>
                             </div>
                         </div>
                     </div>
+                    <Logout v-if="showPopup" @close="showPopup = false" />
                 </div>
             </div>
         </div>
@@ -122,6 +127,7 @@ onMounted(async () => {
             <button class="register"><router-link to="/register">Daftar</router-link></button>
         </div>
     </div>
+
 </template>
 
 <style scoped>
@@ -399,6 +405,15 @@ onMounted(async () => {
     margin-bottom: 10px;
 }
 
+.profile-info li span {
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.profile-info li span:hover {
+    font-weight: bold;
+}
+
 .profile-info li a {
     text-decoration: none;
     color: #000;
@@ -415,5 +430,6 @@ onMounted(async () => {
     background-color: #000;
     margin-bottom: 5px;
 }
+
 
 </style>
