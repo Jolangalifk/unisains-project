@@ -3,6 +3,16 @@
 import { ref, onMounted } from 'vue'
 const isLoggedIn = ref(false)
 const username = ref('')
+const showProfileMenu = ref(false)
+
+const toggleProfileMenu = () => {
+    showProfileMenu.value = !showProfileMenu.value;
+};
+
+const hideProfileMenu = () => {
+    showProfileMenu.value = false;
+};
+
 
 onMounted(async () => {
     isLoggedIn.value = checkUserloginStatus()
@@ -20,7 +30,6 @@ onMounted(async () => {
 
     console.log(isLoggedIn.value)
 })
-
 </script>
 
 <template>
@@ -54,13 +63,59 @@ onMounted(async () => {
                     <img src="@/assets/icon/cart-icon.svg" alt="">
                 </router-link>
             </button>
-            <button class="profile btn">
-                <router-link to="/profile">
+            <div class="profile-container">
+                <button class="profile-btn" @click="toggleProfileMenu">
                     <div class="avatar">
                         <img src="@/assets/image/profile-ex.png" alt="">
                     </div>
-                </router-link>
-            </button>
+                </button>
+                <!-- Profile Menu -->
+                <div class="profile-menu" v-if="showProfileMenu" @click="hideProfileMenu">
+                    <div class="profile-item-account">
+                        <div class="profile-content-account">
+                            <img src="@/assets/image/profile-ex.png" alt="">
+                            <div class="profile-info-account">
+                                <h3>John Doe</h3>
+                                <p>jolangalifk@gmail.com</p>
+                            </div>
+                        </div>
+                        <hr class="profile-divider">
+                    </div>
+                    <div class="profile-item">
+                        <div class="profile-content">
+                            <div class="profile-info">
+                                <ul>
+                                    <li><router-link to="/pembelajaran-saya">Pembelajaran saya</router-link></li>
+                                    <li><router-link to="/keranjang">Keranjang</router-link></li>
+                                    <li><router-link to="/daftar-keinginan">Daftar keinginan</router-link></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <hr class="profile-divider">
+                    </div>
+                    <div class="profile-item">
+                        <div class="profile-content">
+                            <div class="profile-info">
+                                <ul>
+                                    <li><router-link to="/pengaturan-akun">Pengaturan Akun</router-link></li>
+                                    <li><router-link to="/riwayat-transaksi">Riwayat transaksi</router-link></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <hr class="profile-divider">
+                    </div>
+                    <div class="profile-item">
+                        <div class="profile-content">
+                            <div class="profile-info">
+                                <ul>
+                                    <li><router-link to="/bantuan">Bantuan</router-link></li>
+                                    <li><router-link to="/keluar">Keluar Akun</router-link></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="account-before-login" v-else>
             <button class="login"><router-link to="/login">Masuk</router-link></button>
@@ -251,4 +306,114 @@ onMounted(async () => {
     font-size: 18px;
     font-weight: 600;
 }
+
+.profile-btn {
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+.avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile-container {
+    position: relative;
+    display: inline-block;
+}
+
+.profile-menu {
+    width: 300px;
+    height: auto;
+    position: absolute;
+    top: 100%;
+    left: -250px;
+    background-color: #fff;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    z-index: 999;
+}
+
+.profile-item-account {
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.profile-item {
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.profile-content-account {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.profile-content {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.profile-content-account {
+    margin: 20px;
+}
+
+.profile-content-account img {
+    margin-right: 10px;
+    width: 80px;
+    height: 80px;
+}
+
+.profile-content-account h3 {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.profile-info {
+    flex: 1;
+}
+
+.profile-info-account {
+    flex: 1;
+}
+
+.profile-info ul {
+    list-style: none;
+    padding: 0;
+    margin-left: 20px;
+}
+
+.profile-info li {
+    margin-bottom: 10px;
+}
+
+.profile-info li a {
+    text-decoration: none;
+    color: #000;
+    font-weight: normal;
+}
+
+.profile-info li a:hover {
+    font-weight: bold;
+}
+
+.profile-divider {
+    width: 100%;
+    height: 1px;
+    background-color: #000;
+    margin-bottom: 5px;
+}
+
 </style>
