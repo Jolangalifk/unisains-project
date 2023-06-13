@@ -431,5 +431,4 @@ onMounted(async () => {
     margin-bottom: 5px;
 }
 
-
 </style>
