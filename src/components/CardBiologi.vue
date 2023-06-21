@@ -7,7 +7,7 @@
                 <p>{{ kursus.name_category }}</p>
                 <h3>{{ kursus.price }}</h3>
             </div>
-            <div v-else class="card" @click="handlePopup(kursus.id)">
+            <div v-else class="card" @click="handlePopup">
                 <img :src="kursus.image_course" alt="">
                 <h4>{{ kursus.title_course }}</h4>
                 <p>{{ kursus.name_category }}</p>
@@ -18,20 +18,22 @@
         <div v-if="popup" class="popup">
             <div class="two-preview">
                 <div class="preview-image">
-                    <img :src="previewData.image" alt="">
+                    <img src="@/assets/image/card-bg.png" alt="">
                 </div>
                 <div class="preview-content">
                     <div class="tittle-btn">
-                        <h4>{{ previewData.title }}</h4>
+                        <h4>Anatomi Tubuh Manusia : Jantung</h4>
                         <button @click="closePreview">
                             <img src="@/assets/icon/close-icon.svg" alt="">
                         </button>
                     </div>
-                    <h3>Kategori: {{ previewData.name_category }}</h3>
-                    <h3>Harga: {{ previewData.price }}</h3>
-                    <p class="text-deskripsi-preview">{{ previewData.description }}</p>
-                    <button class="selengkapnya"><router-link
-                            :to="`/login/${previewData.id_course}`">Selengkapnya</router-link></button>
+                    <h3>Kategori : Astronomi</h3>
+                    <h3>Harga : Rp 300,000</h3>
+                    <p class="text-deskripsi-preview">Lorem ipsum dolor sit amet consectetur. Ullamcorper cursus dictum
+                        dolor
+                        auctor. Vitae eget pellentesque id nunc nisi gravida. Lorem ipsum dolor sit amet consectetur.
+                        Ullamcorper cursus dictum dolor auctor. Vitae eget pellentesque id nunc nisi gravida.</p>
+                    <button class="selengkapnya"><router-link to="/login">Selengkapnya</router-link></button>
                 </div>
             </div>
         </div>
@@ -47,11 +49,9 @@ const isLoggedIn = ref(false);
 const router = useRouter();
 const courseData = ref([]);
 const popup = ref(false);
-const previewData = ref([]);
 
-const handlePopup = async (id) => {
+const handlePopup = () => {
     if (!isLoggedIn.value) {
-        await fetchPreviewData(id);
         popup.value = true;
     }
 };
@@ -71,7 +71,6 @@ const goToDetailCourse = () => {
 onMounted(async () => {
     isLoggedIn.value = checkUserLoginStatus();
     await fetchData();
-    await fetchPreviewData();
 });
 
 const checkUserLoginStatus = () => {
@@ -82,18 +81,8 @@ const checkUserLoginStatus = () => {
 const fetchData = async () => {
     try {
         const response = await axios.get('https://admin.unisains.com/public/api/v1/course/category');
-        courseData.value = response.data.astronomi;
+        courseData.value = response.data.anatomi;
         console.log(courseData.value);
-    } catch (error) {
-        console.error(error);
-    }
-};
-
-const fetchPreviewData = async (id) => {
-    try {
-        const response = await axios.get(`https://admin.unisains.com/public/api/v1/course/preview/${id}`);
-        previewData.value = response.data.course;
-        console.log(previewData.value);
     } catch (error) {
         console.error(error);
     }
@@ -102,13 +91,13 @@ const fetchPreviewData = async (id) => {
   
   
 <style  scoped>
+
 .scroll-course {
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
 }
-
 .card {
     width: 350px;
     height: 360px;
