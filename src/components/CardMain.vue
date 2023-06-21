@@ -71,7 +71,7 @@ const goToDetailCourse = () => {
 onMounted(async () => {
     isLoggedIn.value = checkUserLoginStatus();
     await fetchData();
-    await fetchPreviewData();
+    // await fetchPreviewData();
 });
 
 const checkUserLoginStatus = () => {
