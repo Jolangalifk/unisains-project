@@ -42,7 +42,7 @@ const router = createRouter({
       component: () => import('../views/Course.vue')
     },
     {
-      path: '/detail-course',
+      path: '/detail-course/:id',
       name: 'detail-course',
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route

@@ -18,26 +18,27 @@
         <div v-if="popup" class="popup">
             <div class="two-preview">
                 <div class="preview-image">
-                    <img :src="previewData.image" alt="">
+                    <img :src="previewData.image_course" alt="">
                 </div>
                 <div class="preview-content">
                     <div class="tittle-btn">
-                        <h4>{{ previewData.title }}</h4>
+                        <h4>{{ previewData.title_course }}</h4>
                         <button @click="closePreview">
                             <img src="@/assets/icon/close-icon.svg" alt="">
                         </button>
                     </div>
-                    <h3>Kategori: {{ previewData.name_category }}</h3>
-                    <h3>Harga: {{ previewData.price }}</h3>
+                    <h3>Kategori : {{ previewData.name_category }}</h3>
+                    <h3>Harga : {{ previewData.price }}</h3>
                     <p class="text-deskripsi-preview">{{ previewData.description }}</p>
-                    <button class="selengkapnya"><router-link
-                            :to="`/login/${previewData.id_course}`">Selengkapnya</router-link></button>
+                    <button class="selengkapnya" @click="goToDetailCourse(previewCourseId)">
+                        Selengkapnya
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 </template>
-  
+
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
@@ -48,9 +49,11 @@ const router = useRouter();
 const courseData = ref([]);
 const popup = ref(false);
 const previewData = ref([]);
+const previewCourseId = ref(null);
 
 const handlePopup = async (id) => {
     if (!isLoggedIn.value) {
+        previewCourseId.value = id;
         await fetchPreviewData(id);
         popup.value = true;
     }
@@ -60,9 +63,9 @@ const closePreview = () => {
     popup.value = false;
 };
 
-const goToDetailCourse = () => {
+const goToDetailCourse = (id) => {
     if (isLoggedIn.value) {
-        router.push('/detail-course');
+        router.push(`/detail-course/${id}`);
     } else {
         router.push('/login');
     }
@@ -71,7 +74,6 @@ const goToDetailCourse = () => {
 onMounted(async () => {
     isLoggedIn.value = checkUserLoginStatus();
     await fetchData();
-    // await fetchPreviewData();
 });
 
 const checkUserLoginStatus = () => {
@@ -83,22 +85,25 @@ const fetchData = async () => {
     try {
         const response = await axios.get('https://admin.unisains.com/public/api/v1/course/category');
         courseData.value = response.data.astronomi;
-        console.log(courseData.value);
     } catch (error) {
         console.error(error);
     }
 };
 
 const fetchPreviewData = async (id) => {
-    try {
-        const response = await axios.get(`https://admin.unisains.com/public/api/v1/course/preview/${id}`);
-        previewData.value = response.data.course;
-        console.log(previewData.value);
-    } catch (error) {
-        console.error(error);
-    }
+  try {
+    const response = await axios.get(
+      `https://admin.unisains.com/public/api/v1/course/preview/${id}`
+    );
+    previewData.value = response.data.course[0]; // Perbarui baris ini
+    console.log(previewData.value);
+  } catch (error) {
+    console.error(error);
+  }
 };
+
 </script>
+
   
   
 <style  scoped>
@@ -236,14 +241,13 @@ const fetchPreviewData = async (id) => {
     margin-bottom: 10px;
 }
 
-
 .preview-content p {
     white-space: normal;
     /* Setiap baris teks akan dibungkus */
     max-height: 100px;
     /* Tinggi maksimum yang diinginkan */
     margin-top: 30px;
-    margin-bottom: 30px;
+    margin-bottom: 70px;
 }
 
 button.selengkapnya {
