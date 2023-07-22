@@ -4,39 +4,66 @@ import Footer from '../components/Footer.vue'
 import ModulCourse from '../components/ModulCourse.vue'
 import RatingCourse from '../components/RatingCourse.vue'
 import CardMain from '../components/CardMain.vue'
+import { ref, onMounted } from 'vue';
+import axios from 'axios';
 
+const courseData = ref(null);
+
+// Fungsi untuk mengambil token dari local storage
+const getUserToken = () => {
+    const token = localStorage.getItem('token');
+    return token ? token : '';
+};
+
+// Fungsi untuk mengambil data dari API dengan menggunakan token dari local storage
+const fetchData = async () => {
+    const userToken = getUserToken(); // Ambil token dari local storage
+    try {
+        const response = await axios.get('https://admin.unisains.com/public/api/v1/course/show/', {
+            headers: {
+                Authorization: `Bearer ${userToken}`,
+            },
+        });
+        courseData.value = response.data;
+    } catch (error) {
+        console.error(error);
+    }
+};
+
+onMounted(() => {
+    fetchData();
+});
 </script>
 
 <template>
     <main>
         <Navbar />
-        <div class="main-page">
+        <div class="main-page" v-if="courseData">
+            <!-- Tampilan data kursus -->
             <div class="preview">
-                <img src="@/assets/image/card-bg.png" alt="">
-                <h3>Rp 300,000</h3>
+                <img :src="courseData.data.image" alt="">
+                <h3>{{ courseData.data.price }}</h3>
                 <div class="button">
-                    <button class="cart">Keranjang</button>
-                    <button class="favorit">
-                        <img src="@/assets/icon/favorite-icon.svg" alt="">
-                    </button>
+                  <!-- Tombol dan elemen lainnya -->
                 </div>
                 <p class="cover">Kursus ini meliputi:</p>
-                <p class="item">1. Dapet sertifikat tanah</p>
-                <p class="item">2. Dapet sertifikat tanah</p>
-                <p class="item">3. Dapet sertifikat tanah</p>
-            </div>
-            <div class="info">
+                <p class="item" v-for="item in courseData.data.contents" :key="item.id">{{ item.description }}</p>
+              </div>
+              <div class="info">
                 <div class="text">
-                    <h3>Judul Kursus - Anatomi Buaya Udara</h3>
-                    <p>UNISAINS</p>
+                  <h3>{{ courseData.title }}</h3>
+                  <p>{{ courseData.provider }}</p>
                 </div>
                 <div class="material">
-                    <p class="cover">Apa yang akan Anda pelajari</p>
-                    <p class="item">a. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus nibh.</p>
-                    <p class="item">b. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus nibh.</p>
-                    <p class="item">c. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus nibh.</p>
+                  <p class="cover">Apa yang akan Anda pelajari</p>
+                  <p class="item" v-for="item in courseData.materials" :key="item.id">{{ item.description }}</p>
                 </div>
-            </div>
+              </div>              
+        </div>
+        <div v-else>
+            <!-- Tampilkan pesan loading atau error jika data belum tersedia atau terjadi kesalahan -->
+            <p v-if="isLoading">Loading...</p>
+            <p v-else-if="error">Terjadi kesalahan saat mengambil data.</p>
         </div>
         <div class="modul-course">
             <p>Konten kursus :</p>
@@ -370,38 +397,34 @@ import CardMain from '../components/CardMain.vue'
 }
 
 .more-course {
-    width: 80%;
-    height: auto;
+    width: 65%;
+    height: 950px;
     display: flex;
     flex-direction: column;
     margin-left: 200px;
     margin-bottom: 100px;
+    border: 1px solid #c1c1c1;
+    border-radius: 20px;
 }
 
 .more-course h3 {
     font-size: 30px;
     font-weight: 600;
     color: #000000;
-    margin: 30px 0 20px 0;
+    margin: 30px 0 20px 30px;
 }
 
 .more-course .cat1 {
-    width: 100%;
-    height: 380px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
+    width: 80%;
+    height: 400px;
     margin-bottom: 20px;
+    display: flex;
 }
 
 .more-course .cat2 {
-    width: 100%;
-    height: 380px;
+    width: 80%;
+    height: 400px;
+    margin-bottom: 20px;
     display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
 }
-
 </style>
