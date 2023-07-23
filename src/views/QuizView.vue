@@ -45,7 +45,6 @@ export default {
 
 <template>
     <main>
-        <Navbar />
         <div class="container-quiz">
             <div class="fit-container">
                 <div class="course-title">
