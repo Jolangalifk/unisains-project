@@ -95,7 +95,7 @@ export default {
                 return;
             }
             this.isLoading = true;
-            let result = await axios.post('http://127.0.0.1:8000/api/v1/auth/register', {
+            let result = await axios.post('https://admin.unisains.com/api/v1/auth/register', {
                 first_name : this.first_name,
                 last_name : this.last_name,
                 username: this.username,

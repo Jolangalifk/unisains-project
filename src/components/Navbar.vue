@@ -12,10 +12,18 @@ const toggleProfileMenu = () => {
 };
 
 const logout = () => {
-    console.log('Melakukan logout...');
-    // Logika logout di sini
-    // Setelah logout, Anda dapat mengarahkan pengguna ke halaman lain jika diperlukan
     showPopup.value = true;
+    const popupButton = document.getElementById('popupButton');
+    popupButton.addEventListener('click', () => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user-info');
+
+        isLoggedIn.value = false;
+        username.value = '';
+        showProfileMenu.value = false;
+        showPopup.value = false;
+        window.location.href = '/';
+    });
 };
 
 onMounted(async () => {
@@ -430,5 +438,4 @@ onMounted(async () => {
     background-color: #000;
     margin-bottom: 5px;
 }
-
 </style>
