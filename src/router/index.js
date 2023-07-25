@@ -53,6 +53,38 @@ const router = createRouter({
       path: '/history-course',
       name: 'history-course',
       component: () => import('../views/HistoryCourse.vue')
+    },
+    {
+      path: '/profile',
+      name: 'profile',
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/Profile.vue')
+    },
+    {
+      path: '/card-course',
+      name: 'card-course',
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/CardCourse.vue')
+    },
+    {
+      path: '/course/module/quiz',
+      name: 'quiz',
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/QuizView.vue')
+    },
+    {
+      path: '/course/module',
+      name: 'course-module',
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/CourseModuleView.vue')
     }
   ]
 })
