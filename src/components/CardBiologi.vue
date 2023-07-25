@@ -2,13 +2,13 @@
     <div class="scroll-course">
         <div v-for="(kursus, index) in courseData" :key="index">
             <div v-if="isLoggedIn" class="card" @click="goToDetailCourse(kursus.id)">
-                <img :src="kursus.image_course" alt="">
+                <img :src="kursus.thumbnail" alt="">
                 <h4>{{ kursus.title_course }}</h4>
                 <p>{{ kursus.name_category }}</p>
                 <h3>{{ kursus.price }}</h3>
             </div>
             <div v-else class="card" @click="handlePopup(kursus.id)">
-                <img :src="kursus.image_course" alt="">
+                <img :src="kursus.thumbnail" alt="">
                 <h4>{{ kursus.title_course }}</h4>
                 <p>{{ kursus.name_category }}</p>
                 <h3>{{ kursus.price }}</h3>
@@ -18,7 +18,7 @@
         <div v-if="popup" class="popup">
             <div class="two-preview">
                 <div class="preview-image">
-                    <img :src="previewData.image_course" alt="">
+                    <img :src="previewData.thumbnail" alt="Thumbnail" />
                 </div>
                 <div class="preview-content">
                     <div class="tittle-btn">
@@ -27,7 +27,7 @@
                             <img src="@/assets/icon/close-icon.svg" alt="">
                         </button>
                     </div>
-                    <h3>Kategori : {{ previewData.name_category }}</h3>
+                    <h3>Kategori : {{ previewData.category.name_category }}</h3>
                     <h3>Harga : {{ previewData.price }}</h3>
                     <p class="text-deskripsi-preview">{{ previewData.description }}</p>
                     <button class="selengkapnya" @click="goToDetailCourse(previewCourseId)">
@@ -48,7 +48,7 @@ const isLoggedIn = ref(false);
 const router = useRouter();
 const courseData = ref([]);
 const popup = ref(false);
-const previewData = ref([]);
+const previewData = ref(null);
 const previewCourseId = ref(null);
 
 const handlePopup = async (id) => {
@@ -74,6 +74,7 @@ const goToDetailCourse = (id) => {
 onMounted(async () => {
     isLoggedIn.value = checkUserLoginStatus();
     await fetchData();
+    fetchPreviewData(1);
 });
 
 const checkUserLoginStatus = () => {
@@ -83,8 +84,8 @@ const checkUserLoginStatus = () => {
 
 const fetchData = async () => {
     try {
-        const response = await axios.get('https://admin.unisains.com/public/api/v1/course/category');
-        courseData.value = response.data.anatomi;
+        const response = await axios.get('https://admin.unisains.com/api/v1/course/category');
+        courseData.value = response.data.data.anatomi;
         console.log(courseData.value);
     } catch (error) {
         console.error(error);
@@ -94,9 +95,9 @@ const fetchData = async () => {
 const fetchPreviewData = async (id) => {
   try {
     const response = await axios.get(
-      `https://admin.unisains.com/public/api/v1/course/preview/${id}`
+      `https://admin.unisains.com/api/v1/course/preview/${id}`
     );
-    previewData.value = response.data.course[0]; // Perbarui baris ini
+    previewData.value = response.data.data.course; // Perbarui baris ini
     console.log(previewData.value);
   } catch (error) {
     console.error(error);
