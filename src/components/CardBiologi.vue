@@ -38,7 +38,7 @@
         </div>
     </div>
 </template>
-
+  
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
@@ -84,7 +84,8 @@ const checkUserLoginStatus = () => {
 const fetchData = async () => {
     try {
         const response = await axios.get('https://admin.unisains.com/public/api/v1/course/category');
-        courseData.value = response.data.astronomi;
+        courseData.value = response.data.anatomi;
+        console.log(courseData.value);
     } catch (error) {
         console.error(error);
     }
@@ -101,19 +102,17 @@ const fetchPreviewData = async (id) => {
     console.error(error);
   }
 };
-
 </script>
-
   
   
 <style  scoped>
+
 .scroll-course {
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
 }
-
 .card {
     width: 350px;
     height: 360px;
@@ -241,13 +240,14 @@ const fetchPreviewData = async (id) => {
     margin-bottom: 10px;
 }
 
+
 .preview-content p {
     white-space: normal;
     /* Setiap baris teks akan dibungkus */
     max-height: 100px;
     /* Tinggi maksimum yang diinginkan */
     margin-top: 30px;
-    margin-bottom: 70px;
+    margin-bottom: 30px;
 }
 
 button.selengkapnya {
