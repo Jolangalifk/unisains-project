@@ -8,6 +8,7 @@ import { ref, onMounted } from 'vue';
 import axios from 'axios';
 
 const courseData = ref(null);
+const courseId = 1; // Ganti dengan id kursus yang diinginkan
 
 // Fungsi untuk mengambil token dari local storage
 const getUserToken = () => {
@@ -17,14 +18,15 @@ const getUserToken = () => {
 
 // Fungsi untuk mengambil data dari API dengan menggunakan token dari local storage
 const fetchData = async () => {
-    const userToken = getUserToken(); // Ambil token dari local storage
+    const userToken = getUserToken();
+    console.log("User Token:", userToken); // Ambil token dari local storage
     try {
-        const response = await axios.get('https://admin.unisains.com/public/api/v1/course/show/', {
+        const response = await axios.get(`https://admin.unisains.com/api/v1/course/show/${courseId}`, {
             headers: {
                 Authorization: `Bearer ${userToken}`,
             },
         });
-        courseData.value = response.data;
+        courseData.value = response.data.data.course;
     } catch (error) {
         console.error(error);
     }
@@ -41,24 +43,24 @@ onMounted(() => {
         <div class="main-page" v-if="courseData">
             <!-- Tampilan data kursus -->
             <div class="preview">
-                <img :src="courseData.data.image" alt="">
+                <img :src="courseData.thumbnail" alt="">
                 <h3>{{ courseData.data.price }}</h3>
                 <div class="button">
-                  <!-- Tombol dan elemen lainnya -->
+                    <!-- Tombol dan elemen lainnya -->
                 </div>
                 <p class="cover">Kursus ini meliputi:</p>
-                <p class="item" v-for="item in courseData.data.contents" :key="item.id">{{ item.description }}</p>
-              </div>
-              <div class="info">
+                <p class="item" v-for="item in courseData.contents" :key="item.id">{{ item.description }}</p>
+            </div>
+            <div class="info">
                 <div class="text">
-                  <h3>{{ courseData.title }}</h3>
-                  <p>{{ courseData.provider }}</p>
+                    <h3>{{ courseData.title_course }}</h3>
+                    <p>{{ courseData.description }}</p>
                 </div>
                 <div class="material">
-                  <p class="cover">Apa yang akan Anda pelajari</p>
-                  <p class="item" v-for="item in courseData.materials" :key="item.id">{{ item.description }}</p>
+                    <p class="cover">Apa yang akan Anda pelajari</p>
+                    <p class="item" v-for="item in courseData.modules" :key="item.id">{{ item.description }}</p>
                 </div>
-              </div>              
+            </div>
         </div>
         <div v-else>
             <!-- Tampilkan pesan loading atau error jika data belum tersedia atau terjadi kesalahan -->
