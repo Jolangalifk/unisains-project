@@ -13,19 +13,25 @@ const courseId = 1; // Ganti dengan id kursus yang diinginkan
 // Fungsi untuk mengambil token dari local storage
 const getUserToken = () => {
     const token = localStorage.getItem('token');
-    return token ? token : '';
+    return token ? JSON.parse(token) : '';
+};
+
+// Fungsi untuk menyimpan token ke dalam local storage
+const setUserToken = (token) => {
+    localStorage.setItem('token', JSON.stringify(token));
 };
 
 // Fungsi untuk mengambil data dari API dengan menggunakan token dari local storage
 const fetchData = async () => {
     const userToken = getUserToken();
-    console.log("User Token:", userToken); // Ambil token dari local storage
+    console.log("Token Pengguna:", userToken); // Ambil token dari local storage
     try {
         const response = await axios.get(`https://admin.unisains.com/api/v1/course/show/${courseId}`, {
             headers: {
                 Authorization: `Bearer ${userToken}`,
             },
         });
+        console.log("Respon API:", response.data);
         courseData.value = response.data.data.course;
     } catch (error) {
         console.error(error);
@@ -37,6 +43,7 @@ onMounted(() => {
 });
 </script>
 
+
 <template>
     <main>
         <Navbar />
@@ -44,7 +51,7 @@ onMounted(() => {
             <!-- Tampilan data kursus -->
             <div class="preview">
                 <img :src="courseData.thumbnail" alt="">
-                <h3>{{ courseData.data.price }}</h3>
+                <h3>{{ courseData.price }}</h3>
                 <div class="button">
                     <!-- Tombol dan elemen lainnya -->
                 </div>
@@ -67,10 +74,10 @@ onMounted(() => {
             <p v-if="isLoading">Loading...</p>
             <p v-else-if="error">Terjadi kesalahan saat mengambil data.</p>
         </div>
-        <div class="modul-course">
+        <div class="modul-course" v-if="courseData">
             <p>Konten kursus :</p>
             <p>3 Modul - 30 Materi - Total durasi 2j 15m</p>
-            <ModulCourse />
+            <ModulCourse :modules="courseData.modules" />
         </div>
         <div class="condition">
             <p class="wrapper">Persyaratan</p>
