@@ -1,79 +1,77 @@
 <template>
-    <main>
-        <Navbar />
-        <div class="main-page" v-if="courseData">
-            <!-- Tampilan data kursus -->
-            <div class="preview">
-                <img :src="courseData.thumbnail" alt="">
-                <h3>{{ courseData.price }}</h3>
-                <div class="button">
-                    <!-- Tombol dan elemen lainnya -->
-                </div>
-                <p class="cover">Kursus ini meliputi:</p>
-                <p class="item" v-for="item in courseData.contents" :key="item.id">{{ item.description }}</p>
+    <Navbar />
+    <div class="main-page" v-if="courseData">
+        <!-- Tampilan data kursus -->
+        <div class="preview">
+            <img :src="courseData.thumbnail" alt="">
+            <h3>{{ courseData.price }}</h3>
+            <div class="button">
+                <button @click="pesanSekarang">Pesan Sekarang</button>
+                <button class="keranjang" @click="keranjang">
+                    <img src="@/assets/icon/cart-course.svg" alt="">
+                </button>
             </div>
-            <div class="info">
-                <div class="text">
-                    <h3>{{ courseData.title_course }}</h3>
-                    <p>{{ courseData.description }}</p>
-                </div>
-                <div class="material">
-                    <p class="cover">Apa yang akan Anda pelajari</p>
-                    <p class="item" v-for="item in courseData.modules" :key="item.id">{{ item.description }}</p>
-                </div>
+            <p class="cover">Kursus ini meliputi:</p>
+            <p class="item" v-for="item in courseData.contents" :key="item.id">{{ item.description }}</p>
+        </div>
+        <div class="info">
+            <div class="text">
+                <h3>{{ courseData.title_course }}</h3>
+                <p>{{ courseData.description }}</p>
+            </div>
+            <div class="material">
+                <p class="cover">Apa yang akan Anda pelajari</p>
+                <p class="item" v-for="item in courseData.modules" :key="item.id">{{ item.description }}</p>
             </div>
         </div>
-        <div v-else>
-            <!-- Tampilkan pesan loading atau error jika data belum tersedia atau terjadi kesalahan -->
-            <div v-if="isLoading" class="loading-container">
-                <div class="loading-dots">
-                    <div class="dot dot1"></div>
-                    <div class="dot dot2"></div>
-                    <div class="dot dot3"></div>
-                </div>
-                <p>Loading...</p>
+    </div>
+    <div v-else>
+        <!-- Tampilkan pesan loading atau error jika data belum tersedia atau terjadi kesalahan -->
+        <div v-if="isLoading" class="lds-facebook">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+        <p v-else-if="error">Terjadi kesalahan saat mengambil data.</p>
+    </div>
+    <div class="modul-course" v-if="courseData">
+        <p>Konten kursus :</p>
+        <p>3 Modul - 30 Materi - Total durasi 2j 15m</p>
+        <ModulCourse :modules="courseData.modules" />
+    </div>
+    <div class="condition">
+        <p class="wrapper">Persyaratan</p>
+        <p class="item">1. Mac atau Windows</p>
+        <p class="item">2. Mempunyai HP yang support Augmented Reality (AR)</p>
+        <p class="item">3. Pemahaman dasar tentang anatomi</p>
+    </div>
+    <div class="rating-course">
+        <h3>4.7 course rating . 11K ratings</h3>
+        <div class="wrapper-review">
+            <div class="rate1">
+                <RatingCourse />
+                <RatingCourse />
+                <RatingCourse />
             </div>
-            <p v-else-if="error" class="error-message">Terjadi kesalahan saat mengambil data.</p>
-        </div>
-        <div class="modul-course" v-if="courseData">
-            <p>Konten kursus :</p>
-            <p>3 Modul - 30 Materi - Total durasi 2j 15m</p>
-            <ModulCourse :modules="courseData.modules" />
-        </div>
-        <div class="condition">
-            <p class="wrapper">Persyaratan</p>
-            <p class="item">1. Mac atau Windows</p>
-            <p class="item">2. Mempunyai HP yang support Augmented Reality (AR)</p>
-            <p class="item">3. Pemahaman dasar tentang anatomi</p>
-        </div>
-        <div class="rating-course">
-            <h3>4.7 course rating . 11K ratings</h3>
-            <div class="wrapper-review">
-                <div class="rate1">
-                    <RatingCourse />
-                    <RatingCourse />
-                    <RatingCourse />
-                </div>
-                <div class="rate2">
-                    <RatingCourse />
-                    <RatingCourse />
-                    <RatingCourse />
-                </div>
+            <div class="rate2">
+                <RatingCourse />
+                <RatingCourse />
+                <RatingCourse />
             </div>
-            <button class="show">Show all reviews</button>
         </div>
-        <div class="more-course">
-            <h3>More Course</h3>
-            <CardMain />
-            <CardBiologi />
-        </div>
-        <Footer />
-    </main>
+        <button class="show">Show all reviews</button>
+    </div>
+    <div class="more-course">
+        <h3>More Course</h3>
+        <CardMain />
+        <CardBiologi />
+    </div>
+    <Footer />
 </template>
   
 <script setup>
-import { ref, onMounted, watch } from 'vue';
-import { useRoute } from 'vue-router';
+import { ref, onMounted } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import Navbar from '../components/Navbar.vue'
 import Footer from '../components/Footer.vue'
 import ModulCourse from '../components/ModulCourse.vue'
@@ -82,11 +80,10 @@ import CardMain from '../components/CardMain.vue'
 import CardBiologi from '../components/CardBiologi.vue'
 import axios from 'axios';
 
-const route = useRoute();
-const courseId = ref(route.params.id);
 const courseData = ref(null);
 const isLoading = ref(false);
 const error = ref(null);
+const router = useRouter();
 
 // Fungsi untuk mengambil token dari local storage
 const getUserToken = () => {
@@ -94,43 +91,38 @@ const getUserToken = () => {
     return token ? JSON.parse(token) : '';
 };
 
-// Fungsi untuk menyimpan token ke dalam local storage
-const setUserToken = (token) => {
-    localStorage.setItem('token', JSON.stringify(token));
-};
-
 // Fungsi untuk mengambil data dari API dengan menggunakan token dari local storage
 const fetchData = async () => {
     isLoading.value = true;
     const userToken = getUserToken();
-    console.log("Token Pengguna:", userToken); // Ambil token dari local storage
     try {
-        const response = await axios.get(`https://admin.unisains.com/api/v1/course/show/${courseId.value}`, {
+        const courseId = useRoute().params.id; // Ubah disini, langsung mengambil nilai dari useRoute().params.id
+        const response = await axios.get(`https://admin.unisains.com/api/v1/course/show/${courseId}`, {
             headers: {
                 Authorization: `Bearer ${userToken}`,
             },
         });
-        console.log("Respon API:", response.data);
         courseData.value = response.data.data.course;
         isLoading.value = false;
     } catch (error) {
         console.error(error);
         isLoading.value = false;
-        error.value = "Terjadi kesalahan saat mengambil data.";
+        // Handle error response
+        if (error.response && error.response.status === 401) {
+            // Jika status kode 401 (Unauthorized), redirect ke halaman login
+            router.push('/login');
+        } else {
+            // Jika ada error lain, tampilkan pesan error
+            error.value = "Terjadi kesalahan saat mengambil data.";
+        }
     }
 };
 
 onMounted(() => {
     fetchData();
 });
-
-// Tambahan: pantau perubahan dalam `courseId`
-watch(courseId, (newCourseId) => {
-    fetchData();
-});
 </script>
   
-
 <style scoped>
 .main-page {
     width: 100%;
@@ -166,20 +158,25 @@ watch(courseId, (newCourseId) => {
 }
 
 .preview .button {
-    width: 85%;
     margin-left: 30px;
     display: flex;
     align-items: center;
+    gap: 30px;
 }
 
 .preview .button button {
-    width: 250px;
+    width: 260px;
     height: 70px;
     border-radius: 30px;
     border: none;
     outline: none;
     cursor: pointer;
-    border-radius: 20px;
+    border-radius: 15px;
+    background-color: #6A2C70;
+    color: white;
+    font-size: 20px;
+    font-weight: 600;
+    font-family: poppins;
 }
 
 .preview .button .cart {
@@ -191,19 +188,17 @@ watch(courseId, (newCourseId) => {
     margin-right: 20px;
 }
 
-.preview .button .favorit {
-    width: 85px;
+.preview .button .keranjang {
+    width: 80px;
     height: 70px;
-    background-color: white;
-    border: 1px solid #c1c1c1;
+    background-color: #6A2C70;
     font-size: 18px;
     font-weight: 600;
 }
 
-.preview .button .favorit img {
-    color: #6A2C70;
-    width: 70%;
-    height: 70%;
+.preview .button .keranjang img {
+    width: 30px;
+    height: 30px;
 }
 
 .preview p {
@@ -270,50 +265,49 @@ watch(courseId, (newCourseId) => {
     margin-left: 50px;
 }
 
-.loading-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    font-size: 20px;
+.lds-facebook {
+    display: inline-block;
+    position: fixed;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
 }
 
-.loading-dots {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 10px;
+.lds-facebook div {
+    display: inline-block;
+    position: absolute;
+    left: 6px;
+    width: 13px;
+    background: #6A2C70;
+    animation: lds-facebook 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;
 }
 
-.dot {
-    width: 20px;
-    height: 20px;
-    background-color: #6A2C70;
-    border-radius: 50%;
-    margin: 0 5px;
-    animation: bounce 0.6s infinite alternate;
+.lds-facebook div:nth-child(1) {
+    left: 6px;
+    animation-delay: -0.24s;
 }
 
-.dot1 {
-    animation-delay: 0s;
+.lds-facebook div:nth-child(2) {
+    left: 26px;
+    animation-delay: -0.12s;
 }
 
-.dot2 {
-    animation-delay: 0.2s;
+.lds-facebook div:nth-child(3) {
+    left: 45px;
+    animation-delay: 0;
 }
 
-.dot3 {
-    animation-delay: 0.4s;
-}
+@keyframes lds-facebook {
 
-@keyframes bounce {
-    0% {
-        transform: translateY(0);
+    0%,
+    100% {
+        top: 6px;
+        height: 51px;
     }
 
-    100% {
-        transform: translateY(-10px);
+    50% {
+        top: 19px;
+        height: 26px;
     }
 }
 

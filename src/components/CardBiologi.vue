@@ -1,6 +1,6 @@
 <template>
     <div class="scroll-course">
-        <div v-for="(kursus, index) in courseData" :key="index" @click="refreshpage()">
+        <div v-for="(kursus, index) in courseData" :key="index">
             <div v-if="isLoggedIn" class="card" @click="goToDetailCourse(kursus.id)">
                 <img :src="kursus.thumbnail" alt="">
                 <h4>{{ kursus.title_course }}</h4>
@@ -104,9 +104,6 @@ const fetchPreviewData = async (id) => {
   }
 };
 
-const refreshpage = () => {
-    window.location.reload();
-};
 </script>
   
   
