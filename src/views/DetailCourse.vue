@@ -4,6 +4,7 @@ import Footer from '../components/Footer.vue'
 import ModulCourse from '../components/ModulCourse.vue'
 import RatingCourse from '../components/RatingCourse.vue'
 import CardMain from '../components/CardMain.vue'
+
 </script>
 
 <template>
@@ -68,14 +69,8 @@ import CardMain from '../components/CardMain.vue'
             <h3>More Course</h3>
             <div class="cat1">
                 <CardMain />
-                <CardMain />
-                <CardMain />
-                <CardMain />
             </div>
             <div class="cat2">
-                <CardMain />
-                <CardMain />
-                <CardMain />
                 <CardMain />
             </div>
         </div>
@@ -376,7 +371,7 @@ import CardMain from '../components/CardMain.vue'
 
 .more-course {
     width: 80%;
-    height: 850px;
+    height: auto;
     display: flex;
     flex-direction: column;
     margin-left: 200px;

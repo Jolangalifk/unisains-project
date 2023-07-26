@@ -437,4 +437,6 @@ onMounted(async () => {
     background-color: #000;
     margin-bottom: 5px;
 }
+
+
 </style>
