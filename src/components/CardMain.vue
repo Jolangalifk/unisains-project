@@ -48,7 +48,7 @@ const isLoggedIn = ref(false);
 const router = useRouter();
 const courseData = ref([]);
 const popup = ref(false);
-const previewData = ref([]);
+const previewData = ref(null);
 const previewCourseId = ref(null);
 
 const handlePopup = async (id) => {
