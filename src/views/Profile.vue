@@ -1,47 +1,45 @@
 <script>
 import Navbar from '../components/Navbar.vue';
 import MyCourse from '../components/MyCourse.vue';
+import axios from 'axios';
+import { ref, onMounted } from 'vue';
 
 export default {
     components: {
         Navbar,
         MyCourse
     },
-    data() {
-        return {
-            profileData: null,
-            error: null
+    setup() {
+        const profileData = ref(null);
+
+        const getUserToken = () => {
+            const token = localStorage.getItem('token');
+            return token ? token.replace(/['"]+/g, '') : '';
         };
-    },
-    
-    methods: {
-        async fetchProfileData() {
+
+        const fetchProfileData = async () => {
+            const userToken = getUserToken();
+            console.log(userToken);
+            console.log(profileData);
             try {
-                const response = await fetch('https://admin.unisains.com/public/api/v1/profile/show', {
+                const result = await axios.get('https://admin.unisains.com/api/v1/profile/show', {
                     headers: {
-                        Authorization: `Bearer ${localStorage.getItem('token')}`,
+                        Authorization: `Bearer ${userToken}`,
                     },
                 });
-
-                if (!response.ok) {
-                    throw new Error(`Failed to fetch profile data: ${response.status} ${response.statusText}`);
-                }
-
-                const data = await response.json();
-                this.profileData = {
-                    id: data.id,
-                    first_name: data.first_name,
-                    last_name: data.last_name,
-                    email: data.email
-                };
+                profileData.value = result.data;
             } catch (error) {
-                this.error = error.message;
                 console.error(error);
             }
-        }
-    },
-    mounted() {
-        this.fetchProfileData();
+        };
+
+        onMounted(() => {
+            fetchProfileData();
+        });
+
+        return {
+            profileData,
+        };
     },
 };
 </script>
@@ -54,11 +52,11 @@ export default {
             <div class="profile-sidebar">
                 <div class="profile-wrapper">
                     <div class="profile-image">
-                        <img src="@/assets/image/picture-example.png" alt="">
+                        <img :src="profileData && profileData.data.user.image" alt="">
                     </div>
                     <div class="profile-text">
-                        <h3>{{ profileData ? profileData.first_name + ' ' + profileData.last_name : 'Loading...' }}</h3>
-                        <p>{{ profileData ? profileData.email : 'Email not available' }}</p>
+                        <h3>{{ profileData && profileData.data.user.first_name }} {{ profileData && profileData.data.user.last_name }}</h3>
+                        <p>{{ profileData && profileData.data.user.email }}</p>
                     </div>
                     <div class="profile-button">
                         <a><router-link to="/pengaturan-akun">Pengaturan akun</router-link></a>
