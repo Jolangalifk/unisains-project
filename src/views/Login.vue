@@ -80,7 +80,7 @@ export default {
             }
             try {
                 this.isLoading = true;
-                let result = await axios.post('https://admin.unisains.com/public/api/v1/auth/login', {
+                let result = await axios.post('https://admin.unisains.com/api/v1/auth/login', {
                     email: this.email,
                     password: this.password,
                 });
