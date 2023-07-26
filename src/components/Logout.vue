@@ -25,7 +25,7 @@ export default {
     async logout() {
       try {
         // Lakukan request ke API untuk logout
-        await axios.post('http://127.0.0.1:8000/api/v1/auth/logout');
+        await axios.post('https://admin.unisains.com/public/api/v1/auth/logout');
         console.log('Logout berhasil');
         
         // Hapus data pengguna dari penyimpanan lokal

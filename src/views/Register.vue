@@ -28,9 +28,17 @@
                     <div class="form-group">
                         <label for="Password"></label>
                         <img src="@/assets/icon/password-icon.svg" alt="">
-                        <input type="password" placeholder="Masukkan Password" v-model="password">
+                        <input :type="showPassword ? 'text' : 'password'" placeholder="Masukkan Password"
+                            v-model="password">
+                        <button type="button" class="toggle-password" @click="togglePasswordVisibility">
+                            <img class="toggle-password-icon" src="../assets/icon/eye-icon.svg" v-if="!showPassword"
+                                alt="" />
+                            <img class="toggle-password-icon" src="../assets/icon/eye-off-icon.svg" v-if="showPassword"
+                                alt="" />
+                        </button>
                     </div>
-                    <button type="submit" class="button-register">Submit</button>
+                    <p class="error-message" v-if="loginError">{{ loginErrorMessage }}</p>
+                    <button type="submit" class="button-register">Daftar</button>
                 </form>
                 <div class="social-media-register">
                     <p>Atau daftar dengan</p>
@@ -50,7 +58,9 @@
                     <p>Sudah punya akun? <router-link to="/login">Masuk</router-link></p>
                 </div>
             </div>
-
+            <div class="loading-overlay" v-if="isLoading">
+                <div class="loading-spinner"></div>
+            </div>
         </div>
         <img src="@/assets/image/anatomi-bg.png" alt="">
     </div>
@@ -68,11 +78,24 @@ export default {
             username: '',
             email: '',
             password: '',
+            showPassword: false,
+            loginError: false,
+            loginErrorMessage: '',
+            isLoading: false,
         }
     }, 
     methods: {
+        togglePasswordVisibility() {
+            this.showPassword = !this.showPassword; // Membalikkan nilai status
+        },
         async Register() {
-            let result = await axios.post('http://127.0.0.1:8000/api/v1/auth/register', {
+            if (!this.email || !this.password) {
+                this.loginError = true;
+                this.loginErrorMessage = 'Silahkan isi data dengan lengkap terlebih dahulu.';
+                return;
+            }
+            this.isLoading = true;
+            let result = await axios.post('https://admin.unisains.com/public/api/v1/auth/register', {
                 first_name : this.first_name,
                 last_name : this.last_name,
                 username: this.username,
@@ -103,6 +126,7 @@ export default {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    font-family: poppins;
 }
 
 .container-register {
@@ -391,5 +415,47 @@ button h3 {
 .background-register img {
     width: 100%;
     height: 100vh;
+}
+
+.toggle-password {
+    border: none;
+    background-color: white;
+}
+
+.error-message {
+    color: red;
+    font-size: 15px;
+    margin-bottom: 20px;
+}
+
+.loading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.loading-spinner {
+    border: 10px solid #f3f3f3;
+    border-top: 10px solid #F08A5D;
+    border-radius: 50%;
+    width: 70px;
+    height: 70px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
 }
 </style>
