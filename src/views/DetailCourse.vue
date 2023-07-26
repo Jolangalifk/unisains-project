@@ -43,7 +43,6 @@ onMounted(() => {
 });
 </script>
 
-
 <template>
     <main>
         <Navbar />
