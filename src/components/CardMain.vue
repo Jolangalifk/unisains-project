@@ -74,6 +74,7 @@ const goToDetailCourse = (id) => {
 onMounted(async () => {
     isLoggedIn.value = checkUserLoginStatus();
     await fetchData();
+    fetchPreviewData(1);
 });
 
 const checkUserLoginStatus = () => {
@@ -84,7 +85,8 @@ const checkUserLoginStatus = () => {
 const fetchData = async () => {
     try {
         const response = await axios.get('https://admin.unisains.com/api/v1/course/category');
-        courseData.value = response.data.data;
+        courseData.value = response.data.data.astronomi;
+        console.log(courseData.value);
     } catch (error) {
         console.error(error);
     }
@@ -95,7 +97,7 @@ const fetchPreviewData = async (id) => {
     const response = await axios.get(
       `https://admin.unisains.com/api/v1/course/preview/${id}`
     );
-    previewData.value = response.data.course[0]; // Perbarui baris ini
+    previewData.value = response.data.data.course; // Perbarui baris ini
     console.log(previewData.value);
   } catch (error) {
     console.error(error);
