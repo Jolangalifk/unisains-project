@@ -1,49 +1,3 @@
-<script setup>
-import Navbar from '../components/Navbar.vue'
-import Footer from '../components/Footer.vue'
-import ModulCourse from '../components/ModulCourse.vue'
-import RatingCourse from '../components/RatingCourse.vue'
-import CardMain from '../components/CardMain.vue'
-import { ref, onMounted } from 'vue';
-import axios from 'axios';
-
-const courseData = ref(null);
-const courseId = 1; // Ganti dengan id kursus yang diinginkan
-
-// Fungsi untuk mengambil token dari local storage
-const getUserToken = () => {
-    const token = localStorage.getItem('token');
-    return token ? JSON.parse(token) : '';
-};
-
-// Fungsi untuk menyimpan token ke dalam local storage
-const setUserToken = (token) => {
-    localStorage.setItem('token', JSON.stringify(token));
-};
-
-// Fungsi untuk mengambil data dari API dengan menggunakan token dari local storage
-const fetchData = async () => {
-    const userToken = getUserToken();
-    console.log("Token Pengguna:", userToken); // Ambil token dari local storage
-    try {
-        const response = await axios.get(`https://admin.unisains.com/api/v1/course/show/${courseId}`, {
-            headers: {
-                Authorization: `Bearer ${userToken}`,
-            },
-        });
-        console.log("Respon API:", response.data);
-        courseData.value = response.data.data.course;
-    } catch (error) {
-        console.error(error);
-    }
-};
-
-onMounted(() => {
-    fetchData();
-});
-</script>
-
-
 <template>
     <main>
         <Navbar />
@@ -71,8 +25,15 @@ onMounted(() => {
         </div>
         <div v-else>
             <!-- Tampilkan pesan loading atau error jika data belum tersedia atau terjadi kesalahan -->
-            <p v-if="isLoading">Loading...</p>
-            <p v-else-if="error">Terjadi kesalahan saat mengambil data.</p>
+            <div v-if="isLoading" class="loading-container">
+                <div class="loading-dots">
+                    <div class="dot dot1"></div>
+                    <div class="dot dot2"></div>
+                    <div class="dot dot3"></div>
+                </div>
+                <p>Loading...</p>
+            </div>
+            <p v-else-if="error" class="error-message">Terjadi kesalahan saat mengambil data.</p>
         </div>
         <div class="modul-course" v-if="courseData">
             <p>Konten kursus :</p>
@@ -103,16 +64,72 @@ onMounted(() => {
         </div>
         <div class="more-course">
             <h3>More Course</h3>
-            <div class="cat1">
-                <CardMain />
-            </div>
-            <div class="cat2">
-                <CardMain />
-            </div>
+            <CardMain />
+            <CardBiologi />
         </div>
         <Footer />
     </main>
 </template>
+  
+<script setup>
+import { ref, onMounted, watch } from 'vue';
+import { useRoute } from 'vue-router';
+import Navbar from '../components/Navbar.vue'
+import Footer from '../components/Footer.vue'
+import ModulCourse from '../components/ModulCourse.vue'
+import RatingCourse from '../components/RatingCourse.vue'
+import CardMain from '../components/CardMain.vue'
+import CardBiologi from '../components/CardBiologi.vue'
+import axios from 'axios';
+
+const route = useRoute();
+const courseId = ref(route.params.id);
+const courseData = ref(null);
+const isLoading = ref(false);
+const error = ref(null);
+
+// Fungsi untuk mengambil token dari local storage
+const getUserToken = () => {
+    const token = localStorage.getItem('token');
+    return token ? JSON.parse(token) : '';
+};
+
+// Fungsi untuk menyimpan token ke dalam local storage
+const setUserToken = (token) => {
+    localStorage.setItem('token', JSON.stringify(token));
+};
+
+// Fungsi untuk mengambil data dari API dengan menggunakan token dari local storage
+const fetchData = async () => {
+    isLoading.value = true;
+    const userToken = getUserToken();
+    console.log("Token Pengguna:", userToken); // Ambil token dari local storage
+    try {
+        const response = await axios.get(`https://admin.unisains.com/api/v1/course/show/${courseId.value}`, {
+            headers: {
+                Authorization: `Bearer ${userToken}`,
+            },
+        });
+        console.log("Respon API:", response.data);
+        courseData.value = response.data.data.course;
+        isLoading.value = false;
+    } catch (error) {
+        console.error(error);
+        isLoading.value = false;
+        error.value = "Terjadi kesalahan saat mengambil data.";
+    }
+};
+
+onMounted(() => {
+    fetchData();
+});
+
+// Tambahan: pantau perubahan dalam `courseId`
+watch(courseId, (newCourseId) => {
+    fetchData();
+});
+</script>
+  
 
 <style scoped>
 .main-page {
@@ -251,6 +268,60 @@ onMounted(() => {
     font-size: 20px;
     margin-top: 15px;
     margin-left: 50px;
+}
+
+.loading-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    font-size: 20px;
+}
+
+.loading-dots {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.dot {
+    width: 20px;
+    height: 20px;
+    background-color: #6A2C70;
+    border-radius: 50%;
+    margin: 0 5px;
+    animation: bounce 0.6s infinite alternate;
+}
+
+.dot1 {
+    animation-delay: 0s;
+}
+
+.dot2 {
+    animation-delay: 0.2s;
+}
+
+.dot3 {
+    animation-delay: 0.4s;
+}
+
+@keyframes bounce {
+    0% {
+        transform: translateY(0);
+    }
+
+    100% {
+        transform: translateY(-10px);
+    }
+}
+
+.error-message {
+    font-size: 20px;
+    font-weight: 600;
+    color: red;
+    margin-top: 20px;
 }
 
 .modul-course {
