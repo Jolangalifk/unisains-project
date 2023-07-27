@@ -77,8 +77,7 @@ import Footer from '../components/Footer.vue'
           </div>
           <h3>Jolang Alif Khan</h3>
           <h4>JABATAN</h4>
-          <p>“Lorem ipsum dolor sit amet consectetur. Ullamcorper cursus dictum dolor auctor. Vitae eget pellentesque id
-            nunc nisi gravida”.</p>
+          <p>“Unisains sangat cocok untuk membantu menambah pengetahuanmu tentang sains. ditambah dengan fitur menarik, tentu akan membuatmu semakin tertarik”.</p>
         </div>
       </div>
     </div>
@@ -140,7 +139,7 @@ import Footer from '../components/Footer.vue'
   width: 750px;
   height: 750px;
   position: absolute;
-  top: 40.8%;
+  top: 49.7%;
   left: 60%;
   transform: translate(-50%, -50%);
 }
@@ -262,6 +261,7 @@ import Footer from '../components/Footer.vue'
   margin: 20px;
   background-color: #F08A5D;
   border-radius: 30px;
+  background-image: url('@/assets/image/background-page.png');
 }
 
 .image {
@@ -300,7 +300,6 @@ import Footer from '../components/Footer.vue'
   width: 100%;
   height: 980px;
   display: flex;
-  flex-direction: row;
   align-items: center;
   justify-content: center;
 }
