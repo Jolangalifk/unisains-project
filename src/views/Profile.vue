@@ -1,49 +1,35 @@
-<script>
+<script setup>
 import Navbar from '../components/Navbar.vue';
 import MyCourse from '../components/MyCourse.vue';
 import axios from 'axios';
 import { ref, onMounted } from 'vue';
 
-export default {
-    components: {
-        Navbar,
-        MyCourse
-    },
-    setup() {
-        const profileData = ref(null);
+const profileData = ref(null);
+const myCourseHasCourses = ref(false);
 
-        const getUserToken = () => {
-            const token = localStorage.getItem('token');
-            return token ? token.replace(/['"]+/g, '') : '';
-        };
-
-        const fetchProfileData = async () => {
-            const userToken = getUserToken();
-            console.log(userToken);
-            console.log(profileData);
-            try {
-                const result = await axios.get('https://admin.unisains.com/api/v1/profile/show', {
-                    headers: {
-                        Authorization: `Bearer ${userToken}`,
-                    },
-                });
-                profileData.value = result.data;
-            } catch (error) {
-                console.error(error);
-            }
-        };
-
-        onMounted(() => {
-            fetchProfileData();
-        });
-
-        return {
-            profileData,
-        };
-    },
+const getUserToken = () => {
+    const token = localStorage.getItem('token');
+    return token ? token.replace(/['"]+/g, '') : '';
 };
-</script>
 
+const fetchProfileData = async () => {
+    const userToken = getUserToken();
+    console.log(userToken);
+    try {
+        const response = await axios.get('https://admin.unisains.com/api/v1/profile/show', {
+            headers: {
+                Authorization: `Bearer ${userToken}`,
+            },
+        });
+        profileData.value = response.data;
+        myCourseHasCourses.value = response.data.my_course.length > 0;
+    } catch (error) {
+        console.error(error);
+    }
+};
+
+onMounted(fetchProfileData);
+</script>
 
 <template>
     <main>
@@ -55,7 +41,8 @@ export default {
                         <img :src="profileData && profileData.data.user.image" alt="">
                     </div>
                     <div class="profile-text">
-                        <h3>{{ profileData && profileData.data.user.first_name }} {{ profileData && profileData.data.user.last_name }}</h3>
+                        <h3>{{ profileData && profileData.data.user.first_name }} {{ profileData &&
+                            profileData.data.user.last_name }}</h3>
                         <p>{{ profileData && profileData.data.user.email }}</p>
                     </div>
                     <div class="profile-button">
@@ -67,7 +54,7 @@ export default {
             </div>
             <div class="course-wrapper">
                 <MyCourse />
-                <div class="more-course-btn">
+                <div class="more-course-btn" v-if="myCourseHasCourses">
                     <button>
                         <a><router-link to="/lihat-lebih-banyak">Lihat lebih banyak</router-link></a>
                         <img src="@/assets/icon/arrow-right-orange.svg" alt="">

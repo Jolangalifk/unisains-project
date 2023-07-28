@@ -4,11 +4,11 @@
         <!-- Tampilan data kursus -->
         <div class="preview">
             <img :src="courseData.thumbnail" alt="">
-            <h3>{{ courseData.price }}</h3>
+            <h3>Rp {{ courseData.price }}</h3>
             <div class="button">
-                <button @click="pesanSekarang">Pesan Sekarang</button>
+                <button class="pesan" @click="pesanSekarang">Pesan Sekarang</button>
                 <button class="keranjang" @click="keranjang">
-                    <img src="@/assets/icon/cart-course.svg" alt="">
+                    <img src="@/assets/icon/cart-iconw.svg" alt="">
                 </button>
             </div>
             <p class="cover">Kursus ini meliputi:</p>
@@ -164,41 +164,37 @@ onMounted(() => {
     gap: 30px;
 }
 
-.preview .button button {
+.button .pesan {
     width: 260px;
-    height: 70px;
-    border-radius: 30px;
+    height: 75px;
+    border-radius: 20px;
     border: none;
     outline: none;
     cursor: pointer;
-    border-radius: 15px;
-    background-color: #6A2C70;
-    color: white;
-    font-size: 20px;
-    font-weight: 600;
-    font-family: poppins;
-}
-
-.preview .button .cart {
     background-color: #6A2C70;
     color: white;
     font-size: 18px;
     font-weight: 600;
     font-family: poppins;
-    margin-right: 20px;
 }
 
-.preview .button .keranjang {
-    width: 80px;
-    height: 70px;
+.button .keranjang {
+    width: 75px;
+    height: 75px;
+    border-radius: 20px;
+    border: none;
+    outline: none;
+    cursor: pointer;
     background-color: #6A2C70;
+    color: white;
     font-size: 18px;
     font-weight: 600;
+    font-family: poppins;
 }
 
-.preview .button .keranjang img {
-    width: 30px;
-    height: 30px;
+.button .keranjang img {
+    width: 40px;
+    height: 40px;
 }
 
 .preview p {

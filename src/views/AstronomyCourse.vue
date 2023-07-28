@@ -1,9 +1,9 @@
 <template>
     <main>
         <Navbar />
-        <div class="anatomi">
-            <h1>Anatomi</h1>
-            <CardBiologi />
+        <div class="astronomi">
+            <h1>Astronomi</h1>
+            <CardMain />
         </div>
         <Footer />
     </main>
@@ -12,16 +12,16 @@
 <script setup>
 import Navbar from '../components/Navbar.vue'
 import Footer from '../components/Footer.vue'
-import CardBiologi from '../components/CardBiologi.vue'
+import CardMain from '../components/CardMain.vue'
 </script>
 
 <style scoped>
 
-.anatomi {
+.astronomi {
     padding: 100px 200px 100px 200px;
 }
 
-.anatomi h1 {
+.astronomi h1 {
     font-size: 42px;
     font-weight: bold;
     color: #000000;
