@@ -2,7 +2,6 @@
     <div class="course-purchase">
         <div class="information">
             <h1>Tanggal : <span class="tanggal">17 April 2023</span></h1>
-            <h1>Kode Pesanan : <span class="kode">PD-CC-6847716F5933696A6C363243</span></h1>
             <h1>Status : <span class="status">Menunggu Pembayaran</span></h1>
             <h1>Dijual Ke : <span class="penerima">Stefano Llipaly</span></h1>
         </div>
