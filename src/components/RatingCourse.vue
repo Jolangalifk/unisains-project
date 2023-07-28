@@ -29,7 +29,7 @@
     flex-direction: column;
     margin-top: 20px;
     border: 1px solid #c1c1c1;
-    border-radius: 20px;
+    border-radius: 10px;
 }
 
 .review p {
