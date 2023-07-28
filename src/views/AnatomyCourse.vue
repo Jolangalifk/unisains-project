@@ -1,7 +1,7 @@
 <template>
     <main>
         <Navbar />
-        <div class="astronomi">
+        <div class="anatomi">
             <h1>Anatomi</h1>
             <CardBiologi />
         </div>
@@ -12,17 +12,16 @@
 <script setup>
 import Navbar from '../components/Navbar.vue'
 import Footer from '../components/Footer.vue'
-import CardMain from '../components/CardMain.vue'
 import CardBiologi from '../components/CardBiologi.vue'
 </script>
 
 <style scoped>
 
-.astronomi {
+.anatomi {
     padding: 100px 200px 100px 200px;
 }
 
-.astronomi h1 {
+.anatomi h1 {
     font-size: 42px;
     font-weight: bold;
     color: #000000;
