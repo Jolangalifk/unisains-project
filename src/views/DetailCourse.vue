@@ -17,11 +17,8 @@
         <div class="info">
             <div class="text">
                 <h3>{{ courseData.title_course }}</h3>
+                <h4>UNI SAINS</h4>
                 <p>{{ courseData.description }}</p>
-            </div>
-            <div class="material">
-                <p class="cover">Apa yang akan Anda pelajari</p>
-                <p class="item" v-for="item in courseData.modules" :key="item.id">{{ item.description }}</p>
             </div>
         </div>
     </div>
@@ -135,7 +132,7 @@ onMounted(() => {
 .preview {
     width: 430px;
     height: 700px;
-    border-radius: 20px;
+    border-radius: 10px;
     margin-left: 200px;
     margin-right: 70px;
     border: 1px solid #c1c1c1;
@@ -167,7 +164,7 @@ onMounted(() => {
 .button .pesan {
     width: 260px;
     height: 75px;
-    border-radius: 20px;
+    border-radius: 10px;
     border: none;
     outline: none;
     cursor: pointer;
@@ -181,7 +178,7 @@ onMounted(() => {
 .button .keranjang {
     width: 75px;
     height: 75px;
-    border-radius: 20px;
+    border-radius: 10px;
     border: none;
     outline: none;
     cursor: pointer;
@@ -234,10 +231,17 @@ onMounted(() => {
     color: #000000;
 }
 
-.info .text p {
+.info .text h4 {
     font-size: 26px;
+    font-weight: bold;
+    color: #F08A5D;
+}
+
+.info .text p {
+    font-size: 20px;
     font-weight: 600;
     color: #000000;
+    margin-top: 50px;
 }
 
 .info .material {
@@ -368,7 +372,7 @@ onMounted(() => {
     flex-direction: column;
     margin-left: 200px;
     border: 1px solid #c1c1c1;
-    border-radius: 20px;
+    border-radius: 10px;
     margin-bottom: 100px;
 }
 
@@ -406,7 +410,7 @@ onMounted(() => {
 .rating-course .show {
     width: 250px;
     height: 70px;
-    border-radius: 20px;
+    border-radius: 10px;
     border: none;
     outline: none;
     cursor: pointer;
@@ -474,7 +478,7 @@ onMounted(() => {
     margin-left: 200px;
     margin-bottom: 100px;
     border: 1px solid #c1c1c1;
-    border-radius: 20px;
+    border-radius: 10px;
 }
 
 .more-course h3 {
