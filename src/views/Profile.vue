@@ -1,51 +1,35 @@
-<script>
+<script setup>
 import Navbar from '../components/Navbar.vue';
 import MyCourse from '../components/MyCourse.vue';
+import axios from 'axios';
+import { ref, onMounted } from 'vue';
 
-export default {
-    components: {
-        Navbar,
-        MyCourse
-    },
-    data() {
-        return {
-            profileData: null,
-            error: null
-        };
-    },
-    
-    methods: {
-        async fetchProfileData() {
-            try {
-                const response = await fetch('https://admin.unisains.com/public/api/v1/profile/show', {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem('token')}`,
-                    },
-                });
+const profileData = ref(null);
+const myCourseHasCourses = ref(false);
 
-                if (!response.ok) {
-                    throw new Error(`Failed to fetch profile data: ${response.status} ${response.statusText}`);
-                }
-
-                const data = await response.json();
-                this.profileData = {
-                    id: data.id,
-                    first_name: data.first_name,
-                    last_name: data.last_name,
-                    email: data.email
-                };
-            } catch (error) {
-                this.error = error.message;
-                console.error(error);
-            }
-        }
-    },
-    mounted() {
-        this.fetchProfileData();
-    },
+const getUserToken = () => {
+    const token = localStorage.getItem('token');
+    return token ? token.replace(/['"]+/g, '') : '';
 };
-</script>
 
+const fetchProfileData = async () => {
+    const userToken = getUserToken();
+    console.log(userToken);
+    try {
+        const response = await axios.get('https://admin.unisains.com/api/v1/profile/show', {
+            headers: {
+                Authorization: `Bearer ${userToken}`,
+            },
+        });
+        profileData.value = response.data;
+        myCourseHasCourses.value = response.data.my_course.length > 0;
+    } catch (error) {
+        console.error(error);
+    }
+};
+
+onMounted(fetchProfileData);
+</script>
 
 <template>
     <main>
@@ -54,11 +38,12 @@ export default {
             <div class="profile-sidebar">
                 <div class="profile-wrapper">
                     <div class="profile-image">
-                        <img src="@/assets/image/picture-example.png" alt="">
+                        <img :src="profileData && profileData.data.user.image" alt="">
                     </div>
                     <div class="profile-text">
-                        <h3>{{ profileData ? profileData.first_name + ' ' + profileData.last_name : 'Loading...' }}</h3>
-                        <p>{{ profileData ? profileData.email : 'Email not available' }}</p>
+                        <h3>{{ profileData && profileData.data.user.first_name }} {{ profileData &&
+                            profileData.data.user.last_name }}</h3>
+                        <p>{{ profileData && profileData.data.user.email }}</p>
                     </div>
                     <div class="profile-button">
                         <a><router-link to="/pengaturan-akun">Pengaturan akun</router-link></a>
@@ -69,7 +54,7 @@ export default {
             </div>
             <div class="course-wrapper">
                 <MyCourse />
-                <div class="more-course-btn">
+                <div class="more-course-btn" v-if="myCourseHasCourses">
                     <button>
                         <a><router-link to="/lihat-lebih-banyak">Lihat lebih banyak</router-link></a>
                         <img src="@/assets/icon/arrow-right-orange.svg" alt="">
