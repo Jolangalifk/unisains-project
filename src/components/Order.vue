@@ -1,42 +1,80 @@
 <template>
     <div class="course-purchase">
-        <div class="information">
-            <h1>Tanggal : <span class="tanggal">17 April 2023</span></h1>
-            <h1>Status : <span class="status">Menunggu Pembayaran</span></h1>
-            <h1>Dijual Ke : <span class="penerima">Stefano Llipaly</span></h1>
+        <div v-if="transaction">
+            <div class="information">
+                <h1>Tanggal : <span class="tanggal">{{ transaction.date }}</span></h1>
+                <h1>Status : <span class="status">{{ transaction.status }}</span></h1>
+                <h1>Dijual Ke : <span class="penerima">{{ transaction.course.title_course }}</span></h1>
+            </div>
+            <div class="menu">
+                <div class="text-kursus">
+                    Kursus
+                </div>
+                <div class="text-menu">
+                    <p>Tanggal</p>
+                    <p>Status</p>
+                    <p>Harga</p>
+                </div>
+            </div>
+            <div class="list">
+                <div class="kursus">
+                    <p>{{ transaction.course.title_course }}</p>
+                </div>
+                <div class="text">
+                    <p>{{ transaction.date }}</p>
+                    <p>{{ transaction.status }}</p>
+                    <p>Rp {{ transaction.total_price }}</p>
+                </div>
+            </div>
+            <div class="button">
+                <button class="bayar-nanti">Bayar Nanti</button>
+                <button>Lanjutkan</button>
+            </div>
         </div>
-        <div class="menu">
-            <div class="text-kursus">
-                Kursus
-            </div>
-            <div class="text-menu">
-                <p>Tanggal</p>
-                <p>Status</p>
-                <p>Harga</p>
-            </div>
-        </div>
-        <div class="list">
-            <div class="kursus">
-                <p>Anatomi Tubuh Manusia : Jantung</p>
-            </div>
-            <div class="text">
-                <!-- <div class="tanggal-p">
-                    <p class="tanggal">17-01-1999</p>
-                </div> -->
-                <p>17-01-1999</p>
-                <p>Menunggu Pembayaran</p>
-                <p>Rp 200.000</p>
-            </div>
-        </div>
-        <div class="button">
-            <button class="bayar-nanti">Bayar Nanti</button>
-            <button>Lanjutkan</button>
+        <div v-else>
+            Loading...
         </div>
     </div>
 </template>
+  
+<script>
+import axios from "axios";
 
-<script setup>
+// Fungsi untuk mengambil token dari local storage
+const getUserToken = () => {
+    const token = localStorage.getItem('token');
+    return token ? JSON.parse(token) : '';
+};
+
+export default {
+    data() {
+        return {
+            transaction: null,
+        };
+    },
+    async created() {
+        try {
+            // Mendapatkan ID dari route params
+            const orderId = this.$route.params.id;
+
+            const userToken = getUserToken(); // Ganti dengan token yang valid
+
+            // Mengambil data dari API menggunakan axios dan menyertakan token otorisasi
+            const response = await axios.get(`https://admin.unisains.com/api/v1/transaction/show/${orderId}`, {
+                headers: {
+                    Authorization: `Bearer ${userToken}`,
+                },
+            });
+            this.transaction = response.data.data.transaction;
+        } catch (error) {
+            console.error(error);
+            this.transaction = null;
+        }
+    },
+};
 </script>
+
+  
 
 <style scoped>
 .course-purchase {
@@ -133,7 +171,7 @@
     flex-direction: row;
     align-items: center;
     padding-left: 40px;
-    gap: 45px;
+    gap: 105px;
 }
 
 .course-purchase .list .text p {
