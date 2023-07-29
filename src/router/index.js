@@ -79,6 +79,30 @@ const router = createRouter({
       component: () => import('../views/CardCourse.vue')
     },
     {
+      path: '/profile/profile-settings/edit-profile',
+      name: 'edit-profile',
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/EditProfileView.vue')
+    },
+    {
+      path: '/profile/profile-settings/account-privacy',
+      name: 'account-privacy',
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/AccountPrivacyView.vue')
+    },
+    {
+      path: '/profile/profile-settings/theme',
+      name: 'theme',
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/ThemeView.vue')
+    },
+    {
       path: '/course/module/quiz',
       name: 'quiz',
       // route level code-splitting
