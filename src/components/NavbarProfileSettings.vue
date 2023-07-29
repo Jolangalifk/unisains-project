@@ -1,38 +1,37 @@
-<script setup>
-import { ref, onMounted } from 'vue';
-import axios from 'axios';
-
-const selectedBtn = ref(0);
-
-function selectBtn(index) {
-  selectedBtn.value = index;
-}
-</script>
-
 <template>
     <div class="profile-setting-container">
         <div class="nav-profile-settings">
             <div class="back-btn">
-                <img src="../assets/icon/arrow-left-white.svg" alt="">
-                <a><router-link to="/profile">Kembali</router-link></a>
+                <img src="../assets/icon/arrow-left-white.svg" alt="" />
+                <router-link to="/profile">Kembali</router-link>
             </div>
             <div class="profile-settings-text">
                 <h1>Pengaturan akun</h1>
             </div>
         </div>
         <div class="nav-edit">
-            <a :class="{ 'selected': selectedBtn === 0 }" @click="selectBtn(0)">
+            <a :class="{ 'selected': selectedBtn.value === 0 }" @click="selectBtn(0)">
                 <router-link to="/profile/profile-settings/edit-profile">Edit profil</router-link>
             </a>
-            <a :class="{ 'selected': selectedBtn === 1 }" @click="selectBtn(1)">
+            <a :class="{ 'selected': selectedBtn.value === 1 }" @click="selectBtn(1)">
                 <router-link to="/profile/profile-settings/account-privacy">Keamanan akun</router-link>
             </a>
-            <a :class="{ 'selected': selectedBtn === 2 }" @click="selectBtn(2)">
+            <a :class="{ 'selected': selectedBtn.value === 2 }" @click="selectBtn(2)">
                 <router-link to="/profile/profile-settings/theme">Tema</router-link>
             </a>
         </div>
     </div>
 </template>
+  
+<script setup>
+import { ref } from 'vue';
+
+const selectedBtn = ref(0);
+
+function selectBtn(index) {
+    selectedBtn.value = index;
+}
+</script>
 
 <style scoped>
 .profile-setting-container {
@@ -95,15 +94,21 @@ function selectBtn(index) {
     border-bottom: #55235A 3px solid;
 }
 
-.nav-edit a {
-    font-size: 24px;
-    font-weight: 600;
-    color: #6A2C70;
-    margin-right: 30px;
-    text-decoration: none;
+.nav-edit a.selected {
+  color: #b83b5e;
+  border-bottom: 3px solid #b83b5e;
 }
 
-.nav-edit a.selected {
-  color: #B83B5E;
+/* Default styles for non-selected buttons */
+.nav-edit a {
+  font-size: 24px;
+  font-weight: 600;
+  color: #6a2c70;
+  margin-right: 30px;
+  text-decoration: none;
+}
+
+.nav-edit a:not(.selected):hover {
+  color: #b83b5e;
 }
 </style>
