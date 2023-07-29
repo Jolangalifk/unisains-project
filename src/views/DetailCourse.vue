@@ -6,7 +6,7 @@
             <img :src="courseData.thumbnail" alt="">
             <h3>Rp {{ courseData.price }}</h3>
             <div class="button">
-                <button class="pesan" @click="pesanSekarang">Pesan Sekarang</button>
+                <router-link :to="{ name: 'detail-order', params: { id: courseData.id } }"><button class="pesan">Pesan Sekarang</button></router-link>
                 <button class="keranjang" @click="keranjang">
                     <img src="@/assets/icon/cart-iconw.svg" alt="">
                 </button>
@@ -141,7 +141,7 @@ onMounted(() => {
 }
 
 .preview img {
-    border-radius: 20px 20px 0 0;
+    border-radius: 10px 10px 0 0;
     width: 428px;
     height: 255px;
 }
