@@ -1,88 +1,125 @@
+<template>
+    <Navbar />
+    <div class="main-page" v-if="courseData">
+        <!-- Tampilan data kursus -->
+        <div class="preview">
+            <img :src="courseData.thumbnail" alt="">
+            <h3>Rp {{ courseData.price }}</h3>
+            <div class="button">
+                <router-link :to="{ name: 'detail-order', params: { id: courseData.id } }"><button class="pesan">Pesan Sekarang</button></router-link>
+                <button class="keranjang" @click="keranjang">
+                    <img src="@/assets/icon/cart-iconw.svg" alt="">
+                </button>
+            </div>
+            <p class="cover">Kursus ini meliputi:</p>
+            <p class="item" v-for="item in courseData.contents" :key="item.id">{{ item.description }}</p>
+        </div>
+        <div class="info">
+            <div class="text">
+                <h3>{{ courseData.title_course }}</h3>
+                <h4>UNI SAINS</h4>
+                <p>{{ courseData.description }}</p>
+            </div>
+        </div>
+    </div>
+    <div v-else>
+        <!-- Tampilkan pesan loading atau error jika data belum tersedia atau terjadi kesalahan -->
+        <div v-if="isLoading" class="lds-facebook">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+        <p v-else-if="error">Terjadi kesalahan saat mengambil data.</p>
+    </div>
+    <div class="modul-course" v-if="courseData">
+        <p>Konten kursus :</p>
+        <p>3 Modul - 30 Materi - Total durasi 2j 15m</p>
+        <ModulCourse :modules="courseData.modules" />
+    </div>
+    <div class="condition">
+        <p class="wrapper">Persyaratan</p>
+        <p class="item">1. Mac atau Windows</p>
+        <p class="item">2. Mempunyai HP yang support Augmented Reality (AR)</p>
+        <p class="item">3. Pemahaman dasar tentang anatomi</p>
+    </div>
+    <div class="rating-course">
+        <h3>4.7 course rating . 11K ratings</h3>
+        <div class="wrapper-review">
+            <div class="rate1">
+                <RatingCourse />
+                <RatingCourse />
+                <RatingCourse />
+            </div>
+            <div class="rate2">
+                <RatingCourse />
+                <RatingCourse />
+                <RatingCourse />
+            </div>
+        </div>
+        <button class="show">Show all reviews</button>
+    </div>
+    <div class="more-course">
+        <h3>More Course</h3>
+        <CardMain />
+        <CardBiologi />
+    </div>
+    <Footer />
+</template>
+  
 <script setup>
+import { ref, onMounted } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import Navbar from '../components/Navbar.vue'
 import Footer from '../components/Footer.vue'
 import ModulCourse from '../components/ModulCourse.vue'
 import RatingCourse from '../components/RatingCourse.vue'
 import CardMain from '../components/CardMain.vue'
+import CardBiologi from '../components/CardBiologi.vue'
+import axios from 'axios';
+
+const courseData = ref(null);
+const isLoading = ref(false);
+const error = ref(null);
+const router = useRouter();
+
+// Fungsi untuk mengambil token dari local storage
+const getUserToken = () => {
+    const token = localStorage.getItem('token');
+    return token ? JSON.parse(token) : '';
+};
+
+// Fungsi untuk mengambil data dari API dengan menggunakan token dari local storage
+const fetchData = async () => {
+    isLoading.value = true;
+    const userToken = getUserToken();
+    try {
+        const courseId = useRoute().params.id; // Ubah disini, langsung mengambil nilai dari useRoute().params.id
+        const response = await axios.get(`https://admin.unisains.com/api/v1/course/show/${courseId}`, {
+            headers: {
+                Authorization: `Bearer ${userToken}`,
+            },
+        });
+        courseData.value = response.data.data.course;
+        isLoading.value = false;
+    } catch (error) {
+        console.error(error);
+        isLoading.value = false;
+        // Handle error response
+        if (error.response && error.response.status === 401) {
+            // Jika status kode 401 (Unauthorized), redirect ke halaman login
+            router.push('/login');
+        } else {
+            // Jika ada error lain, tampilkan pesan error
+            error.value = "Terjadi kesalahan saat mengambil data.";
+        }
+    }
+};
+
+onMounted(() => {
+    fetchData();
+});
 </script>
-
-<template>
-    <main>
-        <Navbar />
-        <div class="main-page">
-            <div class="preview">
-                <img src="@/assets/image/card-bg.png" alt="">
-                <h3>Rp 300,000</h3>
-                <div class="button">
-                    <button class="cart">Keranjang</button>
-                    <button class="favorit">
-                        <img src="@/assets/icon/favorite-icon.svg" alt="">
-                    </button>
-                </div>
-                <p class="cover">Kursus ini meliputi:</p>
-                <p class="item">1. Dapet sertifikat tanah</p>
-                <p class="item">2. Dapet sertifikat tanah</p>
-                <p class="item">3. Dapet sertifikat tanah</p>
-            </div>
-            <div class="info">
-                <div class="text">
-                    <h3>Judul Kursus - Anatomi Buaya Udara</h3>
-                    <p>UNISAINS</p>
-                </div>
-                <div class="material">
-                    <p class="cover">Apa yang akan Anda pelajari</p>
-                    <p class="item">a. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus nibh.</p>
-                    <p class="item">b. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus nibh.</p>
-                    <p class="item">c. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus nibh.</p>
-                </div>
-            </div>
-        </div>
-        <div class="modul-course">
-            <p>Konten kursus :</p>
-            <p>3 Modul - 30 Materi - Total durasi 2j 15m</p>
-            <ModulCourse />
-        </div>
-        <div class="condition">
-            <p class="wrapper">Persyaratan</p>
-            <p class="item">1. Mac atau Windows</p>
-            <p class="item">2. Mempunyai HP yang support Augmented Reality (AR)</p>
-            <p class="item">3. Pemahaman dasar tentang anatomi</p>
-        </div>
-        <div class="rating-course">
-            <h3>4.7 course rating . 11K ratings</h3>
-            <div class="wrapper-review">
-                <div class="rate1">
-                    <RatingCourse />
-                    <RatingCourse />
-                    <RatingCourse />
-                </div>
-                <div class="rate2">
-                    <RatingCourse />
-                    <RatingCourse />
-                    <RatingCourse />
-                </div>
-            </div>
-            <button class="show">Show all reviews</button>
-        </div>
-        <div class="more-course">
-            <h3>More Course</h3>
-            <div class="cat1">
-                <CardMain />
-                <CardMain />
-                <CardMain />
-                <CardMain />
-            </div>
-            <div class="cat2">
-                <CardMain />
-                <CardMain />
-                <CardMain />
-                <CardMain />
-            </div>
-        </div>
-        <Footer />
-    </main>
-</template>
-
+  
 <style scoped>
 .main-page {
     width: 100%;
@@ -95,7 +132,7 @@ import CardMain from '../components/CardMain.vue'
 .preview {
     width: 430px;
     height: 700px;
-    border-radius: 20px;
+    border-radius: 10px;
     margin-left: 200px;
     margin-right: 70px;
     border: 1px solid #c1c1c1;
@@ -104,7 +141,7 @@ import CardMain from '../components/CardMain.vue'
 }
 
 .preview img {
-    border-radius: 20px 20px 0 0;
+    border-radius: 10px 10px 0 0;
     width: 428px;
     height: 255px;
 }
@@ -118,44 +155,43 @@ import CardMain from '../components/CardMain.vue'
 }
 
 .preview .button {
-    width: 85%;
     margin-left: 30px;
     display: flex;
     align-items: center;
+    gap: 30px;
 }
 
-.preview .button button {
-    width: 250px;
-    height: 70px;
-    border-radius: 30px;
+.button .pesan {
+    width: 260px;
+    height: 75px;
+    border-radius: 10px;
     border: none;
     outline: none;
     cursor: pointer;
-    border-radius: 20px;
-}
-
-.preview .button .cart {
     background-color: #6A2C70;
     color: white;
     font-size: 18px;
     font-weight: 600;
     font-family: poppins;
-    margin-right: 20px;
 }
 
-.preview .button .favorit {
-    width: 85px;
-    height: 70px;
-    background-color: white;
-    border: 1px solid #c1c1c1;
+.button .keranjang {
+    width: 75px;
+    height: 75px;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    background-color: #6A2C70;
+    color: white;
     font-size: 18px;
     font-weight: 600;
+    font-family: poppins;
 }
 
-.preview .button .favorit img {
-    color: #6A2C70;
-    width: 70%;
-    height: 70%;
+.button .keranjang img {
+    width: 40px;
+    height: 40px;
 }
 
 .preview p {
@@ -195,10 +231,17 @@ import CardMain from '../components/CardMain.vue'
     color: #000000;
 }
 
-.info .text p {
+.info .text h4 {
     font-size: 26px;
+    font-weight: bold;
+    color: #F08A5D;
+}
+
+.info .text p {
+    font-size: 20px;
     font-weight: 600;
     color: #000000;
+    margin-top: 50px;
 }
 
 .info .material {
@@ -220,6 +263,59 @@ import CardMain from '../components/CardMain.vue'
     font-size: 20px;
     margin-top: 15px;
     margin-left: 50px;
+}
+
+.lds-facebook {
+    display: inline-block;
+    position: fixed;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+}
+
+.lds-facebook div {
+    display: inline-block;
+    position: absolute;
+    left: 6px;
+    width: 13px;
+    background: #6A2C70;
+    animation: lds-facebook 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;
+}
+
+.lds-facebook div:nth-child(1) {
+    left: 6px;
+    animation-delay: -0.24s;
+}
+
+.lds-facebook div:nth-child(2) {
+    left: 26px;
+    animation-delay: -0.12s;
+}
+
+.lds-facebook div:nth-child(3) {
+    left: 45px;
+    animation-delay: 0;
+}
+
+@keyframes lds-facebook {
+
+    0%,
+    100% {
+        top: 6px;
+        height: 51px;
+    }
+
+    50% {
+        top: 19px;
+        height: 26px;
+    }
+}
+
+.error-message {
+    font-size: 20px;
+    font-weight: 600;
+    color: red;
+    margin-top: 20px;
 }
 
 .modul-course {
@@ -276,7 +372,7 @@ import CardMain from '../components/CardMain.vue'
     flex-direction: column;
     margin-left: 200px;
     border: 1px solid #c1c1c1;
-    border-radius: 20px;
+    border-radius: 10px;
     margin-bottom: 100px;
 }
 
@@ -314,7 +410,7 @@ import CardMain from '../components/CardMain.vue'
 .rating-course .show {
     width: 250px;
     height: 70px;
-    border-radius: 20px;
+    border-radius: 10px;
     border: none;
     outline: none;
     cursor: pointer;
@@ -375,38 +471,34 @@ import CardMain from '../components/CardMain.vue'
 }
 
 .more-course {
-    width: 80%;
-    height: 850px;
+    width: 65%;
+    height: 950px;
     display: flex;
     flex-direction: column;
     margin-left: 200px;
     margin-bottom: 100px;
+    border: 1px solid #c1c1c1;
+    border-radius: 10px;
 }
 
 .more-course h3 {
     font-size: 30px;
     font-weight: 600;
     color: #000000;
-    margin: 30px 0 20px 0;
+    margin: 30px 0 20px 30px;
 }
 
 .more-course .cat1 {
-    width: 100%;
-    height: 380px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
+    width: 80%;
+    height: 400px;
     margin-bottom: 20px;
+    display: flex;
 }
 
 .more-course .cat2 {
-    width: 100%;
-    height: 380px;
+    width: 80%;
+    height: 400px;
+    margin-bottom: 20px;
     display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
 }
-
 </style>

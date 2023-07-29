@@ -135,6 +135,7 @@ onMounted(async () => {
             <button class="register"><router-link to="/register">Daftar</router-link></button>
         </div>
     </div>
+
 </template>
 
 <style scoped>
@@ -437,4 +438,6 @@ onMounted(async () => {
     background-color: #000;
     margin-bottom: 5px;
 }
+
+
 </style>
