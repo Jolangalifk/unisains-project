@@ -2,6 +2,9 @@
 import Navbar from '../components/Navbar.vue'
 import Footer from '../components/Footer.vue'
 import CardMain from '../components/CardMain.vue'
+import CardBiologi from '../components/CardBiologi.vue'
+import AstronomyCourse from './AstronomyCourse.vue'
+import AnatomyCourse from './AnatomyCourse.vue'
 import Modal from '../components/Modal.vue'
 
 </script>
@@ -96,17 +99,10 @@ import Modal from '../components/Modal.vue'
                 <p>Ikuti salah atu kursus Astronomi dan pelajari apa saja yang ada didalamnya. Anda akan belajar mulai dari
                     mempelajari materi hingga tantangan atau quizz yang akan diberikan ketika selesai mempelajarinya. Pilih
                     dari berbagai kursus yang menarik.</p>
-                <button class="explore">Jelajahi Astronomi</button>
+                <router-link to="/astronomy-course"><button class="explore">Jelajahi Astronomi</button></router-link>
             </div>
             <div class="card-main">
                 <div class="card-scroll">
-                    <CardMain />
-                    <CardMain />
-                    <CardMain />
-                    <CardMain />
-                    <CardMain />
-                    <CardMain />
-                    <CardMain />
                     <CardMain />
                 </div>
             </div>
@@ -117,18 +113,11 @@ import Modal from '../components/Modal.vue'
                 <p>Ikuti salah atu kursus Biologi dan pelajari apa saja yang ada didalamnya. Anda akan belajar mulai dari
                     mempelajari materi hingga tantangan atau quizz yang akan diberikan ketika selesai mempelajarinya. Pilih
                     dari berbagai kursus yang menarik.</p>
-                <!-- <button class="explore">Jelajahi Biologi</button> -->
+                <router-link to="/anatomy-course"><button class="explore">Jelajahi Astronomi</button></router-link>
             </div>
             <div class="card-main">
                 <div class="card-scroll">
-                    <CardMain />
-                    <CardMain />
-                    <CardMain />
-                    <CardMain />
-                    <CardMain />
-                    <CardMain />
-                    <CardMain />
-                    <CardMain />
+                    <CardBiologi />
                 </div>
             </div>
         </div>

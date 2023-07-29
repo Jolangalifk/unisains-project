@@ -42,12 +42,25 @@ const router = createRouter({
       component: () => import('../views/Course.vue')
     },
     {
-      path: '/detail-course',
+      path: '/detail-course/:id',
       name: 'detail-course',
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/DetailCourse.vue')
+    },
+    {
+      path: '/after-payment',
+      name: 'after-payment',
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/AfterPurchase.vue')
+    },
+    {
+      path: '/history-course',
+      name: 'history-course',
+      component: () => import('../views/HistoryCourse.vue')
     },
     {
       path: '/profile',
@@ -82,20 +95,52 @@ const router = createRouter({
       component: () => import('../views/AccountPrivacyView.vue')
     },
     {
-      path: '/profile/profile-settings/edit-profile',
-      name: 'edit-profile',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/EditProfileView.vue')
-    },
-    {
       path: '/profile/profile-settings/theme',
       name: 'theme',
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/ThemeView.vue')
+    },
+    {
+      path: '/course/module/quiz',
+      name: 'quiz',
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/QuizView.vue')
+    },
+    {
+      path: '/course/module',
+      name: 'course-module',
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/CourseModuleView.vue')
+    },
+    {
+      path: '/detail-order/:id',
+      name: 'detail-order',
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/DetailOrder.vue')
+    },
+    {
+      path: '/astronomy-course',
+      name: 'astronomy-course',
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/astronomyCourse.vue')
+    },
+    {
+      path: '/anatomy-course',
+      name: 'anatomy-course',
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/anatomyCourse.vue')
     }
   ]
 })
