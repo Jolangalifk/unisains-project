@@ -1,11 +1,18 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted } from 'vue';
 import Logout from './Logout.vue';
+import axios from 'axios';
 
-const isLoggedIn = ref(false)
-const username = ref('')
-const showProfileMenu = ref(false)
-const showPopup = ref(false)
+const profileData = ref({});
+const isLoggedIn = ref(false);
+const showProfileMenu = ref(false);
+const showPopup = ref(false);
+const username = ref('');
+
+const getUserToken = () => {
+    const token = localStorage.getItem('token');
+    return token ? token.replace(/['"]+/g, '') : '';
+};
 
 const toggleProfileMenu = () => {
     showProfileMenu.value = !showProfileMenu.value;
@@ -15,22 +22,39 @@ const logout = () => {
     showPopup.value = true;
 };
 
+const fetchProfileData = async () => {
+    const userToken = getUserToken();
+    console.log(userToken);
+    try {
+        const response = await axios.get('https://admin.unisains.com/api/v1/profile/show', {
+            headers: {
+                Authorization: `Bearer ${userToken}`,
+            },
+        });
+        profileData.value = response.data.data.user;
+    } catch (error) {
+        console.error(error);
+    }
+};
+
 onMounted(async () => {
-    isLoggedIn.value = checkUserloginStatus()
+    isLoggedIn.value = checkUserloginStatus();
 
     function checkUserloginStatus() {
         // get token
-        const token = localStorage.getItem('token')
-        return token ? true : false
+        const token = localStorage.getItem('token');
+        return token ? true : false;
     }
 
-    const userInfo = localStorage.getItem('user-info')
+    const userInfo = localStorage.getItem('user-info');
     if (userInfo) {
-        username.value = JSON.parse(userInfo)
+        const parsedUserInfo = JSON.parse(userInfo);
+        username.value = parsedUserInfo.first_name + ' ' + parsedUserInfo.last_name;
     }
 
-    console.log(isLoggedIn.value)
-})
+    console.log(isLoggedIn.value);
+    await fetchProfileData(); // Fetch profile data here
+});
 </script>
 
 <template>
@@ -64,20 +88,20 @@ onMounted(async () => {
                     <img src="@/assets/icon/cart-icon.svg" alt="">
                 </router-link>
             </button>
-            <div class="profile-container">
+            <div class="profile-container" v-if="profileData">
                 <button class="profile-btn" @click="toggleProfileMenu">
                     <div class="avatar">
-                        <img src="@/assets/image/profile-ex.png" alt="">
+                        <img :src="profileData.image" alt="">
                     </div>
                 </button>
                 <!-- Profile Menu -->
                 <div class="profile-menu" v-if="showProfileMenu" @click="hideProfileMenu">
                     <div class="profile-item-account">
                         <div class="profile-content-account">
-                            <img src="@/assets/image/profile-ex.png" alt="">
+                            <img :src="profileData.image" alt="">
                             <div class="profile-info-account">
-                                <h3>John Doe</h3>
-                                <p>jolangalifk@gmail.com</p>
+                                <h3>{{ profileData.first_name }} {{ profileData.last_name }}</h3>
+                                <p>{{ profileData.email }}</p>
                             </div>
                         </div>
                         <hr class="profile-divider">
@@ -124,7 +148,6 @@ onMounted(async () => {
             <button class="register"><router-link to="/register">Daftar</router-link></button>
         </div>
     </div>
-
 </template>
 
 <style scoped>
@@ -376,6 +399,7 @@ onMounted(async () => {
     margin-right: 10px;
     width: 80px;
     height: 80px;
+    border-radius: 100px;
 }
 
 .profile-content-account h3 {
@@ -427,6 +451,4 @@ onMounted(async () => {
     background-color: #000;
     margin-bottom: 5px;
 }
-
-
 </style>
