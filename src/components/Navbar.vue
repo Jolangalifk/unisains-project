@@ -13,17 +13,6 @@ const toggleProfileMenu = () => {
 
 const logout = () => {
     showPopup.value = true;
-    const popupButton = document.getElementById('popupButton');
-    popupButton.addEventListener('click', () => {
-        localStorage.removeItem('token');
-        localStorage.removeItem('user-info');
-
-        isLoggedIn.value = false;
-        username.value = '';
-        showProfileMenu.value = false;
-        showPopup.value = false;
-        window.location.href = '/';
-    });
 };
 
 onMounted(async () => {
