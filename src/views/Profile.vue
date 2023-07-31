@@ -1,16 +1,22 @@
 <script setup>
 import Navbar from '../components/Navbar.vue';
 import MyCourse from '../components/MyCourse.vue';
+import Logout from '../components/Logout.vue';
 import axios from 'axios';
 import { ref, onMounted } from 'vue';
 
 const profileData = ref(null);
 const myCourseHasCourses = ref(false);
+const showPopup = ref(false);
 
 const getUserToken = () => {
     const token = localStorage.getItem('token');
     return token ? token.replace(/['"]+/g, '') : '';
 };
+
+const logout = () => {
+    showPopup.value = true;
+}
 
 const fetchProfileData = async () => {
     const userToken = getUserToken();
@@ -46,9 +52,9 @@ onMounted(fetchProfileData);
                         <p>{{ profileData && profileData.data.user.email }}</p>
                     </div>
                     <div class="profile-button">
-                        <a><router-link to="/pengaturan-akun">Pengaturan akun</router-link></a>
+                        <a><router-link to="/profile/profile-settings/edit-profile">Pengaturan akun</router-link></a>
                         <a><router-link to="/bantuan">Bantuan</router-link></a>
-                        <a><router-link to="/keluar">Keluar</router-link></a>
+                        <button @click="logout">Keluar</button>
                     </div>
                 </div>
             </div>
@@ -61,6 +67,7 @@ onMounted(fetchProfileData);
                     </button>
                 </div>
             </div>
+            <Logout v-if="showPopup" @close="showPopup = false" />
         </div>
     </main>
 </template>
@@ -124,6 +131,19 @@ onMounted(fetchProfileData);
     color: #000000;
     margin-bottom: 20px;
     text-decoration: none;
+}
+
+.profile-button button {
+    width: 60px;
+    height: 25px;
+    border: none;
+    display: flex;
+    justify-content: start;
+    align-items: start;
+    background-color: transparent;
+    cursor: pointer;
+    font-size: 18px;
+    color: #000000;
 }
 
 .course-wrapper {
