@@ -20,38 +20,37 @@ import axios from 'axios';
 
 const emits = defineEmits(['close']);
 
+const getUserToken = () => {
+    return localStorage.getItem('token') || '';
+};
+
 export default {
-  methods: {
-    // async logout() {
-    //   try {
-    //     // Lakukan request ke API untuk logout
-    //     await axios.post('https://admin.unisains.com/api/v1/auth/logout');
-    //     console.log('Logout berhasil');
-        
-    //     // Hapus data pengguna dari penyimpanan lokal
-    //     localStorage.removeItem('user-info');
-    //     localStorage.removeItem('token');
-        
-    //     // Alihkan ke halaman login
-    //     this.$router.push('/');
-    //   } catch (error) {
-    //     console.error('Gagal melakukan logout:', error);
-    //   }
-    // },
-    async logout(){
-        localStorage.removeItem('user-info');
-        localStorage.removeItem('token');
-        window.location.href = '/';
+    methods: {
+        async logout() {
+            const userToken = getUserToken();
+            console.log('Token pengguna:', userToken);
+            try {
+                await axios.post('https://admin.unisains.com/api/v1/auth/logout', null, {
+                    headers: { Authorization: `Bearer ${userToken}` },
+                });
+                console.log('Logout berhasil');
+
+                localStorage.removeItem('user-info');
+                localStorage.removeItem('token');
+
+                this.$router.push('/login');
+            } catch (error) {
+                console.error('Gagal melakukan logout:', error);
+            }
+        },
+        hideLogoutConfirmation() {
+            this.$emit('close');
+        },
     },
-    hideLogoutConfirmation() {
-      this.$emit('close');
-    },
-  },
 };
 </script>
   
 <style scoped>
-/* Styling sesuai kebutuhan */
 .popup {
     position: fixed;
     top: 0;
