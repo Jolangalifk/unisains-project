@@ -28,7 +28,7 @@
             </div>
             <div class="button">
                 <button class="bayar-nanti">Bayar Nanti</button>
-                <button>Lanjutkan</button>
+                <button @click="payWithMidtrans">Lanjutkan</button>
             </div>
         </div>
         <div v-else>
@@ -50,6 +50,8 @@ export default {
     data() {
         return {
             transaction: null,
+            id: null,
+            data: {}
         };
     },
     async created() {
@@ -71,7 +73,52 @@ export default {
             this.transaction = null;
         }
     },
-};
+    mounted() {
+        const script = document.createElement("script");
+        script.src = "https://app.sandbox.midtrans.com/snap/snap.js";
+        script.setAttribute("data-client-key", "SB-Mid-client-bEgJRNJrEQtjBn4p");
+        document.head.appendChild(script);
+    },
+    methods: {
+        getData() {
+            const getPembayaranInfo = localStorage.getItem("pembayaran");
+            if (getPembayaranInfo) {
+                this.data = JSON.parse(getPembayaranInfo);
+                console.log(this.data);
+            }
+        },
+        async payWithMidtrans() {
+            try {
+                const snapToken = this.data.token;
+
+                snap.pay(snapToken, {
+                    onSuccess: function (result) {
+                        // Payment successful, handle success logic here
+                        alert('Payment successful! Transaction ID: ' + result.transaction_id);
+                        //clear data local storage
+                        localStorage.removeItem('pembayaran');
+                        localStorage.removeItem('tkn-pembayaran');
+                        // Redirect or show success message as needed
+                        self.$router.push({ name: 'payment-success' });
+                    },
+                    onPending: function (result) {
+                        // Payment pending, handle pending logic here
+                        alert('Payment pending. Transaction ID: ' + result.transaction_id);
+                        // Redirect or show pending message as needed
+                    },
+                    onError: function (result) {
+                        // Payment failed, handle error logic here
+                        alert('Payment failed. Status code: ' + result.status_code);
+                        // Redirect or show error message as needed
+                    }
+                });
+            } catch (error) {
+                // Handle any error that occurs during the payment process
+                alert('Error Payment');
+            }
+        }
+    }
+}
 </script>
 
   
