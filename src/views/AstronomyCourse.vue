@@ -13,7 +13,6 @@
 import Navbar from '../components/Navbar.vue'
 import Footer from '../components/Footer.vue'
 import CardMain from '../components/CardMain.vue'
-import CardBiologi from '../components/CardBiologi.vue'
 </script>
 
 <style scoped>
