@@ -1,21 +1,77 @@
 <script setup>
 import NavbarProfileSettings from '../components/NavbarProfileSettings.vue';
 import axios from 'axios';
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
+
+const email = ref('');
+const password = ref('');
+const profileData = ref(null);
+
+const getUserToken = () => {
+    const token = localStorage.getItem('token');
+    return token ? token.replace(/['"]+/g, '') : '';
+};
+
+const saveProfile = async () => {
+    try {
+        const token = getUserToken();
+        if (token) {
+            const formData = new FormData();
+            formData.append('email', email.value);
+            formData.append('password', password.value);
+
+            await axios.post('https://admin.unisains.com/api/v1/profile/update', formData, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+
+            console.log('Profile updated successfully!');
+            // Show success notification
+            alert('Data berhasil diubah');
+        }
+    } catch (error) {
+        console.error('Error updating profile:', error);
+        // Show error notification
+        alert('Data gagal diubah');
+    }
+};
+
+onMounted(async () => {
+    try {
+        const token = getUserToken();
+        if (token) {
+            const timestamp = Date.now();
+            const response = await axios.get(`https://admin.unisains.com/api/v1/profile/show?timestamp=${timestamp}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            console.log('Response Data:', response.data);
+            profileData.value = response.data;
+            email.value = response.data.data.user.email;
+            password.value = response.data.data.user.password;
+            console.log('Email:', email.value);
+        }
+    } catch (error) {
+        console.error('Error fetching profile data:', error);
+    }
+});
 </script>
 
 <template>
     <div class="profile-settings">
         <NavbarProfileSettings />
         <div class="profile-settings-content">
-            <form action="">
+            <form @submit.prevent="saveProfile">
                 <div class="wrapper-email">
                     <h1>Email</h1>
                     <div class="email-content">
                         <div class="custom-email">
-                            <input type="text" name="" id="" placeholder="Email anda saat ini">
+                            <input v-model="email" type="text" name="" id="" placeholder="Email anda saat ini">
                         </div>
-                        <button>Ubah</button>
+                        <button type="submit">Ubah</button>
                     </div>
                 </div>
                 <div class="wrapper-password">
