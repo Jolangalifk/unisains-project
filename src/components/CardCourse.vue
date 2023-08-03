@@ -1,24 +1,62 @@
-<script>
-import ProgressBar from './ProgressBar.vue';
-export default {
-    components: {
-        ProgressBar
-    }
-};
-</script>
-
 <template>
-    <div class="card-course">
+    <div v-if="isCoursePurchased" class="card-course">
         <div class="card-course-image">
-            <img src="@/assets/image/card-bg.png" alt="">
+            <img :src="courseData.image" alt="">
         </div>
         <div class="card-course-text">
-            <h3>Belajar HTML dan CSS</h3>
-            <p>Belajar HTML dan CSS untuk pemula</p>
-            <ProgressBar :value="55" />
+            <h3>{{ courseData.name }}</h3>
+            <p>{{ courseData.description }}</p>
+            <ProgressBar :value="courseData.progress" />
         </div>
     </div>
+    <div v-else>
+        <p>Kursus belum dibeli.</p>
+    </div>
 </template>
+  
+<script setup>
+import { ref, onMounted } from 'vue';
+import axios from 'axios';
+
+const courseId = routes.params.id; // Ganti dengan ID kursus yang sesuai
+const courseData = ref(null);
+const isCoursePurchased = ref(false);
+
+const getUserToken = () => {
+    const token = localStorage.getItem('token');
+    return token ? token.replace(/['"]+/g, '') : '';
+};
+
+const fetchCourseData = async () => {
+    try {
+        const response = await axios.get(`https://admin.unisains.com/public/api/v1/course/learn/${courseId}`);
+        courseData.value = response.data;
+    } catch (err) {
+        console.error('Gagal mengambil data kursus.');
+    }
+};
+
+const fetchPurchasedCourses = async () => {
+    const userToken = getUserToken();
+    try {
+        const response = await axios.get('https://admin.unisains.com/api/v1/profile/show', {
+            headers: {
+                Authorization: `Bearer ${userToken}`,
+            },
+        });
+        const myCourseIds = response.data.my_course.map(course => course.id);
+        isCoursePurchased.value = myCourseIds.includes(courseId);
+    } catch (err) {
+        console.error('Gagal mengambil data profil.');
+    }
+};
+
+onMounted(async () => {
+    await fetchCourseData();
+    await fetchPurchasedCourses();
+});
+</script>
+  
 
 <style scoped>
 .card-course {
@@ -35,8 +73,8 @@ export default {
 }
 
 .card-course:hover {
-  transform: translateY(-5px);
-  box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.2);
+    transform: translateY(-5px);
+    box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.2);
 }
 
 .card-course-image img {
