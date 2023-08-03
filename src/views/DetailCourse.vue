@@ -4,11 +4,11 @@
         <!-- Tampilan data kursus -->
         <div class="preview">
             <img :src="courseData.thumbnail" alt="">
-            <h3>{{ courseData.price }}</h3>
+            <h3>Rp {{ courseData.price }}</h3>
             <div class="button">
-                <button @click="pesanSekarang">Pesan Sekarang</button>
+                <router-link :to="{ name: 'detail-order', params: { id: courseData.id } }"><button class="pesan">Pesan Sekarang</button></router-link>
                 <button class="keranjang" @click="keranjang">
-                    <img src="@/assets/icon/cart-course.svg" alt="">
+                    <img src="@/assets/icon/cart-iconw.svg" alt="">
                 </button>
             </div>
             <p class="cover">Kursus ini meliputi:</p>
@@ -17,11 +17,8 @@
         <div class="info">
             <div class="text">
                 <h3>{{ courseData.title_course }}</h3>
+                <h4>UNI SAINS</h4>
                 <p>{{ courseData.description }}</p>
-            </div>
-            <div class="material">
-                <p class="cover">Apa yang akan Anda pelajari</p>
-                <p class="item" v-for="item in courseData.modules" :key="item.id">{{ item.description }}</p>
             </div>
         </div>
     </div>
@@ -135,7 +132,7 @@ onMounted(() => {
 .preview {
     width: 430px;
     height: 700px;
-    border-radius: 20px;
+    border-radius: 10px;
     margin-left: 200px;
     margin-right: 70px;
     border: 1px solid #c1c1c1;
@@ -144,7 +141,7 @@ onMounted(() => {
 }
 
 .preview img {
-    border-radius: 20px 20px 0 0;
+    border-radius: 10px 10px 0 0;
     width: 428px;
     height: 255px;
 }
@@ -164,41 +161,37 @@ onMounted(() => {
     gap: 30px;
 }
 
-.preview .button button {
+.button .pesan {
     width: 260px;
-    height: 70px;
-    border-radius: 30px;
+    height: 75px;
+    border-radius: 10px;
     border: none;
     outline: none;
     cursor: pointer;
-    border-radius: 15px;
-    background-color: #6A2C70;
-    color: white;
-    font-size: 20px;
-    font-weight: 600;
-    font-family: poppins;
-}
-
-.preview .button .cart {
     background-color: #6A2C70;
     color: white;
     font-size: 18px;
     font-weight: 600;
     font-family: poppins;
-    margin-right: 20px;
 }
 
-.preview .button .keranjang {
-    width: 80px;
-    height: 70px;
+.button .keranjang {
+    width: 75px;
+    height: 75px;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    cursor: pointer;
     background-color: #6A2C70;
+    color: white;
     font-size: 18px;
     font-weight: 600;
+    font-family: poppins;
 }
 
-.preview .button .keranjang img {
-    width: 30px;
-    height: 30px;
+.button .keranjang img {
+    width: 40px;
+    height: 40px;
 }
 
 .preview p {
@@ -238,10 +231,17 @@ onMounted(() => {
     color: #000000;
 }
 
-.info .text p {
+.info .text h4 {
     font-size: 26px;
+    font-weight: bold;
+    color: #F08A5D;
+}
+
+.info .text p {
+    font-size: 20px;
     font-weight: 600;
     color: #000000;
+    margin-top: 50px;
 }
 
 .info .material {
@@ -372,7 +372,7 @@ onMounted(() => {
     flex-direction: column;
     margin-left: 200px;
     border: 1px solid #c1c1c1;
-    border-radius: 20px;
+    border-radius: 10px;
     margin-bottom: 100px;
 }
 
@@ -410,7 +410,7 @@ onMounted(() => {
 .rating-course .show {
     width: 250px;
     height: 70px;
-    border-radius: 20px;
+    border-radius: 10px;
     border: none;
     outline: none;
     cursor: pointer;
@@ -478,7 +478,7 @@ onMounted(() => {
     margin-left: 200px;
     margin-bottom: 100px;
     border: 1px solid #c1c1c1;
-    border-radius: 20px;
+    border-radius: 10px;
 }
 
 .more-course h3 {
