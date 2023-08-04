@@ -31,37 +31,39 @@
         </div>
         <p v-else-if="error">Terjadi kesalahan saat mengambil data.</p>
     </div>
-    <div class="modul-course" v-if="courseData">
-        <p>Konten kursus :</p>
-        <p>3 Modul - 30 Materi - Total durasi 2j 15m</p>
-        <ModulCourse :modules="courseData.modules" />
-    </div>
-    <div class="condition">
-        <p class="wrapper">Persyaratan</p>
-        <p class="item">1. Mac atau Windows</p>
-        <p class="item">2. Mempunyai HP yang support Augmented Reality (AR)</p>
-        <p class="item">3. Pemahaman dasar tentang anatomi</p>
-    </div>
-    <div class="rating-course">
-        <h3>4.7 course rating . 11K ratings</h3>
-        <div class="wrapper-review">
-            <div class="rate1">
-                <RatingCourse />
-                <RatingCourse />
-                <RatingCourse />
-            </div>
-            <div class="rate2">
-                <RatingCourse />
-                <RatingCourse />
-                <RatingCourse />
-            </div>
+    <div class="wrapper-course">
+        <div class="course-modul" v-if="courseData">
+            <p>Konten kursus :</p>
+            <p>3 Modul - 30 Materi - Total durasi 2j 15m</p>
+            <ModulCourse :modules="courseData.modules" />
         </div>
-        <button class="show">Show all reviews</button>
-    </div>
-    <div class="more-course">
-        <h3>More Course</h3>
-        <CardMain />
-        <CardBiologi />
+        <div class="condition">
+            <p class="wrapper">Persyaratan</p>
+            <p class="item">1. Mac atau Windows</p>
+            <p class="item">2. Mempunyai HP yang support Augmented Reality (AR)</p>
+            <p class="item">3. Pemahaman dasar tentang anatomi</p>
+        </div>
+        <div class="rating-course">
+            <h3>4.7 course rating . 11K ratings</h3>
+            <div class="wrapper-review">
+                <div class="rate1">
+                    <RatingCourse />
+                    <RatingCourse />
+                    <RatingCourse />
+                </div>
+                <div class="rate2">
+                    <RatingCourse />
+                    <RatingCourse />
+                    <RatingCourse />
+                </div>
+            </div>
+            <button class="show">Show all reviews</button>
+        </div>
+        <div class="more-course">
+            <h3>More Course</h3>
+            <CardMain />
+            <CardBiologi />
+        </div>
     </div>
     <Footer />
 </template>
@@ -84,7 +86,7 @@ const router = useRouter();
 
 // Fungsi untuk mengambil token dari local storage
 // const getUserToken = () => {
-    
+
 // };
 
 // Fungsi untuk mengambil data dari API dengan menggunakan token dari local storage
@@ -163,7 +165,6 @@ onMounted(() => {
     width: 100%;
     height: 980px;
     display: flex;
-    justify-content: space-between;
     align-items: center;
 }
 
@@ -349,29 +350,28 @@ onMounted(() => {
     }
 }
 
-.error-message {
-    font-size: 20px;
-    font-weight: 600;
-    color: red;
-    margin-top: 20px;
-}
-
-.modul-course {
-    width: 80%;
-    height: 600px;
+.wrapper-course {
+    width: 100%;
+    height: fit-content;
     display: flex;
     flex-direction: column;
+    align-content: space-between;
+}
+
+.course-modul {
+    width: 80%;
+    height: fit-content;
     margin-left: 200px;
 }
 
-.modul-course p {
+.course-modul p {
     font-size: 20px;
     font-weight: 600;
     color: #000000;
     margin-bottom: 20px;
 }
 
-.modul-course .wrapper {
+.course-modul .wrapper {
     font-size: 20px;
     font-weight: 600;
     color: #000000;
