@@ -4,7 +4,7 @@
             <div class="information">
                 <h1>Tanggal : <span class="tanggal">{{ transaction.date }}</span></h1>
                 <h1>Status : <span class="status">{{ transaction.status }}</span></h1>
-                <h1>Dijual Ke : <span class="penerima">{{ transaction.course.title_course }}</span></h1>
+                <h1>Dijual Ke : <span class="penerima">{{ transaction.user.username }}</span></h1>
             </div>
             <div class="menu">
                 <div class="text-kursus">
@@ -38,7 +38,23 @@
 </template>
   
 <script>
+import { ref, onMounted, onBeforeUnmount } from 'vue';
 import axios from "axios";
+import { useRoute, useRouter } from 'vue-router';
+
+const idTrx = localStorage.getItem('idTrx');
+const selectedCourse = ref(null);
+const transaction = ref(null);
+const router = useRouter();
+
+const orderId = useRoute();
+// const router = useRouter(); // Tambahkan router dari vue-router
+
+// Fungsi untuk mengambil data kursus yang dipilih dari localStorage berdasarkan id kursus
+const getSelectedCourse = () => {
+    const courseData = localStorage.getItem(`selectedCourse_${orderId}`);
+    selectedCourse.value = courseData ? JSON.parse(courseData) : null;
+};
 
 // Fungsi untuk mengambil token dari local storage
 const getUserToken = () => {
@@ -46,23 +62,43 @@ const getUserToken = () => {
     return token ? JSON.parse(token) : '';
 };
 
+// const fetchData = async () => {
+//     try {
+//         const userToken = getUserToken();
+
+//         const response = await axios.get(`https://admin.unisains.com/api/v1/transaction/show/${idTrx}`, {
+//             headers: {
+//                 Authorization: `Bearer ${userToken}`,
+//             },
+//         });
+
+//         transaction.value = response.data.data.transaction;
+//     } catch (error) {
+//         console.error(error);
+//         transaction.value = null;
+//     }
+// };
+
 export default {
     data() {
         return {
-            transaction: null,
-            id: null,
-            data: {}
+            transaction,
+            //  payWithMidtrans,
+            snapToken: null,
         };
     },
     async created() {
+        this.getData();
         try {
-            // Mendapatkan ID dari route params
-            const orderId = this.$route.params.id;
+            const userToken = localStorage.getItem('token');
+            const courseId = useRoute().params.id;
 
-            const userToken = getUserToken(); // Ganti dengan token yang valid
+            // Mengambil data kursus dari localStorage berdasarkan orderId
+            const courseData = localStorage.getItem(`selectedCourse_${courseId}`);
+            this.selectedCourse = courseData ? JSON.parse(courseData) : null;
 
-            // Mengambil data dari API menggunakan axios dan menyertakan token otorisasi
-            const response = await axios.get(`https://admin.unisains.com/api/v1/transaction/show/${orderId}`, {
+            // Mengambil data transaksi dari API berdasarkan orderId
+            const response = await axios.get(`https://admin.unisains.com/api/v1/transaction/show/${idTrx}`, {
                 headers: {
                     Authorization: `Bearer ${userToken}`,
                 },
@@ -80,26 +116,42 @@ export default {
         document.head.appendChild(script);
     },
     methods: {
-        getData() {
-            const getPembayaranInfo = localStorage.getItem("pembayaran");
-            if (getPembayaranInfo) {
-                this.data = JSON.parse(getPembayaranInfo);
-                console.log(this.data);
+        async getData() {
+            try {
+                const getUserToken = localStorage.getItem('token');
+                const idTrx = localStorage.getItem('idTrx');
+                const response = await axios.post(
+                    "https://admin.unisains.com/api/v1/transaction/checkout",
+                    {
+                        transaction_id: idTrx, // Menggunakan transaction_id sebagai data body permintaan
+                    },
+                    {
+                        headers: {
+                            Authorization: `Bearer ${getUserToken}`, // Memanggil getUserToken() untuk mendapatkan token
+                        },
+                    }
+                );
+
+                // Mengakses data token dari response dan menampilkannya menggunakan console.log
+                console.log(response.data.snap_token);
+                localStorage.setItem('snapToken', response.data.snap_token);
+            } catch (error) {
+                console.error(error);
+                // Handle error jika terjadi kesalahan saat mengambil data transaksi
             }
         },
         async payWithMidtrans() {
             try {
-                const snapToken = this.data.token;
-
+                const snapToken = localStorage.getItem('snapToken');
                 snap.pay(snapToken, {
                     onSuccess: function (result) {
                         // Payment successful, handle success logic here
                         alert('Payment successful! Transaction ID: ' + result.transaction_id);
                         //clear data local storage
+                        localStorage.removeItem('idTrx');
                         localStorage.removeItem('pembayaran');
-                        localStorage.removeItem('tkn-pembayaran');
                         // Redirect or show success message as needed
-                        self.$router.push({ name: 'payment-success' });
+                        router.push({ name: 'payment-success' });
                     },
                     onPending: function (result) {
                         // Payment pending, handle pending logic here
@@ -120,8 +172,6 @@ export default {
     }
 }
 </script>
-
-  
 
 <style scoped>
 .course-purchase {
