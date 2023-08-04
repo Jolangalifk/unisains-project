@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 
+const idTrx = JSON.parse(localStorage.getItem('idTrx'));
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -119,7 +120,7 @@ const router = createRouter({
       component: () => import('../views/CourseModuleView.vue')
     },
     {
-      path: '/detail-order/:id',
+      path: `/detail-order/${idTrx}`,
       name: 'detail-order',
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route

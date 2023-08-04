@@ -6,8 +6,8 @@
             <img :src="courseData.thumbnail" alt="">
             <h3>Rp {{ courseData.price }}</h3>
             <div class="button">
-                <router-link :to="{ name: 'detail-order', params: { id: courseData.id } }"><button class="pesan">Pesan Sekarang</button></router-link>
-                <button class="keranjang" @click="keranjang">
+                <button class="pesan" @click="checkout(courseData.id)">Pesan Sekarang</button>
+                <button class="keranjang" @click="addToCart">
                     <img src="@/assets/icon/cart-iconw.svg" alt="">
                 </button>
             </div>
@@ -83,20 +83,24 @@ const error = ref(null);
 const router = useRouter();
 
 // Fungsi untuk mengambil token dari local storage
-const getUserToken = () => {
-    const token = localStorage.getItem('token');
-    return token ? JSON.parse(token) : '';
-};
+// const getUserToken = () => {
+    
+// };
 
 // Fungsi untuk mengambil data dari API dengan menggunakan token dari local storage
 const fetchData = async () => {
     isLoading.value = true;
-    const userToken = getUserToken();
+    // const userToken = getUserToken();
+    const getUserInfo = localStorage.getItem('user-info');
+    // const idTrx = localStorage.getItem('idTrx');
+    // return token ? JSON.parse(token) : '';
+    const user = JSON.parse(getUserInfo);
+    const token = user.token;
     try {
         const courseId = useRoute().params.id; // Ubah disini, langsung mengambil nilai dari useRoute().params.id
         const response = await axios.get(`https://admin.unisains.com/api/v1/course/show/${courseId}`, {
             headers: {
-                Authorization: `Bearer ${userToken}`,
+                Authorization: `Bearer ${token}`,
             },
         });
         courseData.value = response.data.data.course;
@@ -112,6 +116,40 @@ const fetchData = async () => {
             // Jika ada error lain, tampilkan pesan error
             error.value = "Terjadi kesalahan saat mengambil data.";
         }
+    }
+};
+
+const checkout = async (courseId) => { // Tambahkan courseId sebagai parameter
+    // const userToken = getUserToken();
+    const getUserInfo = localStorage.getItem('user-info');
+    // const idTrx = localStorage.getItem('idTrx');
+    // return token ? JSON.parse(token) : '';
+    const user = JSON.parse(getUserInfo);
+    const token = user.token;
+
+    try {
+        const response = await axios.post(
+            "https://admin.unisains.com/api/v1/transaction/store",
+            {
+                course_id: courseId,
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }
+        );
+
+        // const snapToken = response.data.snap_token;
+        const idTrx = response.data.data.transaction.id;
+        localStorage.setItem("idTrx", JSON.parse(idTrx));
+        localStorage.setItem("pembayaran", JSON.stringify(response.data));
+        // Redirect ke halaman DetailOrder dengan menyertakan id kursus
+        router.push({ name: 'detail-order' });
+    } catch (error) {
+        console.error(error);
+        // Handle error jika terjadi kesalahan pada checkout
+        alert("Terjadi kesalahan saat checkout");
     }
 };
 
