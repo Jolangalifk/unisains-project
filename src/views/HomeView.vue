@@ -2,8 +2,8 @@
 import TheWelcome from '../components/TheWelcome.vue'
 import Navbar from '../components/Navbar.vue'
 import Footer from '../components/Footer.vue'
-import CardMain from '../components/CardMain.vue';
-import CardBiologi from '../components/CardBiologi.vue';
+import HcAstronomi from '../components/HcAstronomi.vue';
+import HcBiologi from '../components/HcBiologi.vue';
 </script>
 
 <template>
@@ -89,10 +89,10 @@ import CardBiologi from '../components/CardBiologi.vue';
       </div>
       <div class="two-course">
         <div class="course">
-          <CardMain />
+          <HcAstronomi />
         </div>
         <div class="course">
-          <CardBiologi />
+          <HcBiologi />
         </div>
       </div>
     </div>
