@@ -4,7 +4,7 @@
         <div class="receipt">
             <h1>Detail Pesanan</h1>
             <div class="receipt-detail">
-                <Order />
+                <Order :snapToken="snapToken" />
             </div>
         </div>
         <Footer />
@@ -15,6 +15,8 @@
 import Navbar from '../components/Navbar.vue'
 import Footer from '../components/Footer.vue'
 import Order from '../components/Order.vue'
+
+const snapToken = localStorage.getItem("snapToken");
 </script>
 
 <style scoped>
