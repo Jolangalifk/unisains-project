@@ -6,10 +6,13 @@
             <img :src="courseData.thumbnail" alt="">
             <h3>Rp {{ courseData.price }}</h3>
             <div class="button">
-                <router-link :to="{ name: 'detail-order', params: { id: courseData.id } }"><button class="pesan">Pesan Sekarang</button></router-link>
-                <button class="keranjang" @click="keranjang">
-                    <img src="@/assets/icon/cart-iconw.svg" alt="">
+                <button class="pesan">Masukkan keranjang</button>
+                <button class="keranjang" @click="addToCart">
+                    <img src="@/assets/icon/heart-outline .svg" alt="">
                 </button>
+            </div>
+            <div class="beli">
+                <button class="pesan" @click="checkout(courseData.id)">Pesan Sekarang</button>
             </div>
             <p class="cover">Kursus ini meliputi:</p>
             <p class="item" v-for="item in courseData.contents" :key="item.id">{{ item.description }}</p>
@@ -31,37 +34,39 @@
         </div>
         <p v-else-if="error">Terjadi kesalahan saat mengambil data.</p>
     </div>
-    <div class="modul-course" v-if="courseData">
-        <p>Konten kursus :</p>
-        <p>3 Modul - 30 Materi - Total durasi 2j 15m</p>
-        <ModulCourse :modules="courseData.modules" />
-    </div>
-    <div class="condition">
-        <p class="wrapper">Persyaratan</p>
-        <p class="item">1. Mac atau Windows</p>
-        <p class="item">2. Mempunyai HP yang support Augmented Reality (AR)</p>
-        <p class="item">3. Pemahaman dasar tentang anatomi</p>
-    </div>
-    <div class="rating-course">
-        <h3>4.7 course rating . 11K ratings</h3>
-        <div class="wrapper-review">
-            <div class="rate1">
-                <RatingCourse />
-                <RatingCourse />
-                <RatingCourse />
-            </div>
-            <div class="rate2">
-                <RatingCourse />
-                <RatingCourse />
-                <RatingCourse />
-            </div>
+    <div class="wrapper-course">
+        <div class="course-modul" v-if="courseData">
+            <p>Konten kursus :</p>
+            <p>3 Modul - 30 Materi - Total durasi 2j 15m</p>
+            <ModulCourse :modules="courseData.modules" />
         </div>
-        <button class="show">Show all reviews</button>
-    </div>
-    <div class="more-course">
-        <h3>More Course</h3>
-        <CardMain />
-        <CardBiologi />
+        <div class="condition">
+            <p class="wrapper">Persyaratan</p>
+            <p class="item">1. Mac atau Windows</p>
+            <p class="item">2. Mempunyai HP yang support Augmented Reality (AR)</p>
+            <p class="item">3. Pemahaman dasar tentang anatomi</p>
+        </div>
+        <div class="rating-course">
+            <h3>4.7 course rating . 11K ratings</h3>
+            <div class="wrapper-review">
+                <div class="rate1">
+                    <RatingCourse />
+                    <RatingCourse />
+                    <RatingCourse />
+                </div>
+                <div class="rate2">
+                    <RatingCourse />
+                    <RatingCourse />
+                    <RatingCourse />
+                </div>
+            </div>
+            <button class="show">Show all reviews</button>
+        </div>
+        <div class="more-course">
+            <h3>More Course</h3>
+            <CardMain />
+            <CardBiologi />
+        </div>
     </div>
     <Footer />
 </template>
@@ -83,20 +88,24 @@ const error = ref(null);
 const router = useRouter();
 
 // Fungsi untuk mengambil token dari local storage
-const getUserToken = () => {
-    const token = localStorage.getItem('token');
-    return token ? JSON.parse(token) : '';
-};
+// const getUserToken = () => {
+
+// };
 
 // Fungsi untuk mengambil data dari API dengan menggunakan token dari local storage
 const fetchData = async () => {
     isLoading.value = true;
-    const userToken = getUserToken();
+    // const userToken = getUserToken();
+    const getUserInfo = localStorage.getItem('user-info');
+    // const idTrx = localStorage.getItem('idTrx');
+    // return token ? JSON.parse(token) : '';
+    const user = JSON.parse(getUserInfo);
+    const token = user.token;
     try {
         const courseId = useRoute().params.id; // Ubah disini, langsung mengambil nilai dari useRoute().params.id
         const response = await axios.get(`https://admin.unisains.com/api/v1/course/show/${courseId}`, {
             headers: {
-                Authorization: `Bearer ${userToken}`,
+                Authorization: `Bearer ${token}`,
             },
         });
         courseData.value = response.data.data.course;
@@ -115,9 +124,41 @@ const fetchData = async () => {
     }
 };
 
+const checkout = async (courseId) => { // Tambahkan courseId sebagai parameter
+    // const userToken = getUserToken();
+    const getUserInfo = localStorage.getItem('user-info');
+    // const idTrx = localStorage.getItem('idTrx');
+    // return token ? JSON.parse(token) : '';
+    const user = JSON.parse(getUserInfo);
+    const token = user.token;
+
+    try {
+        const response = await axios.post(
+            "https://admin.unisains.com/api/v1/transaction/store",
+            {
+                course_id: courseId,
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }
+        );
+        const idTrx = response.data.data.transaction.id;
+        localStorage.setItem("idTrx", idTrx);
+        localStorage.setItem("pembayaran", JSON.stringify(response.data));
+        router.push({ name: 'detail-order', params: { id: idTrx } });
+    } catch (error) {
+        console.error(error);
+        // Handle error jika terjadi kesalahan pada checkout
+        alert("Terjadi kesalahan saat checkout");
+    }
+};
+
 onMounted(() => {
     fetchData();
 });
+
 </script>
   
 <style scoped>
@@ -125,7 +166,6 @@ onMounted(() => {
     width: 100%;
     height: 980px;
     display: flex;
-    justify-content: space-between;
     align-items: center;
 }
 
@@ -168,10 +208,11 @@ onMounted(() => {
     border: none;
     outline: none;
     cursor: pointer;
-    background-color: #6A2C70;
-    color: white;
+    background-color: white;
+    color: #6A2C70;
+    border: 2px solid #6A2C70;
     font-size: 18px;
-    font-weight: 600;
+    font-weight: bold;
     font-family: poppins;
 }
 
@@ -182,8 +223,8 @@ onMounted(() => {
     border: none;
     outline: none;
     cursor: pointer;
-    background-color: #6A2C70;
-    color: white;
+    background-color: white;
+    border: 2px solid #6A2C70;
     font-size: 18px;
     font-weight: 600;
     font-family: poppins;
@@ -192,6 +233,25 @@ onMounted(() => {
 .button .keranjang img {
     width: 40px;
     height: 40px;
+}
+
+.beli {
+    margin-left: 30px;
+    margin-top: 20px;
+}
+
+.beli .pesan {
+    width: 365px;
+    height: 75px;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    background-color: #6A2C70;
+    color: white;
+    font-size: 18px;
+    font-weight: 600;
+    font-family: poppins;
 }
 
 .preview p {
@@ -311,29 +371,28 @@ onMounted(() => {
     }
 }
 
-.error-message {
-    font-size: 20px;
-    font-weight: 600;
-    color: red;
-    margin-top: 20px;
-}
-
-.modul-course {
-    width: 80%;
-    height: 600px;
+.wrapper-course {
+    width: 100%;
+    height: fit-content;
     display: flex;
     flex-direction: column;
+    align-content: space-between;
+}
+
+.course-modul {
+    width: 80%;
+    height: fit-content;
     margin-left: 200px;
 }
 
-.modul-course p {
+.course-modul p {
     font-size: 20px;
     font-weight: 600;
     color: #000000;
     margin-bottom: 20px;
 }
 
-.modul-course .wrapper {
+.course-modul .wrapper {
     font-size: 20px;
     font-weight: 600;
     color: #000000;
