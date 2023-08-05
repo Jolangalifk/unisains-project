@@ -143,6 +143,7 @@ export default {
         async payWithMidtrans() {
             try {
                 const snapToken = localStorage.getItem('snapToken');
+                const self = this;
                 snap.pay(snapToken, {
                     onSuccess: function (result) {
                         // Payment successful, handle success logic here
@@ -151,12 +152,7 @@ export default {
                         localStorage.removeItem('idTrx');
                         localStorage.removeItem('pembayaran');
                         // Redirect or show success message as needed
-                        router.push({ name: 'payment-success' });
-                    },
-                    onPending: function (result) {
-                        // Payment pending, handle pending logic here
-                        alert('Payment pending. Transaction ID: ' + result.transaction_id);
-                        // Redirect or show pending message as needed
+                        self.$router.push('/payment-success');
                     },
                     onError: function (result) {
                         // Payment failed, handle error logic here
