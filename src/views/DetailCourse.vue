@@ -6,10 +6,13 @@
             <img :src="courseData.thumbnail" alt="">
             <h3>Rp {{ courseData.price }}</h3>
             <div class="button">
-                <button class="pesan" @click="checkout(courseData.id)">Pesan Sekarang</button>
+                <button class="pesan">Masukkan keranjang</button>
                 <button class="keranjang" @click="addToCart">
-                    <img src="@/assets/icon/cart-iconw.svg" alt="">
+                    <img src="@/assets/icon/heart-outline .svg" alt="">
                 </button>
+            </div>
+            <div class="beli">
+                <button class="pesan" @click="checkout(courseData.id)">Pesan Sekarang</button>
             </div>
             <p class="cover">Kursus ini meliputi:</p>
             <p class="item" v-for="item in courseData.contents" :key="item.id">{{ item.description }}</p>
@@ -207,10 +210,11 @@ onMounted(() => {
     border: none;
     outline: none;
     cursor: pointer;
-    background-color: #6A2C70;
-    color: white;
+    background-color: white;
+    color: #6A2C70;
+    border: 2px solid #6A2C70;
     font-size: 18px;
-    font-weight: 600;
+    font-weight: bold;
     font-family: poppins;
 }
 
@@ -221,8 +225,8 @@ onMounted(() => {
     border: none;
     outline: none;
     cursor: pointer;
-    background-color: #6A2C70;
-    color: white;
+    background-color: white;
+    border: 2px solid #6A2C70;
     font-size: 18px;
     font-weight: 600;
     font-family: poppins;
@@ -231,6 +235,25 @@ onMounted(() => {
 .button .keranjang img {
     width: 40px;
     height: 40px;
+}
+
+.beli {
+    margin-left: 30px;
+    margin-top: 20px;
+}
+
+.beli .pesan {
+    width: 365px;
+    height: 75px;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    background-color: #6A2C70;
+    color: white;
+    font-size: 18px;
+    font-weight: 600;
+    font-family: poppins;
 }
 
 .preview p {
