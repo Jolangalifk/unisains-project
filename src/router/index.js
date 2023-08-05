@@ -145,6 +145,11 @@ const router = createRouter({
       path: '/payment-success',
       name: 'payment-success',
       component: () => import('../views/PaymentSuccess.vue')
+    },
+    {
+      path: '/wishlist',
+      name: 'wishlist',
+      component: () => import('../views/Wishlist.vue')
     }
   ]
 })
