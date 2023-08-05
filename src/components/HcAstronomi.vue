@@ -85,7 +85,7 @@ const checkUserLoginStatus = () => {
 const fetchData = async () => {
     try {
         const response = await axios.get('https://admin.unisains.com/api/v1/course/category');
-        courseData.value = response.data.data.astronomi.slice(0, 1);
+        courseData.value = response.data.data.astronomi.slice(1, 2);
         console.log(courseData.value);
     } catch (error) {
         console.error(error);
