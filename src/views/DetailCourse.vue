@@ -144,13 +144,10 @@ const checkout = async (courseId) => { // Tambahkan courseId sebagai parameter
                 },
             }
         );
-
-        // const snapToken = response.data.snap_token;
         const idTrx = response.data.data.transaction.id;
-        localStorage.setItem("idTrx", JSON.parse(idTrx));
+        localStorage.setItem("idTrx", idTrx);
         localStorage.setItem("pembayaran", JSON.stringify(response.data));
-        // Redirect ke halaman DetailOrder dengan menyertakan id kursus
-        router.push({ name: 'detail-order' });
+        router.push({ name: 'detail-order', params: { id: idTrx } });
     } catch (error) {
         console.error(error);
         // Handle error jika terjadi kesalahan pada checkout
@@ -161,6 +158,7 @@ const checkout = async (courseId) => { // Tambahkan courseId sebagai parameter
 onMounted(() => {
     fetchData();
 });
+
 </script>
   
 <style scoped>
