@@ -69,46 +69,46 @@ export default {
         }
     },
     methods: {
-    togglePasswordVisibility() {
-      this.showPassword = !this.showPassword; // Membalikkan nilai status
+        togglePasswordVisibility() {
+            this.showPassword = !this.showPassword; // Membalikkan nilai status
+        },
+        async Login() {
+            if (!this.email || !this.password) {
+                this.loginError = true;
+                this.loginErrorMessage = 'Silahkan isi email dan password terlebih dahulu.';
+                return;
+            }
+            try {
+                this.isLoading = true;
+                let result = await axios.post('https://admin.unisains.com/api/v1/auth/login', {
+                    email: this.email,
+                    password: this.password,
+                });
+                console.log(result);
+                if (result.status === 200 && result.data) {
+                    alert('Login berhasil');
+                    localStorage.setItem('user-info', JSON.stringify(result.data));
+                    localStorage.setItem('token', result.data.token);
+                    this.loginSuccess();
+                }
+            } catch (error) {
+                console.error(error);
+                this.loginError = true; // Set nilai loginError menjadi true
+                this.loginErrorMessage = 'Email atau password yang anda masukkan salah.'; // Set pesan kesalahan yang ingin ditampilkan
+            } finally {
+                this.isLoading = false; // Nonaktifkan overlay loading setelah proses login selesai
+            }
+        },
+        loginSuccess() {
+            const redirectCourseId = localStorage.getItem('redirectCourseId');
+            if (redirectCourseId) {
+                this.$router.push(`/detail-course/${redirectCourseId}`);
+                localStorage.removeItem('redirectCourseId'); // Hapus data dari local storage setelah digunakan
+            } else {
+                this.$router.push('/');
+            }
+        },
     },
-    async Login() {
-      if (!this.email || !this.password) {
-        this.loginError = true;
-        this.loginErrorMessage = 'Silahkan isi email dan password terlebih dahulu.';
-        return;
-      }
-      try {
-        this.isLoading = true;
-        let result = await axios.post('https://admin.unisains.com/api/v1/auth/login', {
-          email: this.email,
-          password: this.password,
-        });
-        console.log(result);
-        if (result.status === 200 && result.data) {
-          alert('Login berhasil');
-          localStorage.setItem('user-info', JSON.stringify(result.data));
-          localStorage.setItem('token', result.data.token);
-          this.loginSuccess();
-        }
-      } catch (error) {
-        console.error(error);
-        this.loginError = true; // Set nilai loginError menjadi true
-        this.loginErrorMessage = 'Email atau password yang anda masukkan salah.'; // Set pesan kesalahan yang ingin ditampilkan
-      } finally {
-        this.isLoading = false; // Nonaktifkan overlay loading setelah proses login selesai
-      }
-    },
-    loginSuccess() {
-      const redirectCourseId = localStorage.getItem('redirectCourseId');
-      if (redirectCourseId) {
-        this.$router.push(`/detail-course/${redirectCourseId}`);
-        localStorage.removeItem('redirectCourseId'); // Hapus data dari local storage setelah digunakan
-      } else {
-        this.$router.push('/'); 
-      }
-    },
-  },
 }
 </script>
 
