@@ -98,7 +98,16 @@ export default {
             } finally {
                 this.isLoading = false; // Nonaktifkan overlay loading setelah proses login selesai
             }
-        }
+        },
+        loginSuccess() {
+            const redirectCourseId = localStorage.getItem('redirectCourseId');
+            if (redirectCourseId) {
+                this.$router.push(`/detail-course/${redirectCourseId}`);
+                localStorage.removeItem('redirectCourseId'); // Hapus data dari local storage setelah digunakan
+            } else {
+                this.$router.push('/'); // Jika tidak ada id yang disimpan, redirect ke halaman beranda (home) atau halaman lainnya
+            }
+        },
 
     },
 }
@@ -390,5 +399,4 @@ button h3 {
         transform: rotate(360deg);
     }
 }
-
 </style>
