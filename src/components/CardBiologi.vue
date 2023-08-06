@@ -56,6 +56,9 @@ const handlePopup = async (id) => {
         previewCourseId.value = id;
         await fetchPreviewData(id);
         popup.value = true;
+        localStorage.setItem('redirectCourseId', id);
+    } else {
+        router.push(`/detail-course/${id}`);
     }
 };
 
@@ -67,6 +70,7 @@ const goToDetailCourse = (id) => {
     if (isLoggedIn.value) {
         router.push(`/detail-course/${id}`);
     } else {
+        localStorage.setItem('redirectCourseId', id);
         router.push('/login');
     }
 };
