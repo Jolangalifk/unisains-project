@@ -80,7 +80,7 @@ export default {
             }
             try {
                 this.isLoading = true;
-                let result = await axios.post('http://127.0.0.1:8000/api/v1/auth/login', {
+                let result = await axios.post('https://admin.unisains.com/api/v1/auth/login', {
                     email: this.email,
                     password: this.password,
                 });
@@ -88,7 +88,7 @@ export default {
                 if (result.status === 200 && result.data) {
                     alert('Login berhasil');
                     localStorage.setItem('user-info', JSON.stringify(result.data));
-                    localStorage.setItem('token', JSON.stringify(result.data.token));
+                    localStorage.setItem('token', result.data.token);
                     this.$router.push('/');
                 }
             } catch (error) {

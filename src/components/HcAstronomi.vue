@@ -56,9 +56,6 @@ const handlePopup = async (id) => {
         previewCourseId.value = id;
         await fetchPreviewData(id);
         popup.value = true;
-        localStorage.setItem('redirectCourseId', id);
-    } else {
-        router.push(`/detail-course/${id}`);
     }
 };
 
@@ -70,7 +67,6 @@ const goToDetailCourse = (id) => {
     if (isLoggedIn.value) {
         router.push(`/detail-course/${id}`);
     } else {
-        localStorage.setItem('redirectCourseId', id);
         router.push('/login');
     }
 };
@@ -89,7 +85,7 @@ const checkUserLoginStatus = () => {
 const fetchData = async () => {
     try {
         const response = await axios.get('https://admin.unisains.com/api/v1/course/category');
-        courseData.value = response.data.data.astronomi;
+        courseData.value = response.data.data.astronomi.slice(1, 2);
         console.log(courseData.value);
     } catch (error) {
         console.error(error);
@@ -97,18 +93,20 @@ const fetchData = async () => {
 };
 
 const fetchPreviewData = async (id) => {
-    try {
-        const response = await axios.get(
-            `https://admin.unisains.com/api/v1/course/preview/${id}`
-        );
-        previewData.value = response.data.data.course; // Perbarui baris ini
-        console.log(previewData.value);
-    } catch (error) {
-        console.error(error);
-    }
+  try {
+    const response = await axios.get(
+      `https://admin.unisains.com/api/v1/course/preview/${id}`
+    );
+    previewData.value = response.data.data.course; // Perbarui baris ini
+    console.log(previewData.value);
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 </script>
+
+  
   
 <style  scoped>
 .scroll-course {

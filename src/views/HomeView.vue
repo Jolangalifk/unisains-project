@@ -2,6 +2,8 @@
 import TheWelcome from '../components/TheWelcome.vue'
 import Navbar from '../components/Navbar.vue'
 import Footer from '../components/Footer.vue'
+import HcAstronomi from '../components/HcAstronomi.vue';
+import HcBiologi from '../components/HcBiologi.vue';
 </script>
 
 <template>
@@ -87,26 +89,10 @@ import Footer from '../components/Footer.vue'
       </div>
       <div class="two-course">
         <div class="course">
-          <div class="img-astronomi">
-            <img class src="@/assets/image/astronomi-course.png" alt="">
-          </div>
-          <h3>Biologi: Astronomi</h3>
-          <div class="button">
-            <button>
-              <router-link to="/course">Lihat kursus</router-link>
-            </button>
-          </div>
+          <HcAstronomi />
         </div>
         <div class="course">
-          <div class="img-anatomi">
-            <img src="@/assets/image/anatomi-course.png" alt="">
-          </div>
-          <h3>Biologi: Anatomi</h3>
-          <div class="button">
-            <button>
-              <router-link to="/course">Lihat kursus</router-link>
-            </button>
-          </div>
+          <HcBiologi />
         </div>
       </div>
     </div>
@@ -270,7 +256,7 @@ import Footer from '../components/Footer.vue'
   width: 750px;
   height: 750px;
   position: absolute;
-  top: 30%;
+  top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
 }
@@ -541,95 +527,11 @@ import Footer from '../components/Footer.vue'
 }
 
 .popular-course .two-course {
-  width: 1000px;
+  width: auto;
+  height: 100%;
   display: flex;
-  justify-content: space-between;
-  margin-top: 10px;
-}
-
-.popular-course .two-course .course {
-  width: 464px;
-  height: 600px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  background-color: white;
-  border-radius: 30px;
-  margin-left: 85px;
-}
-
-.popular-course .course .img-astronomi {
-  width: 464px;
-  height: 410px;
-  border-radius: 30px;
-}
-
-.popular-course .course .img-astronomi img {
-  width: 464px;
-  height: 410px;
-  border-radius: 30px;
-}
-
-.popular-course .course .img-anatomi {
-  width: 464px;
-  height: 410px;
-  border-radius: 30px;
-}
-
-.popular-course .course .img-anatomi img {
-  width: 464px;
-  height: 410px;
-  border-radius: 30px;
-}
-
-.popular-course .course h3 {
-  width: 60%;
-  font-size: 26px;
-  font-weight: bold;
-  color: black;
-  margin-left: 30px;
-  margin-bottom: 20px;
-}
-
-.popular-course .course p {
-  width: 100%;
-  font-size: 20px;
-  font-weight: normal;
-  color: white;
-  line-height: 1.5;
-}
-
-.popular-course .course .button {
-  width: 170px;
-  height: 60px;
-  border-radius: 30px;
-  background-color: #F08A5D;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-left: 30px;
-  margin-bottom: 30px;
-  cursor: pointer;
-}
-
-.popular-course .course .button a {
-  width: 100%;
-  font-size: 18px;
-  font-weight: 600;
-  color: white;
-  text-align: center;
-  font-family: poppins;
-  background-color: transparent;
-  text-decoration: none;
-}
-
-.popular-course .course button {
-  border-radius: 30px;
-  background-color: #F08A5D;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border: none;
+  flex-direction: row;
+  margin-left: 200px;
 }
 
 .practical {

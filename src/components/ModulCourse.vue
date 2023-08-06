@@ -1,83 +1,62 @@
 <template>
     <div>
-        <div v-for="item in items" :key="item.id" @click="toggleAccordion(item.id)"
-            :class="{ 'accordion-item': true, 'active': item.id === activeItem }">
-            <div class="accordion-header"><p>{{ item.title }}</p></div>
-            <div class="accordion-content" v-show="item.id === activeItem">
-                {{ item.content }}
-                <div v-if="item.additionalInfo">
-                    <h4>Additional Info</h4>
-                    <p>{{ item.additionalInfo }}</p>
-                </div>
+        <div v-if="modules && modules.length > 0">
+            <div v-for="module in modules" :key="module.title_module" class="module-item">
+                <h3>{{ module.title_module }}</h3>
+                <p>{{ module.description }}</p>
+                <img :src="module.thumbnail_module" alt="Module Thumbnail" class="module-thumbnail">
             </div>
+        </div>
+        <div v-else>
+            <!-- Tampilkan pesan jika tidak ada data modul -->
+            <p>Tidak ada data modul untuk ditampilkan.</p>
         </div>
     </div>
 </template>
 
 <script>
 export default {
-    data() {
-        return {
-            activeItem: null,
-            items: [
-                {
-                    id: 1,
-                    title: 'Modul 1 - Az', 
-                    content: 'Content 1',
-                    additionalInfo: 'Additional Info 1'
-                },
-                {
-                    id: 2,
-                    title: 'Modul 2 - Az',
-                    content: 'Content 2',
-                    additionalInfo: 'Additional Info 2'
-                },
-                { id: 3, title: 'Modul 3 - Az', content: 'Content 3' }
-            ]
-        };
-    },
-    methods: {
-        toggleAccordion(itemId) {
-            this.activeItem = this.activeItem === itemId ? null : itemId;
+    props: {
+        modules: {
+            type: Array,
+            default: () => []
         }
     }
 };
 </script>
 
 <style>
-/* Styles remain the same */
-
-.accordion-item {
-    width: 1480px;
-    border: 1px solid #ccc;
-    margin-bottom: 10px;
-    border-radius: 20px;
-}
-
-.accordion-header {
-    width: 100%;
-    height: 100px;
-    padding: 10px;
-    cursor: pointer;
+/* Style untuk container modul */
+.module-item {
     background-color: #6A2C70;
-    color: white;
-    border-radius: 20px;
-    display: flex;
-    align-items: center;
+    border-radius: 10px;
+    padding: 30px;
+    margin: 10px 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.accordion-header p {
-    margin-left: 20px;
+/* Style untuk judul modul */
+.module-item h3 {
     font-size: 24px;
     font-weight: 600;
+    margin-bottom: 10px;
+    color: #fff;
 }
 
-.accordion-content {
-    padding: 10px;
-    display: none;
+/* Style untuk deskripsi modul */
+.module-item p {
+    font-size: 20px;
+    margin-bottom: 10px;
+    line-height: 1.5;
+    color: #fff;
 }
 
-.accordion-item.active .accordion-content {
-    display: block;
+/* Style untuk thumbnail modul */
+.module-thumbnail {
+    width: 20%;
+    height: auto;
+    margin-top: 10px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 </style>
