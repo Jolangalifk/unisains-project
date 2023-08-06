@@ -105,7 +105,7 @@ export default {
         this.$router.push(`/detail-course/${redirectCourseId}`);
         localStorage.removeItem('redirectCourseId'); // Hapus data dari local storage setelah digunakan
       } else {
-        this.$router.push('/'); // Jika tidak ada id yang disimpan, redirect ke halaman beranda (home) atau halaman lainnya
+        this.$router.push('/'); 
       }
     },
   },
