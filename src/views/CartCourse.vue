@@ -2,8 +2,6 @@
     <main>
         <Navbar />
         <div class="card">
-            <ListCourse />
-            <OrderSummary />
         </div>
         <Footer />
     </main>
@@ -12,8 +10,6 @@
 <script setup>
 import Navbar from '@/components/Navbar.vue'
 import Footer from '@/components/Footer.vue'
-import ListCourse from '@/components/ListCourse.vue'
-import OrderSummary from '@/components/OrderSummary.vue'
 </script>
   
 <style scoped>
