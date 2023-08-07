@@ -111,7 +111,7 @@ onMounted(async () => {
                             <div class="profile-info">
                                 <ul>
                                     <li><router-link to="/pembelajaran-saya">Pembelajaran saya</router-link></li>
-                                    <li><router-link to="/keranjang">Keranjang</router-link></li>
+                                    <li><router-link to="/cart-course">Keranjang</router-link></li>
                                     <li><router-link to="/daftar-keinginan">Daftar keinginan</router-link></li>
                                 </ul>
                             </div>
