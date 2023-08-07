@@ -1,25 +1,68 @@
 <template>
-    <div class="list-history">
-        <div class="list">
-            <div class="kursus">
-                <p>Anatomi Tubuh Manusia : Jantung</p>
-            </div>
-            <div class="text">
-                <div class="tanggal-p">
-                <p class="tanggal">17-01-1999</p>
-            </div>
-                <p>Berhasil</p>
-                <p>Rp 200.000</p>
-                <p>BCA</p>
-            </div>
-            <div class="button-detail">
-                <button>Detail</button>
+    <div>
+        <div v-for="(item, index) in listHistory" :key="index" class="list-history">
+            <div class="list">
+                <div class="kursus">
+                    <!-- Tambahkan cek kondisional menggunakan v-if -->
+                    <p v-if="item.course">{{ item.course.title_course }}</p>
+                    <p v-else>Kursus Tidak Tersedia</p>
+                </div>
+                <div class="text">
+                    <div class="tanggal-p">
+                        <p class="tanggal">{{ formatDate(item.date) }}</p>
+                    </div>
+                    <p>{{ item.status }}</p>
+                    <p>Rp {{ item.total_price }}</p>
+                    <p>{{ item.code_transaction }}</p>
+                </div>
+                <div class="button-detail">
+                    <button @click="goToDetail(item.id)">Detail</button>
+                </div>
             </div>
         </div>
     </div>
 </template>
 
 <script setup>
+import axios from 'axios';
+import { ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
+
+const listHistory = ref([]);
+const router = useRouter();
+
+const formatDate = (date) => {
+    // Implement your date formatting logic here
+    // For example, you can use JavaScript Date object or a library like moment.js
+    return date;
+};
+
+const goToDetail = (transactionId) => {
+  router.push(`/detail-transaction/${transactionId}`);
+  console.log(transactionId);
+};
+
+onMounted(async () => {
+    try {
+        const getUserInfo = localStorage.getItem('user-info');
+        const user = JSON.parse(getUserInfo);
+        const token = user.token;
+        const response = await axios.get('https://admin.unisains.com/api/v1/transaction/all', {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            }
+        })
+
+        listHistory.value = response.data.data.transactions;
+        console.log(listHistory.value);
+        // if (response.data.status === 200) {
+        //     listHistory.value = response.data.data;
+        // }
+    } catch (error) {
+        console.error(error);
+        alert('Terjadi kesalahan saat mengambil data transaksi.');
+    }
+});
 
 </script>
 

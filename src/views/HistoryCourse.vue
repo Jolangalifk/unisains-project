@@ -12,12 +12,10 @@
                         <p>Tanggal</p>
                         <p>Status</p>
                         <p>Harga</p>
-                        <p>Pembayaran</p>
+                        <p>Kode pesanan</p>
                     </div>
                 </div>
                 <div class="list">
-                    <History />
-                    <History />
                     <History />
                 </div>
             </div>
