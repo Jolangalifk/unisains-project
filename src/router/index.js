@@ -162,6 +162,11 @@ const router = createRouter({
       path: `/detail-transaction/:id`,
       name: 'detail-transaction',
       component: () => import('../views/DetailTransaction.vue')
+    },
+    {
+      path: '/help-center',
+      name: 'help-center',
+      component: () => import('../views/HelpCenter.vue')
     }
   ]
 })
