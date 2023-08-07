@@ -53,7 +53,7 @@ onMounted(async () => {
     }
 
     console.log(isLoggedIn.value);
-    await fetchProfileData(); // Fetch profile data here
+    await fetchProfileData();
 });
 </script>
 
@@ -123,7 +123,7 @@ onMounted(async () => {
                             <div class="profile-info">
                                 <ul>
                                     <li><router-link to="/pengaturan-akun">Pengaturan Akun</router-link></li>
-                                    <li><router-link to="/riwayat-transaksi">Riwayat transaksi</router-link></li>
+                                    <li><router-link to="/history-course">Riwayat transaksi</router-link></li>
                                 </ul>
                             </div>
                         </div>
