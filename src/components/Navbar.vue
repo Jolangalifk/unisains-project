@@ -84,7 +84,7 @@ onMounted(async () => {
                 </router-link>
             </button>
             <button class="cart btn">
-                <router-link to="/cart">
+                <router-link to="/cart-course">
                     <img src="@/assets/icon/cart-icon.svg" alt="">
                 </router-link>
             </button>
