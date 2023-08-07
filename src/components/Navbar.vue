@@ -53,7 +53,7 @@ onMounted(async () => {
     }
 
     console.log(isLoggedIn.value);
-    await fetchProfileData(); // Fetch profile data here
+    await fetchProfileData();
 });
 </script>
 
