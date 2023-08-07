@@ -1,3 +1,13 @@
+<script setup>
+import axios from 'axios';
+import { ref, onMounted, watch } from 'vue';
+
+const getUserToken = () => {
+    const token = localStorage.getItem('token');
+    return token ? token.replace(/['"]+/g, '') : '';
+};
+</script>
+
 <template>
     <div class="module-list-container">
         <div class="modul-container">

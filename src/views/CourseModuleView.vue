@@ -1,47 +1,11 @@
-<script>
+<script setup>
 import ContentModule from '../components/ContentModule.vue';
+import axios from 'axios';
+import { ref, onMounted, watch } from 'vue';
 
-export default {
-    components: {
-        ContentModule
-    },
-    data() {
-        return {
-            moduleData: null,
-            error: null
-        };
-    },
-
-    methods: {
-        async fetchModuleData() {
-            try {
-                const response = await fetch('https://admin.unisains.com/public/api/v1/module/show', {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem('token')}`,
-                    },
-                });
-
-                if (!response.ok) {
-                    throw new Error(`Failed to fetch module data: ${response.status} ${response.statusText}`);
-                }
-
-                const data = await response.json();
-                this.moduleData = {
-                    id: data.id,
-                    title: data.title,
-                    description: data.description,
-                    image: data.image,
-                    content: data.content
-                };
-            } catch (error) {
-                this.error = error.message;
-                console.error(error);
-            }
-        }
-    },
-    mounted() {
-        this.fetchModuleData();
-    },
+const getUserToken = () => {
+    const token = localStorage.getItem('token');
+    return token ? token.replace(/['"]+/g, '') : '';
 };
 </script>
 <template>
@@ -89,6 +53,7 @@ export default {
         </div>
     </main>
 </template>
+
 <style scoped>
 .container-module {
     width: 100%;
