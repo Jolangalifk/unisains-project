@@ -52,7 +52,7 @@ const deleteFromCart = async (courseId) => {
     try {
         const token = localStorage.getItem('token');
 
-        const response = await axios.post(
+        const response = await axios.delete(
             `https://admin.unisains.com/api/v1/course/cart/delete/${courseId}`,
             {
                 headers: {
