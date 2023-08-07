@@ -133,7 +133,7 @@ onMounted(async () => {
                         <div class="profile-content">
                             <div class="profile-info">
                                 <ul>
-                                    <li><router-link to="/bantuan">Bantuan</router-link></li>
+                                    <li><router-link to="/help-center">Bantuan</router-link></li>
                                     <li><span @click="logout">Keluar</span></li>
                                 </ul>
                             </div>
