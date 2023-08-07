@@ -6,8 +6,8 @@
             <img :src="courseData.thumbnail" alt="">
             <h3>Rp {{ courseData.price }}</h3>
             <div class="button">
-                <button class="pesan">Masukkan keranjang</button>
-                <button class="keranjang" @click="addToCart">
+                <button class="pesan" @click="addToCart">Masukkan keranjang</button>
+                <button class="keranjang">
                     <img src="@/assets/icon/heart-outline .svg" alt="">
                 </button>
             </div>
@@ -87,11 +87,6 @@ const isLoading = ref(false);
 const error = ref(null);
 const router = useRouter();
 
-// Fungsi untuk mengambil token dari local storage
-// const getUserToken = () => {
-
-// };
-
 // Fungsi untuk mengambil data dari API dengan menggunakan token dari local storage
 const fetchData = async () => {
     isLoading.value = true;
@@ -158,6 +153,38 @@ const checkout = async (courseId) => { // Tambahkan courseId sebagai parameter
 onMounted(() => {
     fetchData();
 });
+
+const addToCart = async () => {
+  try {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      // Jika tidak ada token, minta pengguna untuk login terlebih dahulu
+      alert('Anda harus login terlebih dahulu untuk menambahkan ke keranjang.');
+      return;
+    }
+
+    const response = await axios.post(
+      'https://admin.unisains.com/api/v1/course/cart/store',
+      {
+        course_id: courseData.value.id,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (response.status === 200) {
+      // Kursus berhasil ditambahkan ke keranjang (wishlist)
+      alert('Kursus berhasil ditambahkan ke keranjang.');
+    }
+  } catch (error) {
+    console.error(error);
+    // Tangani kesalahan lainnya
+    alert('Terjadi kesalahan saat menambahkan ke keranjang.');
+  }
+};
 
 </script>
   
