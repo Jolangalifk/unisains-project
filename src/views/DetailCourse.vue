@@ -81,6 +81,7 @@ import RatingCourse from '../components/RatingCourse.vue'
 import CardMain from '../components/CardMain.vue'
 import CardBiologi from '../components/CardBiologi.vue'
 import axios from 'axios';
+import Swal from 'sweetalert2';
 
 const courseData = ref(null);
 const isLoading = ref(false);
@@ -177,12 +178,19 @@ const addToCart = async () => {
 
     if (response.status === 200) {
       // Kursus berhasil ditambahkan ke keranjang (wishlist)
-      alert('Kursus berhasil ditambahkan ke keranjang.');
+      Swal.fire({
+                icon: 'success',
+                title: 'Berhasil',
+                text: 'Kursus berhasil ditambahkan ke keranjang.',
+            });
     }
   } catch (error) {
     console.error(error);
-    // Tangani kesalahan lainnya
-    alert('Terjadi kesalahan saat menambahkan ke keranjang.');
+    Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Terjadi kesalahan saat menambahkan kursus ke keranjang.',
+        });
   }
 };
 
