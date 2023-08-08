@@ -117,7 +117,7 @@ const router = createRouter({
       component: () => import('../views/QuizView.vue')
     },
     {
-      path: '/course/module',
+      path: '/course/module/:id',
       name: 'course-module',
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route

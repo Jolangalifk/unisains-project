@@ -1,19 +1,37 @@
 <script setup>
 import axios from 'axios';
 import { ref, onMounted, watch } from 'vue';
+import { useRoute } from 'vue-router';
 
-const getUserToken = () => {
-    const token = localStorage.getItem('token');
-    return token ? token.replace(/['"]+/g, '') : '';
-};
+const moduleList = ref([]);
+const courseId = useRoute().params.id;
+const apiUrl = `https://admin.unisains.com/api/v1/course/learn/${courseId}`;
+const token = localStorage.getItem('token');
+
+onMounted(async () => {
+  try {
+    const response = await axios.get(apiUrl, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+    // Simpan data moduleList dari hasil respons API
+    moduleList.value = response.data.course.modules;
+    console.log(moduleList.value);
+  } catch (error) {
+    console.error('Error fetching data:', error);
+  }
+});
+
 </script>
 
 <template>
-    <div class="module-list-container">
+    <div class="module-list-container" v-for="(module, index) in moduleList" :key="index">
         <div class="modul-container">
-            <a href="">
-                <h3>Judul Modul</h3>
-            </a>
+            <!-- create routerlink and change index contentModule -->
+            <router-link :to="`/course/module/${module.id}`">
+                <h3>{{ module.title_module }}</h3>
+            </router-link>
         </div>
     </div>
 </template>
@@ -21,6 +39,7 @@ const getUserToken = () => {
 <style scoped>
 .module-list-container {
     width: 100%;
+    padding-right: 60px;
     height: 75px;
     display: flex;
     flex-direction: row;
