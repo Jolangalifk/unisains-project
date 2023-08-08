@@ -55,6 +55,7 @@
 
 <script>
 import axios from 'axios'
+import Swal from 'sweetalert2';
 
 export default {
     name: 'Login',
@@ -86,12 +87,21 @@ export default {
                 });
                 console.log(result);
                 if (result.status === 200 && result.data) {
-                    alert('Login berhasil');
                     localStorage.setItem('user-info', JSON.stringify(result.data));
                     localStorage.setItem('token', result.data.token);
                     this.loginSuccess();
                 }
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil',
+                    text: 'Berhasil Login!',
+                });
             } catch (error) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal',
+                    text: 'Login Gagal!',
+                });
                 console.error(error);
                 this.loginError = true; // Set nilai loginError menjadi true
                 this.loginErrorMessage = 'Email atau password yang anda masukkan salah.'; // Set pesan kesalahan yang ingin ditampilkan
