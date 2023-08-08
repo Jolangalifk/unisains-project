@@ -1,7 +1,7 @@
 <template>
     <main>
-        <Navbar />   
-        <h1>keranjang</h1>
+        <Navbar />
+        <h1>Keranjang</h1>
         <div class="cart-course">
             <div v-for="(kursus, index) in cartData" :key="index" class="card">
                 <img :src="kursus.course.thumbnail" alt="Course Thumbnail" />
@@ -19,6 +19,7 @@
 import { ref, onMounted } from 'vue';
 import Navbar from '@/components/Navbar.vue'
 import Footer from '@/components/Footer.vue'
+import Swal from 'sweetalert2';
 import axios from 'axios';
 
 const cartData = ref([]);
@@ -38,42 +39,75 @@ const fetchCartData = async () => {
                 },
             }
         );
-
         if (response.status === 200) {
             cartData.value = response.data.data.cart;
         }
     } catch (error) {
         console.error(error);
-        alert('Terjadi kesalahan saat mengambil data keranjang.');
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Terjadi kesalahan saat menambahkan kursus ke keranjang.',
+        });
     }
 };
 
+// Import SweetAlert2 jika Anda menggunakan npm dan memiliki bundler seperti webpack.
+// import Swal from 'sweetalert2';
+
 const deleteFromCart = async (courseId) => {
     try {
-        const token = localStorage.getItem('token');
+        // Tampilkan konfirmasi sebelum menghapus.
+        const result = await Swal.fire({
+            icon: 'warning',
+            title: 'Yakin ingin menghapus?',
+            text: 'Kursus akan dihapus dari keranjang.',
+            showCancelButton: true,
+            confirmButtonText: 'Ya, hapus!',
+            cancelButtonText: 'Batal',
+        });
 
-        const response = await axios.delete(
-            `https://admin.unisains.com/api/v1/course/cart/delete/${courseId}`,
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
+        // Jika pengguna menekan tombol "Ya" pada konfirmasi.
+        if (result.isConfirmed) {
+            const token = localStorage.getItem('token');
+
+            const response = await axios.delete(
+                `https://admin.unisains.com/api/v1/course/cart/delete/${courseId}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+
+            if (response.status === 200) {
+                // Tampilkan alert konfirmasi jika berhasil menghapus.
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil',
+                    text: 'Kursus berhasil dihapus dari keranjang.',
+                });
+
+                fetchCartData();
+            } else {
+                console.error('Unexpected response status:', response.status);
             }
-        );
-
-        if (response.status === 200) {
-            fetchCartData();
-        } else {
-            console.error('Unexpected response status:', response.status);
         }
     } catch (error) {
         console.error('Delete request failed:', error);
         if (error.response) {
             console.error('Error response from server:', error.response);
         }
-        alert('Terjadi kesalahan saat menghapus kursus dari keranjang.');
+
+        // Tampilkan alert error jika gagal menghapus.
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Terjadi kesalahan saat menghapus kursus dari keranjang.',
+        });
     }
 };
+
 
 onMounted(() => {
     fetchCartData();
@@ -144,7 +178,7 @@ h1 {
     width: 150px;
     height: 45px;
     margin-top: 5px;
-    margin-left: 175px; 
+    margin-left: 175px;
     background-color: #F08A5D;
     border: none;
     border-radius: 5px;
