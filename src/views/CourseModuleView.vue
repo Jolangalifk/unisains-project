@@ -16,7 +16,7 @@ const getUserToken = () => {
                     <a href="">
                         <img src="../assets/icon/arrow-left-midnight.svg" alt="">
                     </a>
-                    <h3>Planet Merkurius</h3>
+                    <h3>Matahari</h3>
                 </div>
                 <div class="right-content">
                     <div class="search-content">
@@ -39,7 +39,7 @@ const getUserToken = () => {
                     </h3>
                 </div>
                 <div class="botnav-mid-content">
-                    <h3>Judul Modul 1</h3>
+                    <h3>Matahari</h3>
                 </div>
                 <div class="botnav-right">
                     <h3>
@@ -62,6 +62,7 @@ const getUserToken = () => {
     flex-direction: column;
     align-items: center;
     align-content: center;
+    text-align: justify;
 }
 
 .topnav-module {
