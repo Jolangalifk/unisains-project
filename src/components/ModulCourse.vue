@@ -4,7 +4,6 @@
             <div v-for="module in modules" :key="module.title_module" class="module-item">
                 <h3>{{ module.title_module }}</h3>
                 <p>{{ module.description }}</p>
-                <img :src="module.thumbnail_module" alt="Module Thumbnail" class="module-thumbnail">
             </div>
         </div>
         <div v-else>
