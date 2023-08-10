@@ -1,14 +1,30 @@
 <template>
     <main>
         <Navbar />
-        <h1>Keranjang</h1>
-        <div class="cart-course">
-            <div v-for="(kursus, index) in cartData" :key="index" class="card">
-                <img :src="kursus.course.thumbnail" alt="Course Thumbnail" />
-                <h4>{{ kursus.course.title_course }}</h4>
-                <!-- <p class="description">{{ kursus.course.description }}</p> -->
-                <h3>Rp {{ kursus.course.price }}</h3>
-                <button @click="deleteFromCart(kursus.id)">Hapus</button>
+        <h1 class="cart-title">Keranjang</h1>
+        <div class="wrapper">
+            <div class="cart-course">
+                <div v-for="(kursus, index) in cartData" :key="index" class="card">
+                    <input type="checkbox" class="checkbox">
+                    <img :src="kursus.course.thumbnail" alt="Course Thumbnail" />
+                    <h4>{{ kursus.course.title_course }} <span>UNI SAINS</span></h4>
+                    <!-- <p class="description">{{ kursus.course.description }}</p> -->
+                    <h3>Rp {{ formattedHarga(kursus.course.price) }}</h3>
+                    <button @click="deleteFromCart(kursus.id)">Hapus</button>
+                </div>
+            </div>
+            <div class="summary-wp">
+                <div class="ringkasan">
+                    <h1>Ringkasan Pesanan</h1>
+                    <ul>
+                        <li>Filosofi hidup - tutorin hit API bang</li>
+                    </ul>
+                </div>
+                <div class="total">
+                    <p>Total</p>
+                    <h1>Rp 500.000</h1>
+                </div>
+                <button>Bayar sekarang</button>
             </div>
         </div>
         <Footer />
@@ -23,6 +39,10 @@ import Swal from 'sweetalert2';
 import axios from 'axios';
 
 const cartData = ref([]);
+
+const formattedHarga = (harga) => {
+    return harga.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+};
 
 
 const fetchCartData = async () => {
@@ -51,9 +71,6 @@ const fetchCartData = async () => {
         });
     }
 };
-
-// Import SweetAlert2 jika Anda menggunakan npm dan memiliki bundler seperti webpack.
-// import Swal from 'sweetalert2';
 
 const deleteFromCart = async (courseId) => {
     try {
@@ -116,15 +133,31 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.cart-course {
+main {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.wrapper {
     width: 82%;
-    margin: 0 auto;
+    height: fit-content;
+    display: flex;
+    flex-direction: row;
+}
+
+.cart-course {
+    width: 62%;
+    margin-right: 70px;
     margin-bottom: 100px;
     display: flex;
     flex-wrap: wrap;
+    flex-direction: column;
 }
 
-h1 {
+.cart-title {
     width: 82%;
     margin: 0 auto;
     font-size: 54px;
@@ -135,50 +168,66 @@ h1 {
 }
 
 .card {
-    width: 350px;
-    height: 360px;
+    width: auto;
+    height: 170px;
     background-color: #fff;
     border-radius: 10px;
     border: 1px solid #C1C1C1;
     margin: 20px;
+    margin-left: 0px;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    align-items: center;
+}
+
+.card input {
+    width: 20px;
+    height: 20px;
+    margin-left: 20px;
+    margin-right: 20px;
+    cursor: pointer;
 }
 
 .card img {
-    width: 348px;
-    height: 175px;
-    border-radius: 10px 10px 0 0;
+    width: 200px;
+    height: 120px;
+    border-radius: 5px;
     object-fit: cover;
 }
 
 .card h4 {
-    font-size: 18px;
+    width: 22%;
+    height: auto;
+    font-size: 20px;
     font-weight: bold;
-    margin-top: 20px;
-    margin-left: 15px;
+    margin: 20px;
+}
+
+.card span {
+    font-size: 16px;
+    font-weight: 600;
+    color: #F08A5D;
 }
 
 .card p {
     font-size: 14px;
-    margin-top: 10px;
-    margin-left: 15px;
     text-align: left;
 }
 
 .card h3 {
+    width: auto;
     font-size: 20px;
-    font-weight: 600;
+    font-weight: bold;
     margin-top: 20px;
-    margin-left: 15px;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
+    margin-left: 40px;
+    margin-right: 40px;
 }
 
 .card button {
     width: 150px;
     height: 45px;
     margin-top: 5px;
-    margin-left: 175px;
     background-color: #F08A5D;
     border: none;
     border-radius: 5px;
@@ -187,9 +236,73 @@ h1 {
     font-weight: 600;
     font-family: poppins;
     cursor: pointer;
+    margin-left: 40px;
 }
 
 .card button:hover {
     background-color: #E0593F;
+}
+
+.summary-wp {
+    width: 30%;
+    height: fit-content;
+    color: black;
+    border-radius: 10px;
+    border: 1px solid #C1C1C1;
+    margin-top: 20px;
+}
+
+.summary-wp .ringkasan {
+    width: auto;
+    height: fit-content;
+    margin: 30px;
+    margin-bottom: 50px;
+}
+
+.summary-wp .ringkasan h1 {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.summary-wp .ringkasan ul li {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.summary-wp .total {
+    width: auto;
+    align-items: center;
+    height: fit-content;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 30px;
+    margin-bottom: 0;
+}
+
+.summary-wp .total p {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.summary-wp .total h1 {
+    font-size: 26px;
+    font-weight: bold;
+}
+
+.summary-wp button {
+    width: 405px;
+    height: 60px;
+    background-color: #F08A5D;
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 18px;
+    font-weight: 600;
+    font-family: poppins;
+    cursor: pointer;
+    margin: 30px;
 }
 </style>
