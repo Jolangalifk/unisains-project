@@ -5,7 +5,7 @@
         <div class="wrapper">
             <div class="cart-course">
                 <div v-for="(kursus, index) in cartData" :key="index" class="card">
-                    <input type="checkbox" class="checkbox">
+                    <input type="checkbox" class="checkbox" v-model="kursus.isChecked" @change="toggleCheckbox(kursus)">
                     <img :src="kursus.course.thumbnail" alt="Course Thumbnail" />
                     <h4>{{ kursus.course.title_course }} <span>UNI SAINS</span></h4>
                     <!-- <p class="description">{{ kursus.course.description }}</p> -->
@@ -17,12 +17,17 @@
                 <div class="ringkasan">
                     <h1>Ringkasan Pesanan</h1>
                     <ul>
-                        <li>Filosofi hidup - tutorin hit API bang</li>
+                        <li v-for="(courseTitle, index) in dataCourse" :key="index">
+                            {{ courseTitle.title_course }}
+                        </li>
                     </ul>
                 </div>
                 <div class="total">
                     <p>Total</p>
-                    <h1>Rp 500.000</h1>
+                    <!-- <h1>Rp 500.000</h1> -->
+                    <h1 v-for="(courseTitle, index) in dataCourse" :key="index">
+                        Rp {{ formattedHarga(courseTitle.price) }}
+                    </h1>
                 </div>
                 <button>Bayar sekarang</button>
             </div>
@@ -39,9 +44,23 @@ import Swal from 'sweetalert2';
 import axios from 'axios';
 
 const cartData = ref([]);
+const dataCourse = ref([]);
 
 const formattedHarga = (harga) => {
     return harga.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+};
+
+const toggleCheckbox = (kursus) => {
+    kursus.isChecked = kursus.isChecked;
+
+    if (kursus.isChecked) {
+        dataCourse.value.push(kursus.course);
+    } else {
+        const index = dataCourse.value.indexOf(kursus.course);
+        if (index !== -1) {
+            dataCourse.value.splice(index, 1);
+        }
+    }
 };
 
 
@@ -60,7 +79,15 @@ const fetchCartData = async () => {
             }
         );
         if (response.status === 200) {
-            cartData.value = response.data.data.cart;
+            const cartItems = response.data.data.cart;
+
+            cartData.value = cartItems.map(item => {
+                return {
+                    course: item.course,
+                    isChecked: false,
+                    id: item.id, // Anda perlu menyesuaikan ini dengan atribut id yang ada di respons API
+                };
+            });
         }
     } catch (error) {
         console.error(error);
@@ -129,7 +156,6 @@ const deleteFromCart = async (courseId) => {
 onMounted(() => {
     fetchCartData();
 });
-
 </script>
 
 <style scoped>
