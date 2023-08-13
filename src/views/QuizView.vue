@@ -104,7 +104,7 @@ export default {
     flex-direction: row;
     align-items: center;
     justify-content: start;
-    margin-top: 85px;
+    margin-top: 50px;
 }
 
 .title-course-icon{
