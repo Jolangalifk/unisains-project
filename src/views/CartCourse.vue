@@ -16,20 +16,21 @@
             <div class="summary-wp">
                 <div class="ringkasan">
                     <h1>Ringkasan Pesanan</h1>
-                    <ul>
-                        <li v-for="(courseTitle, index) in dataCourse" :key="index">
-                            {{ courseTitle.title_course }}
+                    <ul v-if="dataCourse.length > 0">
+                        <li v-for="(course, index) in dataCourse" :key="index">
+                            {{ course.title_course }}
                         </li>
                     </ul>
+                    <li v-else>Belum ada kursus yang dipilih (0)</li>
                 </div>
                 <div class="total">
                     <p>Total</p>
-                    <!-- <h1>Rp 500.000</h1> -->
-                    <h1 v-for="(courseTitle, index) in dataCourse" :key="index">
-                        Rp {{ formattedHarga(courseTitle.price) }}
+                    <h1 v-if="dataCourse.length > 0">
+                        Rp {{ formattedHarga(dataCourse.reduce((total, course) => total + course.price, 0)) }}
                     </h1>
+                    <h1 v-else>Rp 0</h1>
                 </div>
-                <button>Bayar sekarang</button>
+                <button class="pesan" @click="checkout()">Pesan Sekarang</button>
             </div>
         </div>
         <Footer />
@@ -42,12 +43,15 @@ import Navbar from '@/components/Navbar.vue'
 import Footer from '@/components/Footer.vue'
 import Swal from 'sweetalert2';
 import axios from 'axios';
+import { useRoute, useRouter } from 'vue-router';
 
 const cartData = ref([]);
 const dataCourse = ref([]);
+const router = useRouter();
+const selectedCourseId = ref(null);
 
 const formattedHarga = (harga) => {
-    return harga.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    return parseInt(harga).toLocaleString('id-ID');
 };
 
 const toggleCheckbox = (kursus) => {
@@ -55,14 +59,16 @@ const toggleCheckbox = (kursus) => {
 
     if (kursus.isChecked) {
         dataCourse.value.push(kursus.course);
+        selectedCourseId.value = kursus.course.id; 
+        console.log(dataCourse.value)
     } else {
         const index = dataCourse.value.indexOf(kursus.course);
         if (index !== -1) {
             dataCourse.value.splice(index, 1);
+            selectedCourseId.value = null;
         }
     }
 };
-
 
 const fetchCartData = async () => {
     try {
@@ -152,6 +158,44 @@ const deleteFromCart = async (courseId) => {
     }
 };
 
+const checkout = async () => {
+    const courseId = selectedCourseId.value;
+    if (!courseId) {
+        // Tampilkan pesan bahwa tidak ada kursus yang dipilih
+        Swal.fire({
+            icon: 'warning',
+            title: 'Pilih Kursus',
+            text: 'Pilih setidaknya satu kursus sebelum melakukan checkout.',
+        });
+        return;
+    }
+
+    const getUserInfo = localStorage.getItem('user-info');
+    const user = JSON.parse(getUserInfo);
+    const token = user.token;
+
+    try {
+        const response = await axios.post(
+            "https://admin.unisains.com/api/v1/transaction/store",
+            {
+                course_id: courseId,
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }
+        );
+        const idTrx = response.data.data.transaction.id;
+        localStorage.setItem("idTrx", idTrx);
+        localStorage.setItem("pembayaran", JSON.stringify(response.data));
+        router.push({ name: 'detail-order', params: { id: idTrx } });
+    } catch (error) {
+        console.error(error);
+        // Handle error jika terjadi kesalahan pada checkout
+        alert("Terjadi kesalahan saat checkout");
+    }
+};
 
 onMounted(() => {
     fetchCartData();
@@ -292,6 +336,12 @@ main {
 }
 
 .summary-wp .ringkasan ul li {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.summary-wp .ringkasan li {
     font-size: 16px;
     font-weight: 600;
     margin-bottom: 10px;
