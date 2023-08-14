@@ -8,7 +8,7 @@
             <p> {{ courseData.title_course }} </p>
             <div class="button">
                 <button class="pesan" @click="addToCart">Masukkan keranjang</button>
-                <button class="keranjang">
+                <button class="keranjang" @click="addToWishlist">
                     <img src="@/assets/icon/heart-outline .svg" alt="">
                 </button>
             </div>
@@ -156,46 +156,86 @@ onMounted(() => {
 });
 
 const addToCart = async () => {
-  try {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      // Jika tidak ada token, minta pengguna untuk login terlebih dahulu
-      alert('Anda harus login terlebih dahulu untuk menambahkan ke keranjang.');
-      return;
-    }
+    try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            // Jika tidak ada token, minta pengguna untuk login terlebih dahulu
+            alert('Anda harus login terlebih dahulu untuk menambahkan ke keranjang.');
+            return;
+        }
 
-    const response = await axios.post(
-      'https://admin.unisains.com/api/v1/course/cart/store',
-      {
-        course_id: courseData.value.id,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+        const response = await axios.post(
+            'https://admin.unisains.com/api/v1/course/cart/store',
+            {
+                course_id: courseData.value.id,
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }
+        );
 
-    if (response.status === 200) {
-      // Kursus berhasil ditambahkan ke keranjang (wishlist)
-      Swal.fire({
+        if (response.status === 200) {
+            // Kursus berhasil ditambahkan ke keranjang (wishlist)
+            Swal.fire({
                 icon: 'success',
                 title: 'Berhasil',
                 text: 'Kursus berhasil ditambahkan ke keranjang.',
             });
-    }
-  } catch (error) {
-    console.error(error);
-    Swal.fire({
+        }
+    } catch (error) {
+        console.error(error);
+        Swal.fire({
             icon: 'error',
             title: 'Oops...',
             text: 'Terjadi kesalahan saat menambahkan kursus ke keranjang.',
         });
-  }
+    }
 };
 
+const addToWishlist = async () => {
+    try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            // Jika tidak ada token, minta pengguna untuk login terlebih dahulu
+            alert('Anda harus login terlebih dahulu untuk menambahkan ke wishlist.');
+            return;
+        }
+
+        const response = await axios.post(
+            'https://admin.unisains.com/api/v1/course/wishlist/store',
+            {
+                course_id: courseData.value.id,
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }
+        );
+
+        if (response.status === 200) {
+            // Kursus berhasil ditambahkan ke wishlist
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil',
+                text: 'Kursus berhasil ditambahkan ke wishlist.',
+            });
+        }
+    } catch (error) {
+        console.error(error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Terjadi kesalahan saat menambahkan kursus ke wishlist.',
+        });
+    }
+};
+
+
 function formattedHarga(harga) {
-    return harga.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+    return harga.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
 }
 
 </script>
