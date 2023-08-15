@@ -6,10 +6,15 @@
             <div class="cart-course">
                 <div v-for="(kursus, index) in cartData" :key="index" class="card">
                     <input type="checkbox" class="checkbox" v-model="kursus.isChecked" @change="toggleCheckbox(kursus)">
-                    <img :src="kursus.course.thumbnail" alt="Course Thumbnail" />
-                    <h4>{{ kursus.course.title_course }} <span>UNI SAINS</span></h4>
-                    <!-- <p class="description">{{ kursus.course.description }}</p> -->
-                    <h3>Rp {{ formattedHarga(kursus.course.price) }}</h3>
+                    <div class="clickable-area" @click="goToDetailCourse(kursus.course.id)">
+                        <img :src="kursus.course.thumbnail" alt="Course Thumbnail" />
+                        <div class="title">
+                            <h4>{{ kursus.course.title_course }} </h4>
+                            <span>UNI SAINS</span>
+                        </div>
+                        <!-- <p class="description">{{ kursus.course.description }}</p> -->
+                        <h3>Rp {{ formattedHarga(kursus.course.price) }}</h3>
+                    </div>
                     <button @click="deleteFromCart(kursus.id)">Hapus</button>
                 </div>
             </div>
@@ -54,12 +59,16 @@ const formattedHarga = (harga) => {
     return parseInt(harga).toLocaleString('id-ID');
 };
 
+const goToDetailCourse = (courseId) => {
+    router.push(`/detail-course/${courseId}`);
+};
+
 const toggleCheckbox = (kursus) => {
     kursus.isChecked = kursus.isChecked;
 
     if (kursus.isChecked) {
         dataCourse.value.push(kursus.course);
-        selectedCourseId.value = kursus.course.id; 
+        selectedCourseId.value = kursus.course.id;
         console.log(dataCourse.value)
     } else {
         const index = dataCourse.value.indexOf(kursus.course);
@@ -158,16 +167,12 @@ const deleteFromCart = async (courseId) => {
     }
 };
 
+// Di dalam fungsi checkout
 const checkout = async () => {
     const courseId = selectedCourseId.value;
     if (!courseId) {
         // Tampilkan pesan bahwa tidak ada kursus yang dipilih
-        Swal.fire({
-            icon: 'warning',
-            title: 'Pilih Kursus',
-            text: 'Pilih setidaknya satu kursus sebelum melakukan checkout.',
-        });
-        return;
+        // ...
     }
 
     const getUserInfo = localStorage.getItem('user-info');
@@ -189,6 +194,11 @@ const checkout = async () => {
         const idTrx = response.data.data.transaction.id;
         localStorage.setItem("idTrx", idTrx);
         localStorage.setItem("pembayaran", JSON.stringify(response.data));
+
+        // Set selectedCourseId ke localStorage untuk digunakan di DetailPesanan
+        localStorage.setItem("selectedCourseId", courseId);
+
+        // Navigasi ke halaman detail-order dengan parameter idTrx
         router.push({ name: 'detail-order', params: { id: idTrx } });
     } catch (error) {
         console.error(error);
@@ -196,6 +206,7 @@ const checkout = async () => {
         alert("Terjadi kesalahan saat checkout");
     }
 };
+
 
 onMounted(() => {
     fetchCartData();
@@ -259,18 +270,27 @@ main {
 }
 
 .card img {
-    width: 200px;
+    width: auto;
     height: 120px;
     border-radius: 5px;
     object-fit: cover;
 }
 
+.card .title {
+    width: 30%;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    margin-left: 40px;
+}
+
 .card h4 {
-    width: 22%;
+    width: auto;
     height: auto;
     font-size: 20px;
     font-weight: bold;
-    margin: 20px;
 }
 
 .card span {
@@ -284,14 +304,13 @@ main {
     text-align: left;
 }
 
-.card h3 {
+.card .clickable-area h3 {
     width: auto;
     font-size: 20px;
     font-weight: bold;
     margin-top: 20px;
     margin-bottom: 20px;
-    margin-left: 40px;
-    margin-right: 40px;
+    margin-left: 50px;
 }
 
 .card button {
@@ -306,11 +325,21 @@ main {
     font-weight: 600;
     font-family: poppins;
     cursor: pointer;
-    margin-left: 40px;
 }
 
 .card button:hover {
     background-color: #E0593F;
+}
+
+.clickable-area {
+    width: 70%;
+    height: 160px;
+    background-color: #fff;
+    display: flex;
+    margin: 5px;
+    flex-direction: row;
+    align-items: center;
+    cursor: pointer;
 }
 
 .summary-wp {
