@@ -5,18 +5,20 @@
         <div class="wrapper">
             <div class="wishlist-course">
                 <div v-for="(kursus, index) in wishlistData" :key="index" class="wishlist">
-                    <img :src="kursus.course.thumbnail" alt="Course Thumbnail" />
-                    <div class="wishlist-gap">
-                        <div class="wishlist-info">
-                            <h4>{{ kursus.course.title_course }}</h4>
-                            <span>UNI SAINS</span>
+                    <div class="clickable-area" @click="goToDetailCourse(kursus.course.id)">
+                        <img :src="kursus.course.thumbnail" alt="Course Thumbnail" />
+                        <div class="wishlist-gap">
+                            <div class="wishlist-info">
+                                <h4>{{ kursus.course.title_course }}</h4>
+                                <span>UNI SAINS</span>
+                            </div>
+                            <!-- <p class="description">{{ kursus.course.description }}</p> -->
+                            <h3>Rp {{ formattedHarga(kursus.course.price) }}</h3>
                         </div>
-                        <!-- <p class="description">{{ kursus.course.description }}</p> -->
-                        <h3>Rp {{ formattedHarga(kursus.course.price) }}</h3>
-                        <button @click="deleteFromWishlist(kursus.id)">
-                            <img src="@/assets/icon/heart-inline.svg" alt="">
-                        </button>
                     </div>
+                    <button @click="deleteFromWishlist(kursus.id)">
+                        <img src="@/assets/icon/heart-inline.svg" alt="">
+                    </button>
                 </div>
             </div>
         </div>
@@ -28,20 +30,30 @@
 import Navbar from '@/components/Navbar.vue'
 import Footer from '@/components/Footer.vue'
 import { ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 import Swal from 'sweetalert2';
 import axios from 'axios';
 
+const router = useRouter();
 const wishlistData = ref([]);
 
 const formattedHarga = (harga) => {
     return parseInt(harga).toLocaleString('id-ID');
 };
 
+const goToDetailCourse = (courseId) => {
+    router.push(`/detail-course/${courseId}`);
+};
+
+const isCourseInWishlist = (courseId) => {
+    return wishlistData.value.some(item => item.course.id === courseId);
+};
+
 const fetchWishlistData = async () => {
     try {
         const getUserInfo = localStorage.getItem('user-info');
         const user = JSON.parse(getUserInfo);
-        const token = user.token;
+        const token = user.token;  
 
         const response = await axios.get(
             'https://admin.unisains.com/api/v1/course/wishlist/all',
@@ -139,7 +151,7 @@ main {
 }
 
 .wishlist-course {
-    width: 80%;
+    width: 75%;
     margin-bottom: 100px;
     display: flex;
     flex-wrap: wrap;
@@ -160,8 +172,8 @@ main {
     width: auto;
     height: 170px;
     background-color: #fff;
-    border-radius: 10px;
     border: 1px solid #C1C1C1;
+    border-radius: 10px;
     margin: 20px;
     display: flex;
     flex-direction: row;
@@ -182,7 +194,7 @@ main {
     justify-content: center;
     align-items: center;
     margin-left: 30px;
-    gap: 100px;
+    gap: 50px;
 }
 
 .wishlist-info {
@@ -239,5 +251,16 @@ main {
 
 .wishlist button:hover {
     background-color: #E0593F;
+}
+
+.clickable-area {
+    width: 80%;
+    height: 160px;
+    background-color: #fff;
+    display: flex;
+    margin: 5px;
+    flex-direction: row;
+    align-items: center;
+    cursor: pointer;
 }
 </style>

@@ -9,7 +9,7 @@
             <div class="button">
                 <button class="pesan" @click="addToCart">Masukkan keranjang</button>
                 <button class="keranjang" @click="addToWishlist">
-                    <img src="@/assets/icon/heart-outline .svg" alt="">
+                    <img :src="wishlistButtonImage" alt="">
                 </button>
             </div>
             <div class="beli">
@@ -72,8 +72,8 @@
 </template>
   
 <script setup>
-import { ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import { ref, onMounted, computed } from 'vue';
 import Navbar from '../components/Navbar.vue'
 import Footer from '../components/Footer.vue'
 import ModulCourse from '../components/ModulCourse.vue'
@@ -82,11 +82,22 @@ import CardMain from '../components/CardMain.vue'
 import CardBiologi from '../components/CardBiologi.vue'
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import heartOutlineImage from '@/assets/icon/heart-outline.svg';
+import heartInlineFillImage from '@/assets/icon/heart-inline-fill.svg';
 
 const courseData = ref(null);
 const isLoading = ref(false);
 const error = ref(null);
 const router = useRouter();
+const wishlistData = ref([]);
+
+const isCourseInWishlist = (courseId) => {
+    return wishlistData.value.some(item => item.course.id === courseId);
+};
+
+const wishlistButtonImage = computed(() => {
+    return courseData.value.is_wishlist ? heartInlineFillImage : heartOutlineImage;
+});
 
 // Fungsi untuk mengambil data dari API dengan menggunakan token dari local storage
 const fetchData = async () => {
@@ -151,10 +162,6 @@ const checkout = async (courseId) => { // Tambahkan courseId sebagai parameter
     }
 };
 
-onMounted(() => {
-    fetchData();
-});
-
 const addToCart = async () => {
     try {
         const token = localStorage.getItem('token');
@@ -198,30 +205,54 @@ const addToWishlist = async () => {
     try {
         const token = localStorage.getItem('token');
         if (!token) {
-            // Jika tidak ada token, minta pengguna untuk login terlebih dahulu
             alert('Anda harus login terlebih dahulu untuk menambahkan ke wishlist.');
             return;
         }
 
-        const response = await axios.post(
-            'https://admin.unisains.com/api/v1/course/wishlist/store',
-            {
-                course_id: courseData.value.id,
-            },
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            }
-        );
+        const courseId = courseData.value.id;
 
-        if (response.status === 200) {
-            // Kursus berhasil ditambahkan ke wishlist
+        // Cek apakah kursus sudah ada di wishlist
+        if (isCourseInWishlist(courseId)) {
             Swal.fire({
-                icon: 'success',
-                title: 'Berhasil',
-                text: 'Kursus berhasil ditambahkan ke wishlist.',
+                icon: 'info',
+                title: 'Info',
+                text: 'Kursus ini sudah pernah ditambahkan ke wishlist.',
             });
+        } else {
+            const response = await axios.post(
+                'https://admin.unisains.com/api/v1/course/wishlist/store',
+                {
+                    course_id: courseId,
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+
+            if (response.data && response.data.message === 'Course already in wishlist') {
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Info',
+                    text: 'Kursus ini sudah pernah ditambahkan ke wishlist.',
+                });
+            } else if (response.status === 200) {
+                // Update properti is_wishlist
+                courseData.value.is_wishlist = true;
+
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil',
+                    text: 'Kursus berhasil ditambahkan ke wishlist.',
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Terjadi kesalahan saat menambahkan kursus ke wishlist.',
+                });
+            }
         }
     } catch (error) {
         console.error(error);
@@ -232,7 +263,9 @@ const addToWishlist = async () => {
         });
     }
 };
-
+onMounted(() => {
+    fetchData();
+});
 
 function formattedHarga(harga) {
     return harga.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
