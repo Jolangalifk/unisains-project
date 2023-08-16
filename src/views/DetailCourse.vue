@@ -4,17 +4,17 @@
         <!-- Tampilan data kursus -->
         <div class="preview">
             <img :src="courseData.thumbnail" alt="">
-            <h3>Rp {{ courseData.price }}</h3>
+            <h3>Rp {{ formattedHarga(courseData.price) }}</h3>
+            <p> {{ courseData.title_course }} </p>
             <div class="button">
-                <button class="pesan">Masukkan keranjang</button>
-                <button class="keranjang" @click="addToCart">
+                <button class="pesan" @click="addToCart">Masukkan keranjang</button>
+                <button class="keranjang">
                     <img src="@/assets/icon/heart-outline .svg" alt="">
                 </button>
             </div>
             <div class="beli">
                 <button class="pesan" @click="checkout(courseData.id)">Pesan Sekarang</button>
             </div>
-            <p class="cover">Kursus ini meliputi:</p>
             <p class="item" v-for="item in courseData.contents" :key="item.id">{{ item.description }}</p>
         </div>
         <div class="info">
@@ -87,11 +87,6 @@ const isLoading = ref(false);
 const error = ref(null);
 const router = useRouter();
 
-// Fungsi untuk mengambil token dari local storage
-// const getUserToken = () => {
-
-// };
-
 // Fungsi untuk mengambil data dari API dengan menggunakan token dari local storage
 const fetchData = async () => {
     isLoading.value = true;
@@ -159,6 +154,42 @@ onMounted(() => {
     fetchData();
 });
 
+const addToCart = async () => {
+  try {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      // Jika tidak ada token, minta pengguna untuk login terlebih dahulu
+      alert('Anda harus login terlebih dahulu untuk menambahkan ke keranjang.');
+      return;
+    }
+
+    const response = await axios.post(
+      'https://admin.unisains.com/api/v1/course/cart/store',
+      {
+        course_id: courseData.value.id,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (response.status === 200) {
+      // Kursus berhasil ditambahkan ke keranjang (wishlist)
+      alert('Kursus berhasil ditambahkan ke keranjang.');
+    }
+  } catch (error) {
+    console.error(error);
+    // Tangani kesalahan lainnya
+    alert('Terjadi kesalahan saat menambahkan ke keranjang.');
+  }
+};
+
+function formattedHarga(harga) {
+    return harga.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+}
+
 </script>
   
 <style scoped>
@@ -171,7 +202,7 @@ onMounted(() => {
 
 .preview {
     width: 430px;
-    height: 700px;
+    height: fit-content;
     border-radius: 10px;
     margin-left: 200px;
     margin-right: 70px;
@@ -199,6 +230,7 @@ onMounted(() => {
     display: flex;
     align-items: center;
     gap: 30px;
+    margin-top: 30px;
 }
 
 .button .pesan {
@@ -238,6 +270,7 @@ onMounted(() => {
 .beli {
     margin-left: 30px;
     margin-top: 20px;
+    margin-bottom: 30px;
 }
 
 .beli .pesan {
@@ -273,7 +306,7 @@ onMounted(() => {
 
 .info {
     width: 80%;
-    height: 700px;
+    height: fit-content;
     margin-right: 200px;
     display: flex;
     flex-direction: column;
@@ -282,7 +315,7 @@ onMounted(() => {
 .info .text {
     width: 95%;
     margin-left: 30px;
-    margin-bottom: 70px;
+    margin-bottom: 300px;
 }
 
 .info .text h3 {

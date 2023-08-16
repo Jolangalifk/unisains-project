@@ -89,7 +89,7 @@ export default {
                     alert('Login berhasil');
                     localStorage.setItem('user-info', JSON.stringify(result.data));
                     localStorage.setItem('token', result.data.token);
-                    this.$router.push('/');
+                    this.loginSuccess();
                 }
             } catch (error) {
                 console.error(error);
@@ -98,8 +98,16 @@ export default {
             } finally {
                 this.isLoading = false; // Nonaktifkan overlay loading setelah proses login selesai
             }
-        }
-
+        },
+        loginSuccess() {
+            const redirectCourseId = localStorage.getItem('redirectCourseId');
+            if (redirectCourseId) {
+                this.$router.push(`/detail-course/${redirectCourseId}`);
+                localStorage.removeItem('redirectCourseId'); // Hapus data dari local storage setelah digunakan
+            } else {
+                this.$router.push('/');
+            }
+        },
     },
 }
 </script>
@@ -390,5 +398,4 @@ button h3 {
         transform: rotate(360deg);
     }
 }
-
 </style>
