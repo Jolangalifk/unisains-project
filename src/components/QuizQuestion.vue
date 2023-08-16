@@ -4,7 +4,12 @@
             <p>1. Berapa waktu yang diperlukan oleh Merkurius untuk mengelilingi Matahari?</p>
         </div>
         <div class="input-container">
-            <textarea name="essayInput" id="" cols="30" rows="10" placeholder="Ketik jawabanmu disini"></textarea>
+            <div class="multiple-choice">
+                <button class="btn btn-primary">A. <span>88 hari</span></button>
+                <button class="btn btn-primary">B. <span>225 hari</span></button>
+                <button class="btn btn-primary">C. <span>365 hari</span></button>
+                <button class="btn btn-primary">D. <span>687 hari</span></button>
+            </div>
         </div>
     </div>
 </template>
@@ -12,13 +17,11 @@
 <style scoped>
 .container-question {
     width: 100%;
-    height: 410px;
+    height: 570px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 60px;
-    border-radius: 20px;
-    background-color: #6A2C70;
+    margin-top: 50px;
 }
 
 .quiz-question {
@@ -30,9 +33,11 @@
 }
 
 .quiz-question p {
+    width: 100%;
+    height: fit-content;
     font-size: 24px;
     font-weight: 600;
-    color: #fff;
+    color: #000000;
 }
 
 .input-container {
@@ -42,25 +47,50 @@
     flex-direction: column;
     align-items: center;
 }
-.input-container textarea {
-    width: 1330px;
-    height: 300px;
-    border: 1px solid #c1c1c1;
-    border-radius: 20px;
-    padding: 40px;
-    font-size: 18px;
+
+.multiple-choice {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-top: 20px;
+}
+
+.multiple-choice button {
+    width: 100%;
+    height: 100px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    align-content: start;
+    font-size: 20px;
     font-weight: 600;
     color: #000000;
-    resize: none;
+    background-color: #FEFAE0;
+    border: 1px solid #FEFAE0;
+    border-radius: 10px;
+    padding-left: 70px;
+    margin-bottom: 20px;
 }
 
-.input-container textarea::placeholder {
-    font-size: 18px;
-    font-weight: 600;
-    color: #000;
+.multiple-choice button span {
+    margin-left: 20px;
 }
 
-.input-container textarea:focus {
-    outline: none;
+.multiple-choice button:hover {
+    background-color: #6A2C70;
+    color: #FFFFFF;
+}
+
+.multiple-choice button:active {
+    background-color: #6A2C70;
+    color: #FFFFFF;
+}
+
+.multiple-choice button:focus {
+    background-color: #6A2C70;
+    color: #FFFFFF;
 }
 </style>
