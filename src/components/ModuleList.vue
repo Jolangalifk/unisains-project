@@ -29,9 +29,13 @@ onMounted(async () => {
     <div class="module-list-container" v-for="(module, index) in moduleList" :key="index">
         <div class="modul-container">
             <!-- create routerlink and change index contentModule -->
-            <router-link :to="`/course/module/${module.id}`">
+            <!-- <router-link :to="`/course/module/${courseId}/${module.id}`">
                 <h3>{{ module.title_module }}</h3>
-            </router-link>
+            </router-link> -->
+            <a :href="`/course/module/${courseId}/${module.id}`">
+                {{ console.log(module.id) }}
+                <h3>{{ module.title_module }}</h3>
+            </a>
         </div>
     </div>
 </template>

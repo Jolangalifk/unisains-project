@@ -122,7 +122,15 @@ const router = createRouter({
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () => import('../views/CourseModuleView.vue')
+      component: () => import('../views/ModuleView.vue')
+    },
+    {
+      path: '/course/module/:id/:module_id',
+      name: 'content-module',
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../components/ContentModule.vue')
     },
     {
       path: `/detail-order/:id`,
