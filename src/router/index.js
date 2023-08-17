@@ -117,7 +117,6 @@ const router = createRouter({
       component: () => import('../views/ModuleView.vue')
     },
     {
-      page/module-summary
       path: '/course/module/summary/:id',
       name: 'module-summary',
       // route level code-splitting
