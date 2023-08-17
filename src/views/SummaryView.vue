@@ -151,7 +151,7 @@ onMounted(getSummaryModules);
     color: #000;
 }
 .bottom-nav .btn img{
-    transition: .5sg;
+    transition: .5s;
 }
 .bottom-nav .btn:hover img {
     transform: translateX(10px);
