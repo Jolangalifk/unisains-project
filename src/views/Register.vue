@@ -68,6 +68,7 @@
 
 <script>
 import axios from 'axios'
+import Swal from 'sweetalert2';
 
 export default {
     name: 'Register',
@@ -104,7 +105,11 @@ export default {
             });
             console.log(result);
             if (result.status == 201 && result.data) {
-                alert('Register berhasil');
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil',
+                    text: 'Register berhasil',
+                });
                 localStorage.setItem('user-info', JSON.stringify(result.data));
                 this.$router.push('/login');
             }
