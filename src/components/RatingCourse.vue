@@ -90,6 +90,11 @@ onMounted(() => {
 </script>
 
 <style scoped>
+.star-ratings {
+    font-size: 24px;
+    color: #ffc700; 
+    margin-bottom: 10px;
+}
 
 .review-container {
     width: 100%;
