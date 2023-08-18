@@ -385,7 +385,7 @@ import Modal from '../components/Modal.vue'
 
 .list-course {
     width: 100%;
-    height: 1000px;
+    height: auto;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -433,11 +433,11 @@ import Modal from '../components/Modal.vue'
 
 .card-main {
     width: 1560px;
-    height: 500px;
     display: flex;
     flex-direction: row;
     align-items: center;
     padding-top: 50px;
+    padding-bottom: 50px;
     overflow-x: scroll;
     white-space: nowrap;
 }

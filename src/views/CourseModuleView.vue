@@ -1,13 +1,7 @@
 <script setup>
 import ContentModule from '../components/ContentModule.vue';
-import axios from 'axios';
-import { ref, onMounted, watch } from 'vue';
-
-const getUserToken = () => {
-    const token = localStorage.getItem('token');
-    return token ? token.replace(/['"]+/g, '') : '';
-};
 </script>
+
 <template>
     <main>
         <div class="container-module">
