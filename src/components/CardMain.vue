@@ -4,14 +4,14 @@
             <div v-if="isLoggedIn" class="card" @click="goToDetailCourse(kursus.id)">
                 <img :src="kursus.thumbnail" alt="">
                 <h4>{{ kursus.title_course }}</h4>
-                <h3>Rp {{ formattedHarga(kursus.price) }}</h3>
-                <p>{{ kursus.category.name_category }}</p>
+                <p>{{ kursus.name_category }}</p>
+                <h3>{{ kursus.price }}</h3>
             </div>
             <div v-else class="card" @click="handlePopup(kursus.id)">
                 <img :src="kursus.thumbnail" alt="">
                 <h4>{{ kursus.title_course }}</h4>
-                <p>{{ kursus.category.name_category }}</p>
-                <h3>Rp {{ formattedHarga(kursus.price) }}</h3>
+                <p>{{ kursus.name_category }}</p>
+                <h3>{{ kursus.price }}</h3>
             </div>
         </div>
         <!-- Pop up preview -->
@@ -28,7 +28,7 @@
                         </button>
                     </div>
                     <h3>Kategori : {{ previewData.category.name_category }}</h3>
-                    <h3>Harga : {{ formattedHarga(previewData.price) }}</h3>
+                    <h3>Harga : {{ previewData.price }}</h3>
                     <p class="text-deskripsi-preview">{{ previewData.description }}</p>
                     <button class="selengkapnya" @click="goToDetailCourse(previewCourseId)">
                         Selengkapnya
@@ -56,9 +56,6 @@ const handlePopup = async (id) => {
         previewCourseId.value = id;
         await fetchPreviewData(id);
         popup.value = true;
-        localStorage.setItem('redirectCourseId', id);
-    } else {
-        router.push(`/detail-course/${id}`);
     }
 };
 
@@ -69,10 +66,15 @@ const closePreview = () => {
 const goToDetailCourse = (id) => {
     if (isLoggedIn.value) {
         router.push(`/detail-course/${id}`);
+        scrollToTop();
     } else {
-        localStorage.setItem('redirectCourseId', id);
         router.push('/login');
     }
+};
+
+const scrollToTop = () => {
+    // Pindahkan tampilan ke posisi atas halaman
+    window.scrollTo(0, 0);
 };
 
 onMounted(async () => {
@@ -97,22 +99,20 @@ const fetchData = async () => {
 };
 
 const fetchPreviewData = async (id) => {
-    try {
-        const response = await axios.get(
-            `https://admin.unisains.com/api/v1/course/preview/${id}`
-        );
-        previewData.value = response.data.data.course; // Perbarui baris ini
-        console.log(previewData.value);
-    } catch (error) {
-        console.error(error);
-    }
+  try {
+    const response = await axios.get(
+      `https://admin.unisains.com/api/v1/course/preview/${id}`
+    );
+    previewData.value = response.data.data.course; // Perbarui baris ini
+    console.log(previewData.value);
+  } catch (error) {
+    console.error(error);
+  }
 };
 
-function formattedHarga(harga) {
-    return harga.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
-}
-
 </script>
+
+  
   
 <style  scoped>
 .scroll-course {
@@ -135,10 +135,8 @@ function formattedHarga(harga) {
 
 .card img {
     width: 348px;
-    height: 190px;
+    height: 175px;
     border-radius: 10px 10px 0 0;
-    object-fit: cover;
-    object-position: center;
 }
 
 .card h4 {
@@ -155,17 +153,18 @@ function formattedHarga(harga) {
 }
 
 .card p {
-    font-size: 16px;
+    font-size: 14px;
     margin-top: 10px;
     margin-left: 15px;
     text-align: left;
 }
 
 .card h3 {
-    font-size: 24px;
-    font-weight: bold;
-    margin-top: 10px;
+    font-size: 20px;
+    font-weight: 600;
+    margin-top: 20px;
     margin-left: 15px;
+    margin-bottom: 10px;
 }
 
 /* CSS for Pop up preview */

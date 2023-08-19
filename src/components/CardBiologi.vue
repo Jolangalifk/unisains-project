@@ -69,10 +69,16 @@ const closePreview = () => {
 const goToDetailCourse = (id) => {
     if (isLoggedIn.value) {
         router.push(`/detail-course/${id}`);
+        scrollToTop();
     } else {
         localStorage.setItem('redirectCourseId', id);
         router.push('/login');
     }
+};
+
+const scrollToTop = () => {
+    // Pindahkan tampilan ke posisi atas halaman
+    window.scrollTo(0, 0);
 };
 
 onMounted(async () => {
