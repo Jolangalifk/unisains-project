@@ -7,6 +7,7 @@ import AstronomyCourse from './AstronomyCourse.vue'
 import AnatomyCourse from './AnatomyCourse.vue'
 import Modal from '../components/Modal.vue'
 
+
 </script>
 
 <template>
@@ -15,17 +16,22 @@ import Modal from '../components/Modal.vue'
         <div class="main-page">
             <h1><span class="orange"> Belajar </span> Menjadi lebih mudah dengan <span class="orange"> Unisains. </span>
             </h1>
+            <img src="@/assets/image/ilustration6.png" alt="">
         </div>
         <div class="course-category">
             <h3>Cari kursus dengan kategori</h3>
             <p>cari kursus yang ingin kamu pelajari dengan memilih kategori dibawah ini ya!</p>
             <div class="wrapper-box">
                 <div class="course">
-                    <img src="@/assets/image/astronomi-category.png" alt="">
+                    <router-link :to="{ path: '/astronomy-course', query: { scrollToTop: true } }">
+                        <img src="@/assets/image/astronomi-category.png" alt="">
+                    </router-link>
                     <h3>Astronomi</h3>
                 </div>
                 <div class="course">
-                    <img src="@/assets/image/biologi-category.png" alt="">
+                    <router-link :to="{ path: '/anatomy-course', query: { scrollToTop: true } }">
+                        <img src="@/assets/image/biologi-category.png" alt="">
+                    </router-link>
                     <h3>Biologi</h3>
                 </div>
             </div>
@@ -99,7 +105,9 @@ import Modal from '../components/Modal.vue'
                 <p>Ikuti salah atu kursus Astronomi dan pelajari apa saja yang ada didalamnya. Anda akan belajar mulai dari
                     mempelajari materi hingga tantangan atau quizz yang akan diberikan ketika selesai mempelajarinya. Pilih
                     dari berbagai kursus yang menarik.</p>
-                <router-link to="/astronomy-course"><button class="explore">Jelajahi Astronomi</button></router-link>
+                    <router-link :to="{ path: '/astronomy-course', query: { scrollToTop: true } }">
+                        <button class="explore">Jelajahi Astronomi</button>
+                    </router-link>
             </div>
             <div class="card-main">
                 <div class="card-scroll">
@@ -113,7 +121,9 @@ import Modal from '../components/Modal.vue'
                 <p>Ikuti salah atu kursus Biologi dan pelajari apa saja yang ada didalamnya. Anda akan belajar mulai dari
                     mempelajari materi hingga tantangan atau quizz yang akan diberikan ketika selesai mempelajarinya. Pilih
                     dari berbagai kursus yang menarik.</p>
-                <router-link to="/anatomy-course"><button class="explore">Jelajahi Astronomi</button></router-link>
+                    <router-link :to="{ path: '/anatomy-course', query: { scrollToTop: true } }">
+                        <button class="explore">Jelajahi Astronomi</button>
+                    </router-link>
             </div>
             <div class="card-main">
                 <div class="card-scroll">
@@ -129,6 +139,10 @@ import Modal from '../components/Modal.vue'
 .main-page {
     width: 100%;
     height: 980px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
     background-image: url('@/assets/image/course-bg.png');
 }
 
@@ -137,14 +151,17 @@ import Modal from '../components/Modal.vue'
     font-size: 110px;
     font-weight: bold;
     color: black;
-    padding-top: 200px;
-    margin-left: 200px;
     line-height: 1.3;
 }
 
 .main-page h1 .orange {
     color: #F08A5D;
     font-weight: bold;
+}
+
+.main-page img {
+    width: 600px;
+    height: auto;
 }
 
 .course-category {
