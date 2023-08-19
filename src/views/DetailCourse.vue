@@ -47,7 +47,14 @@
             <p class="item">3. Pemahaman dasar tentang anatomi</p>
         </div>
         <div class="rating-course">
-            <h3>Ulasan Pembeli</h3>
+            <div class="avgrate">
+                <h3>Ulasan Pembeli</h3>
+                <div class="rate">
+                    <input class="radio-input" type="radio" id="star1" name="star-input" value="1" />
+                    <label class="radio-label" for="star1" title="1 star">1 star</label>
+                    <p>{{ courseData && courseData.avgRate }} <span>/5.0</span> </p>
+                </div>
+            </div>
             <div class="wrapper-review">
                 <div class="rate1">
                     <RatingCourse />
@@ -545,11 +552,79 @@ function formattedHarga(harga) {
     margin-bottom: 100px;
 }
 
+.rating-course .avgrate {
+    width: auto;
+    height: 100px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin-left: 30px;
+}
+
+.rating-course .avgrate .rate {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin-right: 50px;
+}
+
+.rating-course .avgrate p {
+    font-size: 36px;
+    font-weight: 600;
+    color: #000000;
+    margin-left: 10px;
+}
+
+.rating-course .avgrate p span {
+    font-size: 18px;
+    color: black;
+}
+
+.radio-input {
+    position: fixed;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.radio-label {
+    cursor: pointer;
+    font-size: 0;
+    color: rgba(0, 0, 0, 0.2);
+    transition: color 0.1s ease-in-out;
+}
+
+.radio-label:before {
+    color: #ffc700;
+    content: "★";
+    display: inline-block;
+    font-size: 40px;
+}
+
+.radio-input:checked~.radio-label {
+    color: #ffc700;
+    color: gold;
+}
+
+.radio-label:hover,
+.radio-label:hover~.radio-label {
+    color: goldenrod;
+}
+
+.radio-input:checked+.radio-label:hover,
+.radio-input:checked+.radio-label:hover~.radio-label,
+.radio-input:checked~.radio-label:hover,
+.radio-input:checked~.radio-label:hover~.radio-label,
+.radio-label:hover~.radio-input:checked~.radio-label {
+    color: darkgoldenrod;
+}
+
 .rating-course h3 {
     font-size: 30px;
     font-weight: bold;
     color: #000000;
-    margin: 30px 0 20px 30px;
+    margin: 30px 50px 20px 30px;
 }
 
 .rating-course .wrapper-review {

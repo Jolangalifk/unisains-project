@@ -15,7 +15,7 @@
                     </div>
                 </div>
                 <div class="dot">
-                    <img src="@/assets/icon/dot.svg" alt="">
+                    {{ review.date }}
                 </div>
             </div>
             <p>{{ review.comment }}</p>
@@ -166,9 +166,10 @@ onMounted(() => {
 
 .review .user .dot {
     width: 100%;
-    height: 50px;
+    height: 50%;
+    justify-content: center;
+    align-items: center;
     display: flex;
-    justify-content: flex-end;
     align-items: center;
 }
 
