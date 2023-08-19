@@ -4,14 +4,14 @@
             <div v-if="isLoggedIn" class="card" @click="goToDetailCourse(kursus.id)">
                 <img :src="kursus.thumbnail" alt="">
                 <h4>{{ kursus.title_course }}</h4>
-                <p>{{ kursus.name_category }}</p>
-                <h3>{{ kursus.price }}</h3>
+                <h3>Rp {{ formattedHarga(kursus.price) }}</h3>
+                <p>{{ kursus.category.name_category }}</p>
             </div>
             <div v-else class="card" @click="handlePopup(kursus.id)">
                 <img :src="kursus.thumbnail" alt="">
                 <h4>{{ kursus.title_course }}</h4>
-                <p>{{ kursus.name_category }}</p>
-                <h3>{{ kursus.price }}</h3>
+                <p>{{ kursus.category.name_category }}</p>
+                <h3>Rp {{ formattedHarga(kursus.price) }}</h3>
             </div>
         </div>
         <!-- Pop up preview -->
@@ -28,7 +28,7 @@
                         </button>
                     </div>
                     <h3>Kategori : {{ previewData.category.name_category }}</h3>
-                    <h3>Harga : {{ previewData.price }}</h3>
+                    <h3>Harga : {{ formattedHarga(previewData.price) }}</h3>
                     <p class="text-deskripsi-preview">{{ previewData.description }}</p>
                     <button class="selengkapnya" @click="goToDetailCourse(previewCourseId)">
                         Selengkapnya
@@ -110,6 +110,10 @@ const fetchPreviewData = async (id) => {
   }
 };
 
+function formattedHarga(harga) {
+    return harga.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+}
+
 </script>
 
   
@@ -121,7 +125,6 @@ const fetchPreviewData = async (id) => {
     justify-content: center;
     align-items: center;
 }
-
 .card {
     width: 350px;
     height: 360px;
@@ -135,8 +138,10 @@ const fetchPreviewData = async (id) => {
 
 .card img {
     width: 348px;
-    height: 175px;
+    height: 190px;
     border-radius: 10px 10px 0 0;
+    object-fit: cover;
+    object-position: center;
 }
 
 .card h4 {
@@ -153,18 +158,17 @@ const fetchPreviewData = async (id) => {
 }
 
 .card p {
-    font-size: 14px;
+    font-size: 16px;
     margin-top: 10px;
     margin-left: 15px;
     text-align: left;
 }
 
 .card h3 {
-    font-size: 20px;
-    font-weight: 600;
-    margin-top: 20px;
+    font-size: 24px;
+    font-weight: bold;
+    margin-top: 10px;
     margin-left: 15px;
-    margin-bottom: 10px;
 }
 
 /* CSS for Pop up preview */
@@ -249,13 +253,14 @@ const fetchPreviewData = async (id) => {
     margin-bottom: 10px;
 }
 
+
 .preview-content p {
     white-space: normal;
     /* Setiap baris teks akan dibungkus */
     max-height: 100px;
     /* Tinggi maksimum yang diinginkan */
     margin-top: 30px;
-    margin-bottom: 70px;
+    margin-bottom: 30px;
 }
 
 button.selengkapnya {
