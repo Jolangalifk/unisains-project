@@ -23,8 +23,10 @@ import HcBiologi from '../components/HcBiologi.vue';
         <h3>Bergabung dengan kursus kami</h3>
         <p>Kursus dengan fitur menarik yang belum dimiliki kursus pada umumnya.</p>
         <button>
-          <router-link to="/register">Daftar!</router-link>
-          <img src="@/assets/icon/arrow-right.svg" alt="">
+          <router-link to="/register" class="custom-link">
+            <a>Daftar!</a>
+            <img src="@/assets/icon/arrow-right.svg" alt="">
+          </router-link>
         </button>
       </div>
       <div class="img-wrapper">
@@ -131,8 +133,10 @@ import HcBiologi from '../components/HcBiologi.vue';
             lainnya dengan mempelajari kursus yang ada disini ya!</p>
           <div class="button">
             <button>
-              <router-link to="/course">Mulai!</router-link>
-              <img src="@/assets/icon/arrow-right-orange.svg" alt="">
+              <router-link to="/course" class="custom-link">
+                <a>Mulai!</a>
+                <img src="@/assets/icon/arrow-right-orange.svg" alt="">
+              </router-link>
             </button>
           </div>
         </div>
@@ -222,6 +226,15 @@ import HcBiologi from '../components/HcBiologi.vue';
   color: black;
 }
 
+.informasi .cta .custom-link {
+  display: flex;
+  flex-direction: row;
+  text-decoration: none;
+  width: auto;
+  justify-content: center;
+  align-items: center;
+}
+
 .informasi button {
   width: 200px;
   height: 70px;
@@ -229,6 +242,8 @@ import HcBiologi from '../components/HcBiologi.vue';
   border: none;
   border-radius: 50px;
   color: white;
+  justify-content: center;
+  align-items: center;
   font-size: 1rem;
   font-weight: bold;
   cursor: pointer;
@@ -241,15 +256,13 @@ import HcBiologi from '../components/HcBiologi.vue';
   font-family: poppins;
   font-size: 20px;
   font-weight: 600;
-  margin-left: 30px;
-  margin-top: 17px;
+  margin-left: 15px;
 }
 
 .informasi button img {
   width: 50px;
   height: 50px;
-  margin-left: 30px;
-  margin-top: 8px;
+  margin-left: 20px;
 }
 
 .informasi .img-wrapper {
@@ -684,27 +697,30 @@ import HcBiologi from '../components/HcBiologi.vue';
   border: none;
   display: flex;
   cursor: pointer;
+  justify-content: center;
+  align-items: center;
+}
+
+.start-learn .wrapper .text .button button .custom-link {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
 }
 
 .start-learn .wrapper .text .button button a {
-  width: 100%;
-  height: 50%;
+  text-decoration: none;
+  color: white;
+  justify-content: center;
+  align-items: center;
+  font-family: poppins;
   font-size: 20px;
   font-weight: 600;
-  color: white;
-  text-align: center;
-  font-family: poppins;
-  background-color: transparent;
-  border: none;
-  text-decoration: none;
-  margin-top: 20px;
-  margin-left: 10px;
+  margin-left: 35px;
 }
 
 .start-learn .wrapper .text .button button img {
   width: 50px;
   height: 50px;
-  margin-top: 8px;
-  margin-right: 10px;
+  margin-left: 20px;
 }
 </style>
