@@ -122,7 +122,6 @@ function formattedHarga(harga) {
   
   
 <style  scoped>
-
 .scroll-course {
     display: flex;
     flex-direction: row;
