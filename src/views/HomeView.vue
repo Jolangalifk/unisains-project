@@ -715,12 +715,13 @@ import HcBiologi from '../components/HcBiologi.vue';
   font-family: poppins;
   font-size: 20px;
   font-weight: 600;
-  margin-left: 35px;
+  margin-left: 30px;
+  margin-right: 30px;
 }
 
 .start-learn .wrapper .text .button button img {
   width: 50px;
   height: 50px;
-  margin-left: 20px;
+  margin-right: 10px;
 }
 </style>
