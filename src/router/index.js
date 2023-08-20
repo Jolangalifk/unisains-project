@@ -157,6 +157,21 @@ const router = createRouter({
       path: '/wishlist',
       name: 'wishlist',
       component: () => import('../views/Wishlist.vue')
+    },
+    {
+      path: '/forgot-password',
+      name: 'forgot-password',
+      component: () => import('../views/ForgotPassword.vue')
+    },
+    {
+      path: '/forgot-password-otp',
+      name: 'forgot-password-otp',
+      component: () => import('../views/ForgotPasswordOtp.vue')
+    },
+    {
+      path: '/register-otp',
+      name: 'register-otp',
+      component: () => import('../views/RegisterOtp.vue')
     }
   ]
 })

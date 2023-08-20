@@ -40,7 +40,7 @@
                     <p class="error-message" v-if="loginError">{{ loginErrorMessage }}</p>
                     <button type="submit" class="button-register">Daftar</button>
                 </form>
-                <div class="social-media-register">
+                <!-- <div class="social-media-register">
                     <p>Atau daftar dengan</p>
                     <div class="social-media">
                         <button>
@@ -52,7 +52,7 @@
                             <h3> Twitter </h3>
                         </button>
                     </div>
-                </div>
+                </div> -->
                 <br>
                 <div class="login">
                     <p>Sudah punya akun? <router-link to="/login">Masuk</router-link></p>
@@ -66,61 +66,63 @@
     </div>
 </template>
 
-<script>
+<script setup>
 import axios from 'axios'
 import Swal from 'sweetalert2';
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 
-export default {
-    name: 'Register',
-    data() {
-        return {
-            first_name: '',
-            last_name: '',
-            username: '',
-            email: '',
-            password: '',
-            showPassword: false,
-            loginError: false,
-            loginErrorMessage: '',
-            isLoading: false,
-        }
-    }, 
-    methods: {
-        togglePasswordVisibility() {
-            this.showPassword = !this.showPassword; // Membalikkan nilai status
-        },
-        async Register() {
-            if (!this.email || !this.password) {
-                this.loginError = true;
-                this.loginErrorMessage = 'Silahkan isi data dengan lengkap terlebih dahulu.';
-                return;
-            }
-            this.isLoading = true;
-            let result = await axios.post('https://admin.unisains.com/api/v1/auth/register', {
-                first_name : this.first_name,
-                last_name : this.last_name,
-                username: this.username,
-                email: this.email,
-                password: this.password,
+const first_name = ref('');
+const last_name = ref('');
+const username = ref('');
+const email = ref('');
+const password = ref('');
+const showPassword = ref(false);
+const loginError = ref(false);
+const loginErrorMessage = ref('');
+const isLoading = ref(false);
+
+const router = useRouter(); // Objek router
+
+const togglePasswordVisibility = () => {
+    showPassword.value = !showPassword.value;
+};
+
+const Register = async () => {
+    if (!email.value || !password.value) {
+        loginError.value = true;
+        loginErrorMessage.value = 'Silahkan isi data dengan lengkap terlebih dahulu.';
+        return;
+    }
+    isLoading.value = true;
+    try {
+        const response = await axios.post('https://admin.unisains.com/api/v1/auth/register', {
+            first_name: first_name.value,
+            last_name: last_name.value,
+            username: username.value,
+            email: email.value,
+            password: password.value,
+        });
+
+        if (response.status === 200 && response.data) {
+            await Swal.fire({
+                icon: 'success',
+                title: 'Berhasil',
+                text: 'Register berhasil. Silakan verifikasi email Anda.',
             });
-            console.log(result);
-            if (result.status == 201 && result.data) {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Berhasil',
-                    text: 'Register berhasil',
-                });
-                localStorage.setItem('user-info', JSON.stringify(result.data));
-                this.$router.push('/login');
-            }
-        },
-        tes() {
-            console.log('Register berhasil');
-            alert('Register berhasil');
-        }
-    },
-}
 
+            // Simpan token verifikasi ke local storage
+            const verificationToken = response.data['token-verify'];
+            localStorage.setItem('verification-token', verificationToken);
+
+            router.push('/register-otp'); // Redirect to the RegisterOtp page
+        }
+    } catch (error) {
+        console.error('Error:', error);
+    } finally {
+        isLoading.value = false;
+    }
+};
 
 </script>
 
