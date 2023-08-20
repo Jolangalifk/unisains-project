@@ -15,7 +15,8 @@
             </div>
         </div>
         <!-- Pass the courseContent data to the ModuleListView component -->
-        <ModuleListView :courseContent="courseContent" @changeModule="handleChangeModule" />
+        <!-- <ModuleListView :courseContent="courseContent" @changeModule="handleChangeModule" /> -->
+        <ModuleListView />
     </div>
 </template>
   

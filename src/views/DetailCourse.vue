@@ -13,7 +13,7 @@
                 </button>
             </div>
             <div class="beli">
-                <button class="pesan" @click="checkout(courseData.id)">Pesan Sekarang</button>
+                <button class="pesan" @click="checkout(courseData.id)">Beli Sekarang</button>
             </div>
             <p class="item" v-for="item in courseData.contents" :key="item.id">{{ item.description }}</p>
         </div>
@@ -47,20 +47,20 @@
             <p class="item">3. Pemahaman dasar tentang anatomi</p>
         </div>
         <div class="rating-course">
-            <h3>4.7 course rating . 11K ratings</h3>
+            <div class="avgrate">
+                <h3>Ulasan Pembeli</h3>
+                <div class="rate">
+                    <input class="radio-input" type="radio" id="star1" name="star-input" value="1" />
+                    <label class="radio-label" for="star1" title="1 star">1 star</label>
+                    <p>{{ courseData && courseData.avgRate }} <span>/5.0</span> </p>
+                </div>
+            </div>
             <div class="wrapper-review">
                 <div class="rate1">
                     <RatingCourse />
-                    <RatingCourse />
-                    <RatingCourse />
-                </div>
-                <div class="rate2">
-                    <RatingCourse />
-                    <RatingCourse />
-                    <RatingCourse />
                 </div>
             </div>
-            <button class="show">Show all reviews</button>
+            <!-- <button class="show">Show all reviews</button> -->
         </div>
         <div class="more-course">
             <h3>More Course</h3>
@@ -89,7 +89,9 @@ const courseData = ref(null);
 const isLoading = ref(false);
 const error = ref(null);
 const router = useRouter();
+const route = useRoute();
 const wishlistData = ref([]);
+
 
 const isCourseInWishlist = (courseId) => {
     return wishlistData.value.some(item => item.course.id === courseId);
@@ -276,7 +278,7 @@ function formattedHarga(harga) {
 <style scoped>
 .main-page {
     width: 100%;
-    height: 980px;
+    height: 750px;
     display: flex;
     align-items: center;
 }
@@ -287,7 +289,7 @@ function formattedHarga(harga) {
     border-radius: 10px;
     margin-left: 200px;
     margin-right: 70px;
-    border: 1px solid #c1c1c1;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     display: flex;
     flex-direction: column;
 }
@@ -521,6 +523,7 @@ function formattedHarga(harga) {
     flex-direction: column;
     margin-left: 200px;
     margin-bottom: 50px;
+    margin-top: 30px;
 }
 
 .condition p {
@@ -540,20 +543,88 @@ function formattedHarga(harga) {
 
 .rating-course {
     width: 80%;
-    height: 820px;
+    height: fit-content;
     display: flex;
     flex-direction: column;
     margin-left: 200px;
-    border: 1px solid #c1c1c1;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     border-radius: 10px;
     margin-bottom: 100px;
 }
 
-.rating-course h3 {
-    font-size: 30px;
+.rating-course .avgrate {
+    width: auto;
+    height: 100px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin-left: 30px;
+}
+
+.rating-course .avgrate .rate {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin-right: 50px;
+}
+
+.rating-course .avgrate p {
+    font-size: 36px;
     font-weight: 600;
     color: #000000;
-    margin: 30px 0 20px 30px;
+    margin-left: 10px;
+}
+
+.rating-course .avgrate p span {
+    font-size: 18px;
+    color: black;
+}
+
+.radio-input {
+    position: fixed;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.radio-label {
+    cursor: pointer;
+    font-size: 0;
+    color: rgba(0, 0, 0, 0.2);
+    transition: color 0.1s ease-in-out;
+}
+
+.radio-label:before {
+    color: #ffc700;
+    content: "★";
+    display: inline-block;
+    font-size: 40px;
+}
+
+.radio-input:checked~.radio-label {
+    color: #ffc700;
+    color: gold;
+}
+
+.radio-label:hover,
+.radio-label:hover~.radio-label {
+    color: goldenrod;
+}
+
+.radio-input:checked+.radio-label:hover,
+.radio-input:checked+.radio-label:hover~.radio-label,
+.radio-input:checked~.radio-label:hover,
+.radio-input:checked~.radio-label:hover~.radio-label,
+.radio-label:hover~.radio-input:checked~.radio-label {
+    color: darkgoldenrod;
+}
+
+.rating-course h3 {
+    font-size: 30px;
+    font-weight: bold;
+    color: #000000;
+    margin: 30px 50px 20px 30px;
 }
 
 .rating-course .wrapper-review {
@@ -564,20 +635,53 @@ function formattedHarga(harga) {
     margin-right: 100px;
 }
 
-.rating-course .wrapper-review .rate1 {
+.rating-course .wrapper-review form {
     width: 100%;
-    height: 300px;
+    height: auto;
     display: flex;
-    flex-direction: row;
-    padding-right: 30px;
+    flex-direction: column;
 }
 
-.rating-course .wrapper-review .rate2 {
+.rating-course .wrapper-review form textarea {
+    width: auto;
+    height: 200px;
+    border-radius: 10px;
+    border: 1px solid #c1c1c1;
+    outline: none;
+    padding: 10px;
+    margin: 30px;
+    font-size: 18px;
+    font-family: poppins;
+    color: #000000;
+}
+
+.rating-course .wrapper-review form textarea::placeholder {
+    font-size: 18px;
+    font-family: poppins;
+}
+
+.rating-course .wrapper-review form .submit {
+    width: 120px;
+    height: 70px;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    background-color: #6A2C70;
+    color: white;
+    font-size: 18px;
+    font-weight: 600;
+    font-family: poppins;
+    margin-bottom: 50px;
+    margin-left: 90%;
+}
+
+.rating-course .wrapper-review .rate1 {
     width: 100%;
-    height: 300px;
+    height: fit-content;
     display: flex;
-    flex-direction: row;
-    padding-right: 30px;
+    flex-direction: column;
+    padding: 30px;
 }
 
 .rating-course .show {
@@ -594,6 +698,7 @@ function formattedHarga(harga) {
     font-family: poppins;
     margin-left: 30px;
     margin-top: 20px;
+    margin-bottom: 50px;
 }
 
 .rating-course .show:hover {
@@ -644,19 +749,19 @@ function formattedHarga(harga) {
 }
 
 .more-course {
-    width: 65%;
+    width: 80%;
     height: 950px;
     display: flex;
     flex-direction: column;
     margin-left: 200px;
     margin-bottom: 100px;
-    border: 1px solid #c1c1c1;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     border-radius: 10px;
 }
 
 .more-course h3 {
     font-size: 30px;
-    font-weight: 600;
+    font-weight: bold;
     color: #000000;
     margin: 30px 0 20px 30px;
 }

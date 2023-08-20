@@ -13,6 +13,19 @@
 import Navbar from '../components/Navbar.vue'
 import Footer from '../components/Footer.vue'
 import CardBiologi from '../components/CardBiologi.vue'
+import { onMounted } from 'vue';
+
+const scrollToTopIfNeeded = () => {
+  const queryParams = new URLSearchParams(window.location.search);
+  if (queryParams.has('scrollToTop')) {
+    // Pindahkan tampilan ke posisi atas halaman
+    window.scrollTo(0, 0);
+  }
+};
+
+onMounted(() => {
+    scrollToTopIfNeeded();
+});
 </script>
 
 <style scoped>
