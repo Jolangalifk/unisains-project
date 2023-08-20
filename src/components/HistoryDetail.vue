@@ -1,9 +1,11 @@
 <template>
     <div class="course-purchase">
         <div v-if="transaction">
+            <!-- Tampilkan data transaksi yang relevan di sini -->
             <div class="information">
                 <h1>Tanggal : <span class="tanggal">{{ transaction.date }}</span></h1>
                 <h1>Status : <span class="status">{{ transaction.status }}</span></h1>
+                <h1>Kode Pesanan : <span class="kode-pesanan">{{ transaction.code_transaction }}</span></h1>
                 <h1>Dijual Ke : <span class="penerima">{{ transaction.user.username }}</span></h1>
             </div>
             <div class="menu">
@@ -26,9 +28,16 @@
                     <p>Rp {{ formattedHarga(transaction.total_price) }}</p>
                 </div>
             </div>
-            <div class="button">
-                <router-link to="/history-course"><button class="bayar-nanti">Bayar Nanti</button></router-link>
-                <button @click="payWithMidtrans">Lanjutkan</button>
+            <div v-if="transaction.status === 'success'">
+                <router-link class="button" to="/history-course">
+                    <button class="close"><a href="">Tutup</a></button>
+                </router-link>
+            </div>
+            <div v-else-if="transaction.status === 'pending'">
+                <router-link class="button" to="/history-course">
+                    <button class="close"><a href="">Tutup</a></button>
+                    <button class="lanjutkan" @click="payWithMidtrans">Lanjutkan</button>
+                </router-link>
             </div>
         </div>
         <div v-else>
@@ -38,14 +47,12 @@
 </template>
   
 <script>
+import axios from 'axios';
 import { ref, onMounted, onBeforeUnmount } from 'vue';
-import axios from "axios";
-import { useRoute, useRouter } from 'vue-router';
+import { useRoute } from 'vue-router';
 
-const idTrx = localStorage.getItem('idTrx');
 const selectedCourse = ref(null);
 const transaction = ref(null);
-const router = useRouter();
 
 const orderId = useRoute();
 // const router = useRouter(); // Tambahkan router dari vue-router
@@ -74,10 +81,10 @@ export default {
         this.getData();
         try {
             const userToken = localStorage.getItem('token');
-            const courseId = useRoute().params.id;
+            const idTrx = useRoute().params.id;
 
             // Mengambil data kursus dari localStorage berdasarkan orderId
-            const courseData = localStorage.getItem(`selectedCourse_${courseId}`);
+            const courseData = localStorage.getItem(`selectedCourse_${idTrx}`);
             this.selectedCourse = courseData ? JSON.parse(courseData) : null;
 
             // Mengambil data transaksi dari API berdasarkan orderId
@@ -87,6 +94,8 @@ export default {
                 },
             });
             this.transaction = response.data.data.transaction;
+            console.log(this.transaction);
+            console.log(courseId);
         } catch (error) {
             console.error(error);
             this.transaction = null;
@@ -99,13 +108,13 @@ export default {
         document.head.appendChild(script);
     },
     methods: {
-        formattedHarga (harga) {
-            return harga.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+        formattedHarga(harga) {
+            return harga.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
         },
         async getData() {
             try {
                 const getUserToken = localStorage.getItem('token');
-                const idTrx = localStorage.getItem('idTrx');
+                const idTrx = useRoute().params.id;
                 const response = await axios.post(
                     "https://admin.unisains.com/api/v1/transaction/checkout",
                     {
@@ -151,8 +160,37 @@ export default {
                 alert('Error Payment');
             }
         }
-    }
-}
+    },
+    setup() {
+        const router = useRoute();
+        const transaction = ref(null);
+        const transactionId = router.params.id;
+
+        onMounted(async () => {
+            try {
+                const userToken = localStorage.getItem('token');
+
+                const response = await axios.get(`https://admin.unisains.com/api/v1/transaction/show/${transactionId}`, {
+                    headers: {
+                        Authorization: `Bearer ${userToken}`,
+                    },
+                });
+
+                transaction.value = response.data.data.transaction;
+            } catch (error) {
+                console.error(error);
+                transaction.value = null;
+            }
+        });
+
+        // You can add other functions or variables here as needed
+
+        return {
+            transaction,
+            // Add other variables/functions you want to expose to the template
+        };
+    },
+};
 </script>
 
 <style scoped>
@@ -265,12 +303,14 @@ export default {
     display: flex;
     flex-direction: row;
     align-items: center;
+
+
     justify-content: center;
-    gap: 20px;
+    gap: 30px;
 }
 
 .course-purchase .button button {
-    width: 570px;
+    width: 490px;
     height: 70px;
     border: 1px solid #6A2C70;
     border-radius: 10px;
@@ -279,11 +319,37 @@ export default {
     font-size: 20px;
     font-weight: 600;
     cursor: pointer;
+
     font-family: poppins;
 }
 
-.course-purchase .button .bayar-nanti {
+.course-purchase .button {
+    text-decoration: none;
+}
+
+.course-purchase .button .close {
+    width: 100%;
     background-color: white;
     color: #6A2C70;
 }
+
+.course-purchase .button .lanjutkan {
+    width: 100%;
+    background-color: #6A2C70;
+    color: white;
+}
+
+.button .close a {
+    width: 100%;
+    text-decoration: none;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+router-link {
+    text-decoration: none;
+    color: white;
+}
 </style>
+  
+  

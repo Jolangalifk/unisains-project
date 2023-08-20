@@ -1,49 +1,7 @@
-<script>
+<script setup>
 import ContentModule from '../components/ContentModule.vue';
-
-export default {
-    components: {
-        ContentModule
-    },
-    data() {
-        return {
-            moduleData: null,
-            error: null
-        };
-    },
-
-    methods: {
-        async fetchModuleData() {
-            try {
-                const response = await fetch('https://admin.unisains.com/public/api/v1/module/show', {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem('token')}`,
-                    },
-                });
-
-                if (!response.ok) {
-                    throw new Error(`Failed to fetch module data: ${response.status} ${response.statusText}`);
-                }
-
-                const data = await response.json();
-                this.moduleData = {
-                    id: data.id,
-                    title: data.title,
-                    description: data.description,
-                    image: data.image,
-                    content: data.content
-                };
-            } catch (error) {
-                this.error = error.message;
-                console.error(error);
-            }
-        }
-    },
-    mounted() {
-        this.fetchModuleData();
-    },
-};
 </script>
+
 <template>
     <main>
         <div class="container-module">
@@ -52,7 +10,7 @@ export default {
                     <a href="">
                         <img src="../assets/icon/arrow-left-midnight.svg" alt="">
                     </a>
-                    <h3>Planet Merkurius</h3>
+                    <h3>Matahari</h3>
                 </div>
                 <div class="right-content">
                     <div class="search-content">
@@ -75,7 +33,7 @@ export default {
                     </h3>
                 </div>
                 <div class="botnav-mid-content">
-                    <h3>Judul Modul 1</h3>
+                    <h3>Matahari</h3>
                 </div>
                 <div class="botnav-right">
                     <h3>
@@ -89,6 +47,7 @@ export default {
         </div>
     </main>
 </template>
+
 <style scoped>
 .container-module {
     width: 100%;
@@ -97,6 +56,7 @@ export default {
     flex-direction: column;
     align-items: center;
     align-content: center;
+    text-align: justify;
 }
 
 .topnav-module {

@@ -1,26 +1,27 @@
 <template>
-    <main>
-        <Navbar />
-        <div class="receipt">
-            <h1>Detail Pesanan</h1>
-            <div class="receipt-detail">
-                <Order :snapToken="snapToken" />
+    <div>
+        <main>
+            <Navbar />
+            <div class="receipt">
+                <h1>Detail Transaksi</h1>
+                <div class="receipt-detail">
+                    <HistoryDetail :snapToken="snapToken" />
+                </div>
             </div>
-        </div>
-        <Footer />
-    </main>
+            <Footer />
+        </main>
+    </div>
 </template>
 
 <script setup>
-import Navbar from '../components/Navbar.vue'
-import Footer from '../components/Footer.vue'
-import Order from '../components/Order.vue'
+import HistoryDetail from '../components/HistoryDetail.vue';
+import Navbar from '../components/Navbar.vue';
+import Footer from '../components/Footer.vue';
 
-const snapToken = localStorage.getItem("snapToken");
+const snapToken = localStorage.getItem('snapToken');
 </script>
 
 <style scoped>
-
 .receipt {
     width: 100%;
     height: auto;

@@ -53,7 +53,7 @@ onMounted(async () => {
     }
 
     console.log(isLoggedIn.value);
-    await fetchProfileData(); // Fetch profile data here
+    await fetchProfileData();
 });
 </script>
 
@@ -84,7 +84,7 @@ onMounted(async () => {
                 </router-link>
             </button>
             <button class="cart btn">
-                <router-link to="/cart">
+                <router-link to="/cart-course">
                     <img src="@/assets/icon/cart-icon.svg" alt="">
                 </router-link>
             </button>
@@ -111,8 +111,8 @@ onMounted(async () => {
                             <div class="profile-info">
                                 <ul>
                                     <li><router-link to="/pembelajaran-saya">Pembelajaran saya</router-link></li>
-                                    <li><router-link to="/keranjang">Keranjang</router-link></li>
-                                    <li><router-link to="/daftar-keinginan">Daftar keinginan</router-link></li>
+                                    <li><router-link to="/cart-course">Keranjang</router-link></li>
+                                    <li><router-link to="/wishlist">Daftar keinginan</router-link></li>
                                 </ul>
                             </div>
                         </div>
@@ -122,8 +122,8 @@ onMounted(async () => {
                         <div class="profile-content">
                             <div class="profile-info">
                                 <ul>
-                                    <li><router-link to="/pengaturan-akun">Pengaturan Akun</router-link></li>
-                                    <li><router-link to="/riwayat-transaksi">Riwayat transaksi</router-link></li>
+                                    <li><router-link to="/profile">Pengaturan Akun</router-link></li>
+                                    <li><router-link to="/history-course">Riwayat transaksi</router-link></li>
                                 </ul>
                             </div>
                         </div>
@@ -133,7 +133,7 @@ onMounted(async () => {
                         <div class="profile-content">
                             <div class="profile-info">
                                 <ul>
-                                    <li><router-link to="/bantuan">Bantuan</router-link></li>
+                                    <li><router-link to="/help-center">Bantuan</router-link></li>
                                     <li><span @click="logout">Keluar</span></li>
                                 </ul>
                             </div>

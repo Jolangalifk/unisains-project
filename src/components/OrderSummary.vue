@@ -61,7 +61,7 @@
     height: 80px;
     padding: 10px 16px;
     margin-top: 20px;
-    background-color: #F08A5D;
+    background-color: #B83B5E;
     border: none;
     color: white;
     font-size: 20px;
@@ -74,7 +74,7 @@
 }
 
 .summary button:hover {
-    background-color: #c0392b;
+    background-color: #8F423A;
 }
 
 .text {

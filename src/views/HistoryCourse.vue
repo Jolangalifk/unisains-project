@@ -12,12 +12,10 @@
                         <p>Tanggal</p>
                         <p>Status</p>
                         <p>Harga</p>
-                        <p>Pembayaran</p>
+                        <p>Kode</p>
                     </div>
                 </div>
                 <div class="list">
-                    <History />
-                    <History />
                     <History />
                 </div>
             </div>
@@ -62,7 +60,7 @@ import History from '@/components/History.vue'
 }
 
 .text-kursus {
-    width: 34%;
+    width: 25%;
     height: 100%;
     display: flex;
     flex-direction: column;
