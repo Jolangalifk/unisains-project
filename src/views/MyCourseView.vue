@@ -134,8 +134,8 @@ onMounted(() => {
 }
 
 .card-course:hover {
-    transform: scale(1.05);
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, .3);
+    transform: scale(1.01);
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, .1);
 }
 
 .card-course a {
@@ -159,7 +159,7 @@ onMounted(() => {
 }
 
 .card-course:hover .card-course-image img {
-    transform: scale(1.2);
+    transform: scale(1.1);
 }
 
 .card-course .card-course-text {
