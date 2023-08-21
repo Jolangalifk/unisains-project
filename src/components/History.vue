@@ -16,7 +16,8 @@
                     <p>{{ item.code_transaction }}</p>
                 </div>
                 <div class="button-detail">
-                    <button class="nilai" @click="openPopup(item.course.id, item)">Nilai</button>
+                    <!-- Tambahkan kondisi untuk menampilkan tombol "Nilai" -->
+                    <button v-if="item.course.is_purchased && !item.is_rated" class="nilai" @click="openPopup(item.course.id, item)">Nilai</button>
                 </div>
                 <div class="button-detail">
                     <button @click="goToDetail(item.id)">Detail</button>
