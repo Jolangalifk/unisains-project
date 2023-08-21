@@ -4,7 +4,8 @@
         <!-- Tampilan data kursus -->
         <div class="preview">
             <img :src="courseData.thumbnail" alt="">
-            <h3>Rp {{ courseData.price }}</h3>
+            <h3>Rp {{ formattedHarga(courseData.price) }}</h3>
+            <p> {{ courseData.title_course }} </p>
             <div class="button">
                 <button class="pesan" @click="addToCart">Masukkan keranjang</button>
                 <button class="keranjang">
@@ -14,7 +15,6 @@
             <div class="beli">
                 <button class="pesan" @click="checkout(courseData.id)">Pesan Sekarang</button>
             </div>
-            <p class="cover">Kursus ini meliputi:</p>
             <p class="item" v-for="item in courseData.contents" :key="item.id">{{ item.description }}</p>
         </div>
         <div class="info">
@@ -186,6 +186,10 @@ const addToCart = async () => {
   }
 };
 
+function formattedHarga(harga) {
+    return harga.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+}
+
 </script>
   
 <style scoped>
@@ -198,7 +202,7 @@ const addToCart = async () => {
 
 .preview {
     width: 430px;
-    height: 700px;
+    height: fit-content;
     border-radius: 10px;
     margin-left: 200px;
     margin-right: 70px;
@@ -226,6 +230,7 @@ const addToCart = async () => {
     display: flex;
     align-items: center;
     gap: 30px;
+    margin-top: 30px;
 }
 
 .button .pesan {
@@ -265,6 +270,7 @@ const addToCart = async () => {
 .beli {
     margin-left: 30px;
     margin-top: 20px;
+    margin-bottom: 30px;
 }
 
 .beli .pesan {
@@ -300,7 +306,7 @@ const addToCart = async () => {
 
 .info {
     width: 80%;
-    height: 700px;
+    height: fit-content;
     margin-right: 200px;
     display: flex;
     flex-direction: column;
@@ -309,7 +315,7 @@ const addToCart = async () => {
 .info .text {
     width: 95%;
     margin-left: 30px;
-    margin-bottom: 70px;
+    margin-bottom: 300px;
 }
 
 .info .text h3 {

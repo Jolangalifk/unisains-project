@@ -9,13 +9,14 @@
                 <h2>{{ currentModule.title_module }}</h2>
                 <h1>{{ currentModule.description }}</h1>
                 <p>{{ currentModule.materi_module }}</p>
-                <div class="content-ar-img">
+                <!-- <div class="content-ar-img">
                     <img :src="currentModule.image_module" alt="Module Image" />
-                </div>
+                </div> -->
             </div>
         </div>
         <!-- Pass the courseContent data to the ModuleListView component -->
-        <ModuleListView :courseContent="courseContent" @changeModule="handleChangeModule" />
+        <!-- <ModuleListView :courseContent="courseContent" @changeModule="handleChangeModule" /> -->
+        <ModuleListView />
     </div>
 </template>
   
@@ -23,13 +24,14 @@
 import axios from 'axios';
 import { ref, onMounted } from 'vue';
 import ModuleListView from './ModuleListView.vue';
+import { useRoute } from 'vue-router';
 
-const courseId = '2'; // Replace 'YOUR_COURSE_ID' with the actual course ID you want to fetch.
-
+const courseId = useRoute().params.id;
 const courseContent = ref(null);
 const isCoursePurchased = ref(false);
-
 const currentModule = ref(null);
+let currentIndex = 0;
+
 const getUserToken = () => {
     const token = localStorage.getItem('token');
     return token ? token.replace(/['"]+/g, '') : '';
@@ -95,13 +97,14 @@ const handleChangeModule = (module) => {
     align-items: center;
     align-content: center;
     margin-bottom: 40px;
+    object-fit: contain;
 }
 
 .container-module h1 {
     font-size: 26px;
     font-weight: 600;
     color: #000000;
-    margin-top: 40px;
+    margin: 40px 0;
 }
 
 .content-ar-img {
@@ -131,6 +134,10 @@ const handleChangeModule = (module) => {
 .container-module h2 {
     font-size: 36px;
     font-weight: 600;
+    color: #000000;
+}
+.container-module p {
+    font-size: 20px;
     color: #000000;
 }
 

@@ -9,10 +9,10 @@ import ModuleList from './ModuleList.vue';
         </div>
         <ProgressBarModuleView />
         <div class="scrollview">
+            <!-- <ModuleList />
             <ModuleList />
             <ModuleList />
-            <ModuleList />
-            <ModuleList />
+            <ModuleList /> -->
             <ModuleList />
         </div>
     </div>
@@ -20,8 +20,8 @@ import ModuleList from './ModuleList.vue';
 
 <style scoped>
 .container-module-list {
-    width: 530px;
-    height: 745px;
+    width: fit-content;
+    height: calc(100vh - 200px);
     display: flex;
     border-left: 1px solid #CBC8B3;
     flex-direction: column;
