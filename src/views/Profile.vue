@@ -85,7 +85,7 @@ onMounted(() => {
                 </div>
                 <div class="more-course-btn" v-if="myCourse.length > 3">
                     <button>
-                        <a><router-link to="/lihat-lebih-banyak">Lihat lebih banyak</router-link></a>
+                        <a><router-link to="/profile/my-course">Lihat lebih banyak</router-link></a>
                         <img src="@/assets/icon/arrow-right-orange.svg" alt="">
                     </button>
                 </div>
