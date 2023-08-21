@@ -1,8 +1,9 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import axios from 'axios';
 import { useRoute } from 'vue-router';
 
+let isLoading = ref(true);
 const route = useRoute();
 let courseData = ref([]);
 const summaryModules = ref({});
@@ -11,6 +12,8 @@ const getUserToken = () => {
     const token = localStorage.getItem('token');
     return token ? token.replace(/['"]+/g, '') : '';
 };
+
+const routeQuiz = computed(() => `/course/module/summary/quiz/${route.params.id}`);
 
 const getSummaryModules = async () => {
     const token = getUserToken();
@@ -27,15 +30,17 @@ const getSummaryModules = async () => {
         courseData.value = response.data.course;
         console.log(summaryModules.value);
         console.log(courseData.value);
+        isLoading.value = false;
     } catch (error) {
         console.log(error);
+        isLoading.value = false;
     }
 };
 
 onMounted(getSummaryModules);
 </script>
 <template>
-    <div class="summary-container">
+    <div class="summary-container" v-if="!isLoading">
         <div class="summary-title">
             <h1>Rangkuman {{ courseData.title_course }}</h1>
         </div>
@@ -52,10 +57,21 @@ onMounted(getSummaryModules);
             <div class="border-right"></div>
         </div>
         <div class="bottom-nav">
-            <div class="btn btn-next_module">
-                <a>Lanjut</a>
+            <!-- <div class="btn btn-next_module">
                 <img src="@/assets/icon/arrow-right.svg" alt="">
-            </div>
+            </div> -->
+            <!-- router link to /course/module/summary/quiz/score/:id dengan data id dari courseData.id -->
+            <router-link :to="routeQuiz">
+                <div class="btn btn-next_module">
+                    <a>Quiz</a>
+                    <img src="@/assets/icon/arrow-right.svg" alt="">
+                </div>
+            </router-link>
+        </div>
+    </div>
+    <div v-else>
+        <div class="else-content">
+            <h3>Loading...</h3>
         </div>
     </div>
 </template>
@@ -184,5 +200,20 @@ onMounted(getSummaryModules);
     border-radius: 15px;
     overflow: hidden;
     position: relative;
+}
+
+.else-content {
+    width: 100%;
+    height: 950px;
+    display: flex;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+}
+
+.else-content h3 {
+    font-size: 24px;
+    font-weight: 600;
+    color: #6A2C70;
 }
 </style>
