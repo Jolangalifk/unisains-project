@@ -3,6 +3,7 @@ import { ref, onMounted, computed } from 'vue'
 import axios from 'axios';
 import { useRoute } from 'vue-router';
 import router from '@/router/index.js';
+import Swal from 'sweetalert2';
 
 const route = useRoute();
 
@@ -76,8 +77,11 @@ const postAnswerQuiz = async () => {
             console.log("Unexpected response structure:", response.data);
         }
     } catch (error) {
-        console.log(error);
-        alert("Gagal mengirim jawaban");
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Terjadi kesalahan saat mengirim jawaban.',
+        });
     }
 }
 
@@ -282,6 +286,12 @@ onMounted(() => {
     margin-top: 20px;
 }
 
+.container-question h1 {
+    font-size: 24px;
+    font-weight: bold;
+    color: #000000;
+}
+
 .quiz-question {
     width: 1330px;
     display: flex;
@@ -404,6 +414,7 @@ onMounted(() => {
     font-weight: 500;
     color: #fff;
     margin-left: 20px;
+    font-family: poppins;
 }
 
 .btn-nextquiz {
@@ -425,11 +436,29 @@ onMounted(() => {
     border: none;
 }
 
+.btn-answer {
+    width: 100%;
+    height: 100%;
+    background-color: #FEFAE0;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    border: none;
+    font-size: 20px;
+    font-weight: 600;
+    color: #000000;
+    padding-left: 70px;
+    margin-bottom: 20px;
+    font-family: poppins;
+}
+
 .btn-nextquiz button p {
     font-size: 18px;
     font-weight: 500;
     color: #fff;
     margin-right: 20px;
+    font-family: poppins;
 }
 
 .btn-nextquiz button img {
