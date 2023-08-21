@@ -1,6 +1,5 @@
 <script setup>
 import Navbar from '../components/Navbar.vue';
-import ProgressBar from '../components/ProgressBar.vue';
 import Logout from '../components/Logout.vue';
 import axios from 'axios';
 import { ref, onMounted } from 'vue';
@@ -85,7 +84,7 @@ onMounted(() => {
                 </div>
                 <div class="more-course-btn" v-if="myCourse.length > 3">
                     <button>
-                        <a><router-link to="/lihat-lebih-banyak">Lihat lebih banyak</router-link></a>
+                        <a><router-link to="/profile/my-course">Lihat lebih banyak</router-link></a>
                         <img src="@/assets/icon/arrow-right-orange.svg" alt="">
                     </button>
                 </div>
@@ -212,7 +211,7 @@ onMounted(() => {
     height: 100%;
     display: flex;
     justify-content: center;
-    margin-top: 10px;
+    margin-top: 50px;
 }
 
 .more-course-btn button {
@@ -240,62 +239,64 @@ onMounted(() => {
     margin-left: 20px;
 }
 
-.card-course {
-    width: 375px;
+.course-content-row .card-course {
+    width: 380px;
     height: fit-content;
-    border-radius: 20px;
-    margin-right: 30px;
-    margin-bottom: 30px;
-    border: 1px solid #B83B5E;
-    display: flex;
-    flex-direction: column;
-    padding: 10px;
-    transition: all 0.3s ease-in-out;
+    border: 1px solid #C1C1C1;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.card-course:hover {
+    transform: scale(1.01);
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, .1);
 }
 
 .card-course a {
     text-decoration: none;
+    color: #000000;
 }
 
-.card-course:hover {
-    transform: translateY(-5px);
-    box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.2);
+.card-course .card-course-image {
+    position: relative;
+    width: 100%;
+    height: 190px;
+    overflow: hidden;
 }
 
-.card-course-image img {
-    width: 349px;
-    height: 200px;
-    border-radius: 20px;
-}
-
-.card-course-text {
+.card-course .card-course-image img {
     width: 100%;
     height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    margin-top: 10px;
+    object-fit: cover;
+    object-position: center;
+    transition: transform 0.3s ease-in-out;
+}
+
+.card-course:hover .card-course-image img {
+    transform: scale(1.1);
+}
+
+.card-course .card-course-text {
+    width: 100%;
+    height: 100%;
+    padding: 20px;
 }
 
 .card-course-text h3 {
-    font-size: 14px;
-    font-weight: 800;
-    margin-bottom: 7px;
-    color: #000000;
+    font-size: 18px;
+    font-weight: bold;
+    line-height: 1.5;
+    margin-bottom: 10px;
+
 }
 
 .card-course-text p {
-    color: #000000;
-    font-size: 11px;
-    font-weight: 400;
-    margin-bottom: 5px;
-    text-align: justify;
-    max-height: 40px;
-    overflow: hidden;
-    text-overflow: ellipsis;
     display: -webkit-box;
-    -webkit-line-clamp: 2;
+    -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-align: justify;
 }
 
 .more-course-btn button a,
