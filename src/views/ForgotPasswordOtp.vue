@@ -4,7 +4,7 @@
             <div class="password-wrapper">
                 <div class="head-password">
                     <h1>Lupa Password</h1>
-                    <p>Isi data dibawah ini untuk melanjutkan proses reset password!</p>
+                    <p>Isi data dibawah ini untuk melanjutkan proses ubah kata sandi!</p>
                 </div>
                 <form class="form-input" v-on:submit.prevent="resetPassword">
                     <div class="form-group">
@@ -15,7 +15,7 @@
                     <div class="form-group">
                         <label for="Password"></label>
                         <img src="@/assets/icon/password-icon.svg" alt="">
-                        <input :type="showPassword ? 'text' : 'password'" placeholder="Masukkan Password Baru"
+                        <input :type="showPassword ? 'text' : 'password'" placeholder="Masukkan Kata Sandi Baru"
                             v-model="newPassword">  
                         <button type="button" class="toggle-password" @click="togglePasswordVisibility">
                             <img class="toggle-password-icon" src="../assets/icon/eye-icon.svg" v-if="!showPassword"
@@ -27,7 +27,7 @@
                     <div class="form-group">
                         <label for="ConfirmPassword"></label>
                         <img src="@/assets/icon/password-icon.svg" alt="">
-                        <input :type="showPassword ? 'text' : 'password'" placeholder="Konfirmasi Password Baru"
+                        <input :type="showPassword ? 'text' : 'password'" placeholder="Konfirmasi Kata Sandi Baru"
                             v-model="confirmPassword">
                         <button type="button" class="toggle-password" @click="togglePasswordVisibility">
                             <img class="toggle-password-icon" src="../assets/icon/eye-icon.svg" v-if="!showPassword"
@@ -37,7 +37,7 @@
                         </button>
                     </div>
                     <p class="error-message" v-if="passwordError">{{ passwordErrorMessage }}</p>
-                    <button type="submit" class="button-password">Ubah Password</button>
+                    <button type="submit" class="button-password">Ubah Kata Sandi</button>
                 </form>
             </div>
             <div class="loading-overlay" v-if="isLoading">

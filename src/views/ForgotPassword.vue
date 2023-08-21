@@ -4,8 +4,8 @@
         <div class="container-forgot-password">
             <div class="forgot-password-wrapper">
                 <div class="head-forgot-password">
-                    <h1>Lupa Password</h1>
-                    <p>Masukkan Email anda disini untuk melanjutkan proses reset password!</p>
+                    <h1>Lupa Kata Sandi</h1>
+                    <p>Masukkan Email anda disini untuk melanjutkan proses ubah kata sandi!</p>
                 </div>
                 <form class="form-input" v-on:submit.prevent="ForgotPassword">
                     <div class="form-group">

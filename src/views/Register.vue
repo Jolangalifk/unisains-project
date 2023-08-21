@@ -28,7 +28,7 @@
                     <div class="form-group">
                         <label for="Password"></label>
                         <img src="@/assets/icon/password-icon.svg" alt="">
-                        <input :type="showPassword ? 'text' : 'password'" placeholder="Masukkan Password"
+                        <input :type="showPassword ? 'text' : 'password'" placeholder="Masukkan Kata Sandi"
                             v-model="password">
                         <button type="button" class="toggle-password" @click="togglePasswordVisibility">
                             <img class="toggle-password-icon" src="../assets/icon/eye-icon.svg" v-if="!showPassword"
