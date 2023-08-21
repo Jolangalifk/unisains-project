@@ -254,9 +254,6 @@ function formattedHarga(harga) {
 
 .preview-content p {
     white-space: normal;
-    /* Setiap baris teks akan dibungkus */
-    max-height: 100px;
-    /* Tinggi maksimum yang diinginkan */
     margin-top: 30px;
     margin-bottom: 30px;
 }
