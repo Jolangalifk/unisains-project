@@ -32,16 +32,18 @@ export default {
     <table>
       <thead>
         <tr>
-          <label class="select-all">
-            <input type="checkbox" v-model="selectAll" @change="selectAllItems">
-            <p>Pilih Semua</p>
-          </label>
+          <th>
+            <label class="select-all">
+              <input type="checkbox" v-model="selectAll" @change="selectAllItems">
+              <span>Pilih Semua</span>
+            </label>
+          </th>
           <th>Harga</th>
           <th>Aksi</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(item, index) in data" :key="index">
+        <tr v-for="(item, index) in data" :key="item.id" class="data-row">
           <td>
             <input type="checkbox" v-model="selectedItems" :value="item.id">
             <img :src="item.gambar" alt="Gambar" height="50">
@@ -63,8 +65,7 @@ export default {
 <style scoped>
 .list-course {
   width: 1150px;
-  height: 980px;
-  border-collapse: collapse;
+  height: 100%;
   margin: auto;
   font-family: poppins;
   font-size: 14px;
@@ -74,7 +75,7 @@ export default {
 .list-course h3 {
   font-size: 40px;
   font-weight: bold;
-  margin-bottom: 20px;
+  margin-bottom: 50px;
 }
 
 .list-course .select-all {
@@ -97,13 +98,14 @@ export default {
   width: 515px;
 }
 
+.list-course .data-row {
+  border-bottom: 1px solid #ddd;
+}
+
 .list-course .harga {
   width: 260px;
 }
 
-.list-course .button {
-  width: 260px;
-}
 .list-course tr {
   font-size: 20px;
   font-weight: 600;
@@ -129,9 +131,10 @@ export default {
 
 .list-course .button {
   text-align: center;
+  width: 260px;
 }
 
-.list-course button {
+.list-course button { 
   width: 50px;
   height: 50px;
   background-color: white;
@@ -140,5 +143,9 @@ export default {
   cursor: pointer;
   align-items: center;
   justify-content: center;
+}
+
+.list-course .data-row {
+  border-bottom: 1px solid #ddd;
 }
 </style>

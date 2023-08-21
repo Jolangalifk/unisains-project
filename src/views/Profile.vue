@@ -28,6 +28,7 @@ const fetchProfileData = async () => {
             },
         });
         profileData.value = response.data;
+        console.log(profileData.value);
         myCourseHasCourses.value = response.data.my_course.length > 0;
     } catch (error) {
         console.error(error);

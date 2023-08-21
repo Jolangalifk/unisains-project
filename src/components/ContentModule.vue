@@ -1,137 +1,72 @@
-<script>
-import ModuleListView from '@/components/ModuleListView.vue';
-
-export default {
-    components: {
-        ModuleListView
-    },
-    data() {
-        return {
-            moduleData: null,
-            error: null
-        };
-    },
-
-    methods: {
-        async fetchModuleData() {
-            try {
-                const response = await fetch('https://admin.unisains.com/public/api/v1/module/show', {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem('token')}`,
-                    },
-                });
-
-                if (!response.ok) {
-                    throw new Error(`Failed to fetch module data: ${response.status} ${response.statusText}`);
-                }
-
-                const data = await response.json();
-                this.moduleData = {
-                    id: data.id,
-                    title: data.title,
-                    description: data.description,
-                    image: data.image,
-                    content: data.content
-                };
-            } catch (error) {
-                this.error = error.message;
-                console.error(error);
-            }
-        }
-    },
-    mounted() {
-        this.fetchModuleData();
-    },
-};
-</script>
 <template>
     <div class="container-content-module">
-        <div class="container-module">
-            <div class="module-cover-container">
-                <img src="../assets/img/merkurius-cover.png" alt="">
-            </div>
-            <h2>Planet Merkurius</h2>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel eius ea odio, quo neque cumque nam dolore
-                exercitationem tenetur. Veniam deserunt aperiam rerum dolorum natus minima tenetur cum facilis sapiente?
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum, exercitationem voluptatem minima
-                incidunt laborum repudiandae saepe! Ipsum sint a aspernatur fugit! Perferendis vero quasi iusto voluptate.
-                Eveniet quasi modi odit. Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus necessitatibus
-                harum enim numquam. Quas voluptas veritatis assumenda perferendis temporibus, itaque quod saepe recusandae
-                repudiandae facere delectus ex rem aut nesciunt? Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Natus aspernatur fuga placeat nihil, atque blanditiis cupiditate sed reiciendis doloremque nostrum sequi
-                quos repellat esse velit consectetur praesentium asperiores corrupti nemo! Lorem ipsum dolor sit amet
-                consectetur adipisicing elit. Vel eius ea odio, quo neque cumque nam dolore
-                exercitationem tenetur. Veniam deserunt aperiam rerum dolorum natus minima tenetur cum facilis sapiente?
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum, exercitationem voluptatem minima
-                incidunt laborum repudiandae saepe! Ipsum sint a aspernatur fugit! Perferendis vero quasi iusto voluptate.
-                Eveniet quasi modi odit. Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus necessitatibus
-                harum enim numquam. Quas voluptas veritatis assumenda perferendis temporibus, itaque quod saepe recusandae
-                repudiandae facere delectus ex rem aut nesciunt? Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Natus aspernatur fuga placeat nihil, atque blanditiis cupiditate sed reiciendis doloremque nostrum sequi
-                quos repellat esse velit consectetur praesentium asperiores corrupti nemo! Lorem ipsum dolor sit amet
-                consectetur adipisicing elit. Vel eius ea odio, quo neque cumque nam dolore
-                exercitationem tenetur. Veniam deserunt aperiam rerum dolorum natus minima tenetur cum facilis sapiente?
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum, exercitationem voluptatem minima
-                incidunt laborum repudiandae saepe! Ipsum sint a aspernatur fugit! Perferendis vero quasi iusto voluptate.
-                Eveniet quasi modi odit. Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus necessitatibus
-                harum enim numquam. Quas voluptas veritatis assumenda perferendis temporibus, itaque quod saepe recusandae
-                repudiandae facere delectus ex rem aut nesciunt? Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Natus aspernatur fuga placeat nihil, atque blanditiis cupiditate sed reiciendis doloremque nostrum sequi
-                quos repellat esse velit consectetur praesentium asperiores corrupti nemo! Lorem ipsum dolor sit amet
-                consectetur adipisicing elit. Vel eius ea odio, quo neque cumque nam dolore
-                exercitationem tenetur. Veniam deserunt aperiam rerum dolorum natus minima tenetur cum facilis sapiente?
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum, exercitationem voluptatem minima
-                incidunt laborum repudiandae saepe! Ipsum sint a aspernatur fugit! Perferendis vero quasi iusto voluptate.
-                Eveniet quasi modi odit. Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus necessitatibus
-                harum enim numquam. Quas voluptas veritatis assumenda perferendis temporibus, itaque quod saepe recusandae
-                repudiandae facere delectus ex rem aut nesciunt? Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Natus aspernatur fuga placeat nihil, atque blanditiis cupiditate sed reiciendis doloremque nostrum sequi
-                quos repellat esse velit consectetur praesentium asperiores corrupti nemo! Lorem ipsum dolor sit amet
-                consectetur adipisicing elit. Vel eius ea odio, quo neque cumque nam dolore
-                exercitationem tenetur. Veniam deserunt aperiam rerum dolorum natus minima tenetur cum facilis sapiente?
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum, exercitationem voluptatem minima
-                incidunt laborum repudiandae saepe! Ipsum sint a aspernatur fugit! Perferendis vero quasi iusto voluptate.
-                Eveniet quasi modi odit. Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus necessitatibus
-                harum enim numquam. Quas voluptas veritatis assumenda perferendis temporibus, itaque quod saepe recusandae
-                repudiandae facere delectus ex rem aut nesciunt? Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Natus aspernatur fuga placeat nihil, atque blanditiis cupiditate sed reiciendis doloremque nostrum sequi
-                quos repellat esse velit consectetur praesentium asperiores corrupti nemo! Lorem ipsum dolor sit amet
-                consectetur adipisicing elit. Vel eius ea odio, quo neque cumque nam dolore
-                exercitationem tenetur. Veniam deserunt aperiam rerum dolorum natus minima tenetur cum facilis sapiente?
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum, exercitationem voluptatem minima
-                incidunt laborum repudiandae saepe! Ipsum sint a aspernatur fugit! Perferendis vero quasi iusto voluptate.
-                Eveniet quasi modi odit. Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus necessitatibus
-                harum enim numquam. Quas voluptas veritatis assumenda perferendis temporibus, itaque quod saepe recusandae
-                repudiandae facere delectus ex rem aut nesciunt? Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Natus aspernatur fuga placeat nihil, atque blanditiis cupiditate sed reiciendis doloremque nostrum sequi
-                quos repellat esse velit consectetur praesentium asperiores corrupti nemo! Lorem ipsum dolor sit amet
-                consectetur adipisicing elit. Vel eius ea odio, quo neque cumque nam dolore
-                exercitationem tenetur. Veniam deserunt aperiam rerum dolorum natus minima tenetur cum facilis sapiente?
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum, exercitationem voluptatem minima
-                incidunt laborum repudiandae saepe! Ipsum sint a aspernatur fugit! Perferendis vero quasi iusto voluptate.
-                Eveniet quasi modi odit. Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus necessitatibus
-                harum enim numquam. Quas voluptas veritatis assumenda perferendis temporibus, itaque quod saepe recusandae
-                repudiandae facere delectus ex rem aut nesciunt? Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Natus aspernatur fuga placeat nihil, atque blanditiis cupiditate sed reiciendis doloremque nostrum sequi
-                quos repellat esse velit consectetur praesentium asperiores corrupti nemo! Lorem ipsum dolor sit amet
-                consectetur adipisicing elit. Vel eius ea odio, quo neque cumque nam dolore
-                exercitationem tenetur. Veniam deserunt aperiam rerum dolorum natus minima tenetur cum facilis sapiente?
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum, exercitationem voluptatem minima
-                incidunt laborum repudiandae saepe! Ipsum sint a aspernatur fugit! Perferendis vero quasi iusto voluptate.
-                Eveniet quasi modi odit. Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus necessitatibus
-                harum enim numquam. Quas voluptas veritatis assumenda perferendis temporibus, itaque quod saepe recusandae
-                repudiandae facere delectus ex rem aut nesciunt? Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Natus aspernatur fuga placeat nihil, atque blanditiis cupiditate sed reiciendis doloremque nostrum sequi
-                quos repellat esse velit consectetur praesentium asperiores corrupti nemo!
-            </p>
-            <h1>Scan Augmented Reality disini!</h1>
-            <div class="content-ar-img">
-                <img src="../assets/img/merkurius-ar.png" alt="">
+        <div v-if="currentModule">
+            <div class="container-module">
+                <!-- Content for the currently displayed module -->
+                <div class="module-cover-container">
+                    <img :src="currentModule.thumbnail_module" alt="Module Thumbnail" />
+                </div>
+                <h2>{{ currentModule.title_module }}</h2>
+                <h1>{{ currentModule.description }}</h1>
+                <p>{{ currentModule.materi_module }}</p>
+                <!-- <div class="content-ar-img">
+                    <img :src="currentModule.image_module" alt="Module Image" />
+                </div> -->
             </div>
         </div>
+        <!-- Pass the courseContent data to the ModuleListView component -->
+        <!-- <ModuleListView :courseContent="courseContent" @changeModule="handleChangeModule" /> -->
         <ModuleListView />
     </div>
 </template>
+  
+<script setup>
+import axios from 'axios';
+import { ref, onMounted } from 'vue';
+import ModuleListView from './ModuleListView.vue';
+import { useRoute } from 'vue-router';
+
+const courseId = useRoute().params.id;
+const courseContent = ref(null);
+const isCoursePurchased = ref(false);
+const currentModule = ref(null);
+let currentIndex = 0;
+
+const getUserToken = () => {
+    const token = localStorage.getItem('token');
+    return token ? token.replace(/['"]+/g, '') : '';
+};
+
+const fetchCourseContent = async () => {
+    try {
+        // Simulate the course has been purchased.
+        isCoursePurchased.value = true;
+
+        const token = getUserToken();
+        const response = await axios.get(
+            `https://admin.unisains.com/api/v1/course/learn/${courseId}`,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }
+        );
+        courseContent.value = response.data;
+        // Assuming the API response contains the course content details.
+        currentModule.value = courseContent.value.course.modules[0];
+    } catch (error) {
+        console.error('Failed to fetch course content:', error);
+    }
+};
+
+onMounted(fetchCourseContent);
+
+const handleChangeModule = (module) => {
+    currentModule.value = module;
+};
+</script>
+  
+  
 
 <style scoped>
 .container-content-module {
@@ -162,13 +97,14 @@ export default {
     align-items: center;
     align-content: center;
     margin-bottom: 40px;
+    object-fit: contain;
 }
 
 .container-module h1 {
     font-size: 26px;
     font-weight: 600;
     color: #000000;
-    margin-top: 40px;
+    margin: 40px 0;
 }
 
 .content-ar-img {
@@ -198,6 +134,10 @@ export default {
 .container-module h2 {
     font-size: 36px;
     font-weight: 600;
+    color: #000000;
+}
+.container-module p {
+    font-size: 20px;
     color: #000000;
 }
 

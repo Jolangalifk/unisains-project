@@ -2,6 +2,7 @@
 import NavbarProfileSettings from '../components/NavbarProfileSettings.vue';
 import axios from 'axios';
 import { ref, onMounted, watch } from 'vue';
+import Swal from 'sweetalert2';
 
 const firstName = ref('');
 const lastName = ref('');
@@ -52,13 +53,19 @@ const saveProfile = async () => {
             });
 
             console.log('Profile updated successfully!');
-            // Show success notification
-            alert('Data berhasil di ubah');
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil',
+                text: 'Profile berhasil diubah!.',
+            });
         }
     } catch (error) {
         console.error('Error updating profile:', error);
-        // Show error notification
-        alert('Terjadi kesalahan saat mengedit data');
+        Swal.fire({
+            icon: 'error',
+            title: 'Gagal',
+            text: 'Terjadi kesalahan saat mengubah profile.',
+        });
     }
 };
 

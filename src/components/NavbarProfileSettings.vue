@@ -16,9 +16,6 @@
             <a :class="{ 'selected': selectedBtn.value === 1 }" @click="selectBtn(1)">
                 <router-link to="/profile/profile-settings/account-privacy">Keamanan akun</router-link>
             </a>
-            <a :class="{ 'selected': selectedBtn.value === 2 }" @click="selectBtn(2)">
-                <router-link to="/profile/profile-settings/theme">Tema</router-link>
-            </a>
         </div>
     </div>
 </template>

@@ -1,50 +1,6 @@
-<script>
+<script setup>
 import ProgressBarModuleView from './ProgressBarModuleView.vue';
 import ModuleList from './ModuleList.vue';
-
-export default {
-    components: {
-        ProgressBarModuleView,
-        ModuleList
-    },
-    data() {
-        return {
-            moduleData: null,
-            error: null
-        };
-    },
-
-    methods: {
-        async fetchModuleData() {
-            try {
-                const response = await fetch('https://admin.unisains.com/public/api/v1/module/show', {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem('token')}`,
-                    },
-                });
-
-                if (!response.ok) {
-                    throw new Error(`Failed to fetch module data: ${response.status} ${response.statusText}`);
-                }
-
-                const data = await response.json();
-                this.moduleData = {
-                    id: data.id,
-                    title: data.title,
-                    description: data.description,
-                    image: data.image,
-                    content: data.content
-                };
-            } catch (error) {
-                this.error = error.message;
-                console.error(error);
-            }
-        }
-    },
-    mounted() {
-        this.fetchModuleData();
-    },
-};
 </script>
 <template>
     <div class="container-module-list">
@@ -53,10 +9,10 @@ export default {
         </div>
         <ProgressBarModuleView />
         <div class="scrollview">
+            <!-- <ModuleList />
             <ModuleList />
             <ModuleList />
-            <ModuleList />
-            <ModuleList />
+            <ModuleList /> -->
             <ModuleList />
         </div>
     </div>
@@ -64,8 +20,8 @@ export default {
 
 <style scoped>
 .container-module-list {
-    width: 530px;
-    height: 745px;
+    width: fit-content;
+    height: calc(100vh - 200px);
     display: flex;
     border-left: 1px solid #CBC8B3;
     flex-direction: column;
