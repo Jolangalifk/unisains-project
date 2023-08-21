@@ -110,9 +110,9 @@ onMounted(async () => {
                         <div class="profile-content">
                             <div class="profile-info">
                                 <ul>
-                                    <li><router-link to="/pembelajaran-saya">Pembelajaran saya</router-link></li>
+                                    <li><router-link to="/learn-course">Pembelajaran saya</router-link></li>
                                     <li><router-link to="/cart-course">Keranjang</router-link></li>
-                                    <li><router-link to="/daftar-keinginan">Daftar keinginan</router-link></li>
+                                    <li><router-link to="/wishlist">Daftar keinginan</router-link></li>
                                 </ul>
                             </div>
                         </div>
@@ -406,6 +406,10 @@ onMounted(async () => {
     font-size: 20px;
     font-weight: 600;
     margin-bottom: 5px;
+    max-width: 170px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .profile-info {
@@ -414,6 +418,16 @@ onMounted(async () => {
 
 .profile-info-account {
     flex: 1;
+}
+
+.profile-info-account p {
+    font-size: 14px;
+    font-weight: 400;
+    margin-bottom: 5px;
+    max-width: 170px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .profile-info ul {
