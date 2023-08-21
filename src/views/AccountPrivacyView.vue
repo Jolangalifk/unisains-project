@@ -36,13 +36,11 @@ onMounted(fetchProfileData);
         <div class="profile-settings-content">
             <div class="title-edit-password">
                 <h1>Halo {{ profileData && profileData.data.user.first_name }} {{ profileData &&
-                            profileData.data.user.last_name }}!, jika anda ingin mengubah sandi
+                    profileData.data.user.last_name }}!, jika anda ingin mengubah sandi
                     silahkan klik button di bawah ini</h1>
             </div>
             <div class="btn-edit">
-                <router-link to="/forgot-password">
-                    <button>Ubah sandi</button>
-                </router-link>
+                <button>Ubah sandi</button>
             </div>
         </div>
     </div>
