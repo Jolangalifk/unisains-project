@@ -85,6 +85,14 @@ const router = createRouter({
       component: () => import('../views/CartCourse.vue')
     },
     {
+      path: '/profile/my-course',
+      name: 'my-course',
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/MyCourseView.vue')
+    },
+    {
       path: '/profile/profile-settings/edit-profile',
       name: 'edit-profile',
       // route level code-splitting
