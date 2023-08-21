@@ -117,6 +117,14 @@ const router = createRouter({
       component: () => import('../views/QuizScoreView.vue')
     },
     {
+      path: '/course/module/summary/quiz/score/:id',
+      name: 'bad-quiz-score',
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/BadQuizScoreView.vue')
+    },
+    {
       path: '/course/module/:id',
       name: 'course-module',
       // route level code-splitting

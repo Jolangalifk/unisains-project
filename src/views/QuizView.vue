@@ -12,6 +12,7 @@ const getUserToken = () => {
     return token ? token.replace(/['"]+/g, '') : '';
 };
 
+let loading = ref(false);
 let currentQuestionIndex = ref(0);
 let courseData = ref([]);
 const quizData = ref([]);
@@ -36,7 +37,7 @@ const getQuizzezData = async () => {
         );
         courseData.value = response.data.course;
         quizData.value = response.data.quizzez;
-        answerData.value = response.data.quizzez.answers;
+        answerData.value = response.data.quizzez;
         console.log(courseData.value);
         console.log(quizData.value);
         console.log(answerData.value);
@@ -47,6 +48,7 @@ const getQuizzezData = async () => {
 
 const postAnswerQuiz = async () => {
     try {
+        loading.value = true;
         const token = getUserToken();
 
         const userAnswer = {
@@ -91,7 +93,7 @@ const goToQuizScore = () => {
             if (userScore.value < 80) {
                 // If userScore is below 80, navigate to QuizScoreView.vue
                 router.push({
-                    name: 'quiz-score',
+                    name: 'bad-quiz-score',
                     params: {
                         id: route.params.id,
                     },
@@ -199,7 +201,16 @@ onMounted(() => {
                     </div>
                 </div>
                 <div class="btn-submit">
-                    <button @click="postAnswerQuiz()" v-if="currentQuestionIndex === quizData.length - 1">Kirim</button>
+                    <button @click="postAnswerQuiz()" v-if="currentQuestionIndex === quizData.length - 1 && !loading">
+                        Kirim
+                    </button>
+                    <div v-else>
+                        <div v-if="loading">
+                            <div class="else-content">
+                                <h3>Loading...</h3>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

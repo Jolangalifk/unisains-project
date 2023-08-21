@@ -16,7 +16,7 @@ const getUserToken = () => {
 
 const backToCourse = () => {
     localStorage.removeItem('userScore');
-    router.push(`/detail-course/${route.params.id}`);
+    router.push(`/course/module/summary/quiz/${route.params.id}`);
 };
 
 const getCourseData = async () => {
@@ -54,14 +54,15 @@ onMounted(() => {
             <h1>{{ userScore }}!</h1>
         </div>
         <div class="title-greetings">
-            <h1>Kami dengan senang hati akan mengirimkan sertifikat kamu sebagai penghargaan atas pencapaian kamu dalam
-                Kursus {{ courseData.title_course }}. Teruslah bersemangat dan teruslah belajar!</h1>
+            <h1>Kami memberikan penghargaan atas partisipasi Anda dalam Kursus {{ courseData.title_course }}. Meskipun tidak berhasil
+                dalam kuis, jangan menyerah.
+                Teruslah belajar dan berkembang. Semangat!</h1>
         </div>
         <div class="btn-try-next">
             <div class="btn-next">
                 <button @click="backToCourse">
-                    <p>Kembali ke kursus</p>
-                    <img src="@/assets/icon/arrow-right.svg" alt="">
+                    <img src="@/assets/icon/arrow-left-purple.svg" alt="">
+                    <p>Ulangi kuis!</p>
                 </button>
             </div>
         </div>
@@ -116,29 +117,29 @@ onMounted(() => {
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: flex-end;
+    justify-content: flex-start;
 }
 
 .btn-next button {
-    width: 300px;
+    width: 250px;
     height: 70px;
     background-color: #6A2C70;
     border-radius: 50px;
     display: flex;
     align-items: center;
-    justify-content: flex-end;
+    justify-content: flex-start;
     border: none;
     cursor: pointer;
 }
 
 .btn-next button img {
-    margin-right: 10px;
+    margin-left: 10px;
 }
 
 .btn-next button p {
     font-size: 20px;
     color: #fff;
     font-weight: 600;
-    margin-right: 20px;
+    margin-left: 20px;
 }
 </style>
