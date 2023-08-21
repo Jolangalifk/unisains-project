@@ -69,7 +69,7 @@ onMounted(() => {
                     </div>
                     <div class="course-content">
                         <div class="course-content-row">
-                            <div class="card-course" v-for="my_course in myCourse" :key="my_course.id">
+                            <div class="card-course" v-for="(my_course, index) in myCourse.slice(0, 3)" :key="my_course.id">
                                 <router-link :to="'/course/module/' + my_course.course_id">
                                     <div class="card-course-image">
                                         <img :src="my_course.course.thumbnail" alt="">
@@ -83,7 +83,7 @@ onMounted(() => {
                         </div>
                     </div>
                 </div>
-                <div class="more-course-btn">
+                <div class="more-course-btn" v-if="myCourse.length > 3">
                     <button>
                         <a><router-link to="/lihat-lebih-banyak">Lihat lebih banyak</router-link></a>
                         <img src="@/assets/icon/arrow-right-orange.svg" alt="">
@@ -182,8 +182,8 @@ onMounted(() => {
 .course-content-row {
     width: 100%;
     height: 100%;
-    display: flex;
-    flex-direction: row;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
 }
 
 .profile-button button {
