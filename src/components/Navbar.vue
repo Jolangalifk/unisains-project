@@ -110,7 +110,7 @@ onMounted(async () => {
                         <div class="profile-content">
                             <div class="profile-info">
                                 <ul>
-                                    <li><router-link to="/pembelajaran-saya">Pembelajaran saya</router-link></li>
+                                    <li><router-link to="/learn-course">Pembelajaran saya</router-link></li>
                                     <li><router-link to="/cart-course">Keranjang</router-link></li>
                                     <li><router-link to="/wishlist">Daftar keinginan</router-link></li>
                                 </ul>
