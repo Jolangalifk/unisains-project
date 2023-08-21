@@ -98,7 +98,9 @@ onMounted(async () => {
                 <div class="profile-menu" v-if="showProfileMenu" @click="hideProfileMenu">
                     <div class="profile-item-account">
                         <div class="profile-content-account">
-                            <img :src="profileData.image" alt="">
+                            <router-link to="/profile">
+                                <img :src="profileData.image" alt="">
+                            </router-link>
                             <div class="profile-info-account">
                                 <h3>{{ profileData.first_name }} {{ profileData.last_name }}</h3>
                                 <p>{{ profileData.email }}</p>
@@ -122,7 +124,7 @@ onMounted(async () => {
                         <div class="profile-content">
                             <div class="profile-info">
                                 <ul>
-                                    <li><router-link to="/profile">Pengaturan Akun</router-link></li>
+                                    <li><router-link to="/profile/profile-settings/edit-profile">Pengaturan Akun</router-link></li>
                                     <li><router-link to="/history-course">Riwayat transaksi</router-link></li>
                                 </ul>
                             </div>
@@ -405,6 +407,10 @@ onMounted(async () => {
     font-size: 20px;
     font-weight: 600;
     margin-bottom: 5px;
+    max-width: 170px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .profile-info {
@@ -413,6 +419,16 @@ onMounted(async () => {
 
 .profile-info-account {
     flex: 1;
+}
+
+.profile-info-account p {
+    font-size: 14px;
+    font-weight: 400;
+    margin-bottom: 5px;
+    max-width: 170px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .profile-info ul {

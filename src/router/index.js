@@ -101,15 +101,7 @@ const router = createRouter({
       component: () => import('../views/AccountPrivacyView.vue')
     },
     {
-      path: '/profile/profile-settings/theme',
-      name: 'theme',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/ThemeView.vue')
-    },
-    {
-      path: '/course/module/quiz',
+      path: '/course/module/summary/quiz/:id',
       name: 'quiz',
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
@@ -117,12 +109,36 @@ const router = createRouter({
       component: () => import('../views/QuizView.vue')
     },
     {
-      path: '/course/module',
+      path: '/course/module/summary/quiz/score/:id',
+      name: 'quiz-score',
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/QuizScoreView.vue')
+    },
+    {
+      path: '/course/module/:id',
       name: 'course-module',
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () => import('../views/CourseModuleView.vue')
+      component: () => import('../views/ModuleView.vue')
+    },
+    {
+      path: '/course/module/summary/:id',
+      name: 'module-summary',
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/SummaryView.vue')
+    },
+    {
+      path: '/course/module/:id/:module_id',
+      name: 'content-module',
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../components/ContentModule.vue')
     },
     {
       path: `/detail-order/:id`,
@@ -159,6 +175,21 @@ const router = createRouter({
       component: () => import('../views/Wishlist.vue')
     },
     {
+      path: '/forgot-password',
+      name: 'forgot-password',
+      component: () => import('../views/ForgotPassword.vue')
+    },
+    {
+      path: '/forgot-password-otp',
+      name: 'forgot-password-otp',
+      component: () => import('../views/ForgotPasswordOtp.vue')
+    },
+    {
+      path: '/register-otp',
+      name: 'register-otp',
+      component: () => import('../views/RegisterOtp.vue')
+     },
+     {
       path: `/detail-transaction/:id`,
       name: 'detail-transaction',
       component: () => import('../views/DetailTransaction.vue')

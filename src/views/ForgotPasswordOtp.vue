@@ -1,22 +1,22 @@
 <template>
     <div class="body">
-        <div class="container-login">
-            <div class="login-wrapper">
-                <div class="head-login">
-                    <h1>Masuk</h1>
-                    <p>dan cari kursus sains yang ingin anda pelajari!</p>
+        <div class="container-password">
+            <div class="password-wrapper">
+                <div class="head-password">
+                    <h1>Lupa Password</h1>
+                    <p>Isi data dibawah ini untuk melanjutkan proses ubah kata sandi!</p>
                 </div>
-                <form class="form-input" v-on:submit.prevent="Login">
+                <form class="form-input" v-on:submit.prevent="resetPassword">
                     <div class="form-group">
-                        <label for="Email"></label>
+                        <label for="OTP"></label>
                         <img src="@/assets/icon/email-icon.svg" alt="">
-                        <input type="email" placeholder="Masukkan Email" v-model="email">
+                        <input type="text" placeholder="Masukkan Kode OTP" v-model="otp">
                     </div>
                     <div class="form-group">
                         <label for="Password"></label>
                         <img src="@/assets/icon/password-icon.svg" alt="">
-                        <input :type="showPassword ? 'text' : 'password'" placeholder="Masukkan Kata Sandi"
-                            v-model="password">
+                        <input :type="showPassword ? 'text' : 'password'" placeholder="Masukkan Kata Sandi Baru"
+                            v-model="newPassword">  
                         <button type="button" class="toggle-password" @click="togglePasswordVisibility">
                             <img class="toggle-password-icon" src="../assets/icon/eye-icon.svg" v-if="!showPassword"
                                 alt="" />
@@ -24,26 +24,21 @@
                                 alt="" />
                         </button>
                     </div>
-                    <router-link to="/forgot-password">Lupa Sandi?</router-link>
-                    <p class="error-message" v-if="loginError">{{ loginErrorMessage }}</p>
-                    <button type="submit" class="button-login">Login</button>
-                </form>
-                <!-- <div class="social-media-login">
-                    <div class="social-media">
-                        <button>
-                            <img src="../assets/image/google-icon.png" alt="google">
-                            <h3> Google </h3>
-                        </button>
-                        <button>
-                            <img src="../assets/image/twitter-icon.png" alt="facebook">
-                            <h3> Twitter </h3>
+                    <div class="form-group">
+                        <label for="ConfirmPassword"></label>
+                        <img src="@/assets/icon/password-icon.svg" alt="">
+                        <input :type="showPassword ? 'text' : 'password'" placeholder="Konfirmasi Kata Sandi Baru"
+                            v-model="confirmPassword">
+                        <button type="button" class="toggle-password" @click="togglePasswordVisibility">
+                            <img class="toggle-password-icon" src="../assets/icon/eye-icon.svg" v-if="!showPassword"
+                                alt="" />
+                            <img class="toggle-password-icon" src="../assets/icon/eye-off-icon.svg" v-if="showPassword"
+                                alt="" />
                         </button>
                     </div>
-                </div> -->
-                <br>
-                <div class="register">
-                    <p>Belum punya akun? <router-link to="/register">Daftar</router-link></p>
-                </div>
+                    <p class="error-message" v-if="passwordError">{{ passwordErrorMessage }}</p>
+                    <button type="submit" class="button-password">Ubah Kata Sandi</button>
+                </form>
             </div>
             <div class="loading-overlay" v-if="isLoading">
                 <div class="loading-spinner"></div>
@@ -52,73 +47,75 @@
         <img src="@/assets/image/astronomi-bg.png" alt="">
     </div>
 </template>
-
-<script>
-import axios from 'axios'
+  
+<script setup>
+import { ref } from 'vue';
+import axios from 'axios';
 import Swal from 'sweetalert2';
+import { useRouter } from 'vue-router';
 
-export default {
-    name: 'Login',
-    data() {
-        return {
-            email: '',
-            password: '',
-            showPassword: false,
-            loginError: false,
-            loginErrorMessage: '',
-            isLoading: false,
+const otp = ref('');
+const newPassword = ref('');
+const confirmPassword = ref('');
+const showPassword = ref(false);
+const isLoading = ref(false);
+const passwordError = ref(false);
+const passwordErrorMessage = ref('');
+
+const router = useRouter();
+
+function togglePasswordVisibility() {
+    showPassword.value = !showPassword.value;
+}
+async function resetPassword() {
+    // Mendefinisikan variabel config dengan header yang sesuai di sini
+    const token = localStorage.getItem('userToken');
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`
         }
-    },
-    methods: {
-        togglePasswordVisibility() {
-            this.showPassword = !this.showPassword; // Membalikkan nilai status
-        },
-        async Login() {
-            if (!this.email || !this.password) {
-                this.loginError = true;
-                this.loginErrorMessage = 'Silahkan isi email dan kata sandi terlebih dahulu.';
-                return;
-            }
-            try {
-                this.isLoading = true;
-                let result = await axios.post('https://admin.unisains.com/api/v1/auth/login', {
-                    email: this.email,
-                    password: this.password,
-                });
-                console.log(result);
-                if (result.status === 200 && result.data) {
-                    localStorage.setItem('user-info', JSON.stringify(result.data));
-                    localStorage.setItem('token', result.data.token);
-                    this.loginSuccess();
-                }
+    };
+
+    if (otp.value && newPassword.value === confirmPassword.value) {
+        isLoading.value = true;
+        passwordError.value = false;
+        try {
+            const response = await axios.post(
+                'https://admin.unisains.com/api/v1/auth/reset-password',
+                {
+                    otp: otp.value,
+                    password: newPassword.value,
+                    password: confirmPassword.value,
+                },
+                config
+            );
+
+            console.log('Response:', response.data);
+            if (response.status === 200) { // Memeriksa kode status yang benar
                 Swal.fire({
                     icon: 'success',
-                    title: 'Berhasil',
-                    text: 'Berhasil Login!',
+                    title: 'Berhasil!',
+                    text: 'Password berhasil diubah.',
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                    router.push('/login');
                 });
-            } catch (error) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Gagal',
-                    text: 'Login Gagal!',
-                });
-                console.error(error);
-                this.loginError = true; // Set nilai loginError menjadi true
-                this.loginErrorMessage = 'Email atau kata sandi yang anda masukkan salah.'; // Set pesan kesalahan yang ingin ditampilkan
-            } finally {
-                this.isLoading = false; // Nonaktifkan overlay loading setelah proses login selesai
-            }
-        },
-        loginSuccess() {
-            const redirectCourseId = localStorage.getItem('redirectCourseId');
-            if (redirectCourseId) {
-                this.$router.push(`/detail-course/${redirectCourseId}`);
-                localStorage.removeItem('redirectCourseId'); // Hapus data dari local storage setelah digunakan
             } else {
-                this.$router.push('/');
+                // Menghandle kesalahan atau kode status yang tidak diharapkan
+                passwordError.value = true;
+                passwordErrorMessage.value = 'Terjadi kesalahan. Silakan coba lagi.';
             }
-        },
-    },
+        } catch (error) {
+            console.error('Error:', error);
+            passwordError.value = true;
+            passwordErrorMessage.value = 'Terjadi kesalahan. Silakan coba lagi.';
+        } finally {
+            isLoading.value = false;
+        }
+    } else {
+        passwordError.value = true;
+        passwordErrorMessage.value = 'Pastikan kode OTP valid dan password baru sesuai.';
+    }
 }
 </script>
 
@@ -129,10 +126,11 @@ export default {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+
     font-family: poppins;
 }
 
-.container-login {
+.container-password {
     width: 100%;
     padding: 10%;
     display: flex;
@@ -140,26 +138,28 @@ export default {
     align-items: center;
 }
 
-.login-wrapper {
+.password-wrapper {
     width: 75%;
 }
 
-.head-login {
+.head-password {
     padding-bottom: 30px;
 }
 
-.head-login h1 {
+.head-password h1 {
     text-align: left;
     font-size: 54px;
     font-weight: bold;
     color: black;
+    text-align: center;
 }
 
-.head-login p {
+.head-password p {
     text-align: left;
     font-size: 20px;
     font-weight: normal;
     color: black;
+    text-align: center;
 }
 
 .form-input {
@@ -207,7 +207,7 @@ export default {
     font-family: poppins;
 }
 
-.button-login {
+.button-password {
     width: 100%;
     height: 80px;
     border: none;
@@ -256,7 +256,7 @@ export default {
     color: black;
 }
 
-.login .login-btn {
+.password .password-btn {
     width: 100%;
     height: 80px;
     border: none;
@@ -273,7 +273,7 @@ export default {
     font-family: poppins;
 }
 
-.social-media-login {
+.social-media-password {
     width: 100%;
     text-align: center;
     font-size: 20px;
@@ -284,13 +284,13 @@ export default {
     flex-direction: column;
 }
 
-.social-media-login a {
+.social-media-password a {
     font-size: 18px;
     text-decoration: none;
     color: black;
 }
 
-.social-media-login p {
+.social-media-password p {
     font-size: 16px;
     font-weight: normal;
     color: black;
@@ -301,7 +301,7 @@ export default {
     padding-bottom: 30px;
 }
 
-.social-media-login button {
+.social-media-password button {
     width: 210px;
     height: 80px;
     margin: 8px 0;
@@ -324,12 +324,12 @@ export default {
     margin-right: 15px;
 }
 
-.social-media-login button img google {
+.social-media-password button img google {
     width: 35px;
     height: 35px;
 }
 
-.social-media-login button img twitter {
+.social-media-password button img twitter {
     width: 35px;
     height: 29px;
 }
@@ -362,12 +362,12 @@ button h3 {
     color: #F08A5D;
 }
 
-.background-login {
+.background-password {
     width: 100%;
     height: 100vh;
 }
 
-.background-login img {
+.background-password img {
     width: 100%;
     height: 100vh;
 }

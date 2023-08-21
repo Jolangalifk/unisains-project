@@ -4,17 +4,17 @@
         <!-- Tampilan data kursus -->
         <div class="preview">
             <img :src="courseData.thumbnail" alt="">
-            <h3>Rp {{ courseData.price }}</h3>
+            <h3>Rp {{ formattedHarga(courseData.price) }}</h3>
+            <p> {{ courseData.title_course }} </p>
             <div class="button">
                 <button class="pesan" @click="addToCart">Masukkan keranjang</button>
-                <button class="keranjang">
-                    <img src="@/assets/icon/heart-outline .svg" alt="">
+                <button class="keranjang" @click="addToWishlist">
+                    <img :src="wishlistButtonImage" alt="">
                 </button>
             </div>
             <div class="beli">
-                <button class="pesan" @click="checkout(courseData.id)">Pesan Sekarang</button>
+                <button class="pesan" @click="checkout(courseData.id)">Beli Sekarang</button>
             </div>
-            <p class="cover">Kursus ini meliputi:</p>
             <p class="item" v-for="item in courseData.contents" :key="item.id">{{ item.description }}</p>
         </div>
         <div class="info">
@@ -47,20 +47,20 @@
             <p class="item">3. Pemahaman dasar tentang anatomi</p>
         </div>
         <div class="rating-course">
-            <h3>4.7 course rating . 11K ratings</h3>
+            <div class="avgrate">
+                <h3>Ulasan Pembeli</h3>
+                <div class="rate">
+                    <input class="radio-input" type="radio" id="star1" name="star-input" value="1" />
+                    <label class="radio-label" for="star1" title="1 star">1 star</label>
+                    <p>{{ courseData && courseData.avgRate }} <span>/5.0</span> </p>
+                </div>
+            </div>
             <div class="wrapper-review">
                 <div class="rate1">
                     <RatingCourse />
-                    <RatingCourse />
-                    <RatingCourse />
-                </div>
-                <div class="rate2">
-                    <RatingCourse />
-                    <RatingCourse />
-                    <RatingCourse />
                 </div>
             </div>
-            <button class="show">Show all reviews</button>
+            <!-- <button class="show">Show all reviews</button> -->
         </div>
         <div class="more-course">
             <h3>More Course</h3>
@@ -72,8 +72,8 @@
 </template>
   
 <script setup>
-import { ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import { ref, onMounted, computed } from 'vue';
 import Navbar from '../components/Navbar.vue'
 import Footer from '../components/Footer.vue'
 import ModulCourse from '../components/ModulCourse.vue'
@@ -81,11 +81,25 @@ import RatingCourse from '../components/RatingCourse.vue'
 import CardMain from '../components/CardMain.vue'
 import CardBiologi from '../components/CardBiologi.vue'
 import axios from 'axios';
+import Swal from 'sweetalert2';
+import heartOutlineImage from '@/assets/icon/heart-outline.svg';
+import heartInlineFillImage from '@/assets/icon/heart-inline-fill.svg';
 
 const courseData = ref(null);
 const isLoading = ref(false);
 const error = ref(null);
 const router = useRouter();
+const route = useRoute();
+const wishlistData = ref([]);
+
+
+const isCourseInWishlist = (courseId) => {
+    return wishlistData.value.some(item => item.course.id === courseId);
+};
+
+const wishlistButtonImage = computed(() => {
+    return courseData.value.is_wishlist ? heartInlineFillImage : heartOutlineImage;
+});
 
 // Fungsi untuk mengambil data dari API dengan menggunakan token dari local storage
 const fetchData = async () => {
@@ -150,59 +164,132 @@ const checkout = async (courseId) => { // Tambahkan courseId sebagai parameter
     }
 };
 
+const addToCart = async () => {
+    try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            // Jika tidak ada token, minta pengguna untuk login terlebih dahulu
+            alert('Anda harus login terlebih dahulu untuk menambahkan ke keranjang.');
+            return;
+        }
+
+        const response = await axios.post(
+            'https://admin.unisains.com/api/v1/course/cart/store',
+            {
+                course_id: courseData.value.id,
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }
+        );
+
+        if (response.status === 200) {
+            // Kursus berhasil ditambahkan ke keranjang (wishlist)
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil',
+                text: 'Kursus berhasil ditambahkan ke keranjang.',
+            });
+        }
+    } catch (error) {
+        console.error(error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Terjadi kesalahan saat menambahkan kursus ke keranjang.',
+        });
+    }
+};
+
+const addToWishlist = async () => {
+    try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            alert('Anda harus login terlebih dahulu untuk menambahkan ke wishlist.');
+            return;
+        }
+
+        const courseId = courseData.value.id;
+
+        // Cek apakah kursus sudah ada di wishlist
+        if (isCourseInWishlist(courseId)) {
+            Swal.fire({
+                icon: 'info',
+                title: 'Info',
+                text: 'Kursus ini sudah pernah ditambahkan ke wishlist.',
+            });
+        } else {
+            const response = await axios.post(
+                'https://admin.unisains.com/api/v1/course/wishlist/store',
+                {
+                    course_id: courseId,
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+
+            if (response.data && response.data.message === 'Course already in wishlist') {
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Info',
+                    text: 'Kursus ini sudah pernah ditambahkan ke wishlist.',
+                });
+            } else if (response.status === 200) {
+                // Update properti is_wishlist
+                courseData.value.is_wishlist = true;
+
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil',
+                    text: 'Kursus berhasil ditambahkan ke wishlist.',
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Terjadi kesalahan saat menambahkan kursus ke wishlist.',
+                });
+            }
+        }
+    } catch (error) {
+        console.error(error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Terjadi kesalahan saat menambahkan kursus ke wishlist.',
+        });
+    }
+};
 onMounted(() => {
     fetchData();
 });
 
-const addToCart = async () => {
-  try {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      // Jika tidak ada token, minta pengguna untuk login terlebih dahulu
-      alert('Anda harus login terlebih dahulu untuk menambahkan ke keranjang.');
-      return;
-    }
-
-    const response = await axios.post(
-      'https://admin.unisains.com/api/v1/course/cart/store',
-      {
-        course_id: courseData.value.id,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-
-    if (response.status === 200) {
-      // Kursus berhasil ditambahkan ke keranjang (wishlist)
-      alert('Kursus berhasil ditambahkan ke keranjang.');
-    }
-  } catch (error) {
-    console.error(error);
-    // Tangani kesalahan lainnya
-    alert('Terjadi kesalahan saat menambahkan ke keranjang.');
-  }
-};
+function formattedHarga(harga) {
+    return harga.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+}
 
 </script>
   
 <style scoped>
 .main-page {
     width: 100%;
-    height: 980px;
+    height: 750px;
     display: flex;
     align-items: center;
 }
 
 .preview {
     width: 430px;
-    height: 700px;
+    height: fit-content;
     border-radius: 10px;
     margin-left: 200px;
     margin-right: 70px;
-    border: 1px solid #c1c1c1;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     display: flex;
     flex-direction: column;
 }
@@ -226,6 +313,7 @@ const addToCart = async () => {
     display: flex;
     align-items: center;
     gap: 30px;
+    margin-top: 30px;
 }
 
 .button .pesan {
@@ -265,6 +353,7 @@ const addToCart = async () => {
 .beli {
     margin-left: 30px;
     margin-top: 20px;
+    margin-bottom: 30px;
 }
 
 .beli .pesan {
@@ -300,7 +389,7 @@ const addToCart = async () => {
 
 .info {
     width: 80%;
-    height: 700px;
+    height: fit-content;
     margin-right: 200px;
     display: flex;
     flex-direction: column;
@@ -309,7 +398,7 @@ const addToCart = async () => {
 .info .text {
     width: 95%;
     margin-left: 30px;
-    margin-bottom: 70px;
+    margin-bottom: 300px;
 }
 
 .info .text h3 {
@@ -434,6 +523,7 @@ const addToCart = async () => {
     flex-direction: column;
     margin-left: 200px;
     margin-bottom: 50px;
+    margin-top: 30px;
 }
 
 .condition p {
@@ -453,20 +543,88 @@ const addToCart = async () => {
 
 .rating-course {
     width: 80%;
-    height: 820px;
+    height: fit-content;
     display: flex;
     flex-direction: column;
     margin-left: 200px;
-    border: 1px solid #c1c1c1;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     border-radius: 10px;
     margin-bottom: 100px;
 }
 
-.rating-course h3 {
-    font-size: 30px;
+.rating-course .avgrate {
+    width: auto;
+    height: 100px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin-left: 30px;
+}
+
+.rating-course .avgrate .rate {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin-right: 50px;
+}
+
+.rating-course .avgrate p {
+    font-size: 36px;
     font-weight: 600;
     color: #000000;
-    margin: 30px 0 20px 30px;
+    margin-left: 10px;
+}
+
+.rating-course .avgrate p span {
+    font-size: 18px;
+    color: black;
+}
+
+.radio-input {
+    position: fixed;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.radio-label {
+    cursor: pointer;
+    font-size: 0;
+    color: rgba(0, 0, 0, 0.2);
+    transition: color 0.1s ease-in-out;
+}
+
+.radio-label:before {
+    color: #ffc700;
+    content: "★";
+    display: inline-block;
+    font-size: 40px;
+}
+
+.radio-input:checked~.radio-label {
+    color: #ffc700;
+    color: gold;
+}
+
+.radio-label:hover,
+.radio-label:hover~.radio-label {
+    color: goldenrod;
+}
+
+.radio-input:checked+.radio-label:hover,
+.radio-input:checked+.radio-label:hover~.radio-label,
+.radio-input:checked~.radio-label:hover,
+.radio-input:checked~.radio-label:hover~.radio-label,
+.radio-label:hover~.radio-input:checked~.radio-label {
+    color: darkgoldenrod;
+}
+
+.rating-course h3 {
+    font-size: 30px;
+    font-weight: bold;
+    color: #000000;
+    margin: 30px 50px 20px 30px;
 }
 
 .rating-course .wrapper-review {
@@ -477,20 +635,53 @@ const addToCart = async () => {
     margin-right: 100px;
 }
 
-.rating-course .wrapper-review .rate1 {
+.rating-course .wrapper-review form {
     width: 100%;
-    height: 300px;
+    height: auto;
     display: flex;
-    flex-direction: row;
-    padding-right: 30px;
+    flex-direction: column;
 }
 
-.rating-course .wrapper-review .rate2 {
+.rating-course .wrapper-review form textarea {
+    width: auto;
+    height: 200px;
+    border-radius: 10px;
+    border: 1px solid #c1c1c1;
+    outline: none;
+    padding: 10px;
+    margin: 30px;
+    font-size: 18px;
+    font-family: poppins;
+    color: #000000;
+}
+
+.rating-course .wrapper-review form textarea::placeholder {
+    font-size: 18px;
+    font-family: poppins;
+}
+
+.rating-course .wrapper-review form .submit {
+    width: 120px;
+    height: 70px;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    background-color: #6A2C70;
+    color: white;
+    font-size: 18px;
+    font-weight: 600;
+    font-family: poppins;
+    margin-bottom: 50px;
+    margin-left: 90%;
+}
+
+.rating-course .wrapper-review .rate1 {
     width: 100%;
-    height: 300px;
+    height: fit-content;
     display: flex;
-    flex-direction: row;
-    padding-right: 30px;
+    flex-direction: column;
+    padding: 30px;
 }
 
 .rating-course .show {
@@ -507,6 +698,7 @@ const addToCart = async () => {
     font-family: poppins;
     margin-left: 30px;
     margin-top: 20px;
+    margin-bottom: 50px;
 }
 
 .rating-course .show:hover {
@@ -557,19 +749,19 @@ const addToCart = async () => {
 }
 
 .more-course {
-    width: 65%;
+    width: 80%;
     height: 950px;
     display: flex;
     flex-direction: column;
     margin-left: 200px;
     margin-bottom: 100px;
-    border: 1px solid #c1c1c1;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     border-radius: 10px;
 }
 
 .more-course h3 {
     font-size: 30px;
-    font-weight: 600;
+    font-weight: bold;
     color: #000000;
     margin: 30px 0 20px 30px;
 }

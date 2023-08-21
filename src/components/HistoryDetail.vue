@@ -10,11 +10,11 @@
             </div>
             <div class="menu">
                 <div class="text-kursus">
-                    Kursus
+                    <p>Kursus</p>
                 </div>
                 <div class="text-menu">
                     <p>Tanggal</p>
-                    <p>Status</p>
+                    <p>Batas pembayaran</p>
                     <p>Harga</p>
                 </div>
             </div>
@@ -24,16 +24,16 @@
                 </div>
                 <div class="text">
                     <p>{{ transaction.date }}</p>
-                    <p>{{ transaction.status }}</p>
-                    <p>Rp {{ transaction.total_price }}</p>
+                    <p>{{ transaction.expired_date }}</p>
+                    <p>Rp {{ formattedHarga(transaction.total_price) }}</p>
                 </div>
             </div>
-            <div v-if="transaction.status === 'success'">
+            <div v-if="transaction.status === 'Selesai'">
                 <router-link class="button" to="/history-course">
                     <button class="close"><a href="">Tutup</a></button>
                 </router-link>
             </div>
-            <div v-else-if="transaction.status === 'pending'">
+            <div v-else-if="transaction.status === 'Belum Dibayar'">
                 <router-link class="button" to="/history-course">
                     <button class="close"><a href="">Tutup</a></button>
                     <button class="lanjutkan" @click="payWithMidtrans">Lanjutkan</button>
@@ -108,6 +108,9 @@ export default {
         document.head.appendChild(script);
     },
     methods: {
+        formattedHarga(harga) {
+            return harga.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+        },
         async getData() {
             try {
                 const getUserToken = localStorage.getItem('token');
@@ -192,7 +195,7 @@ export default {
 
 <style scoped>
 .course-purchase {
-    width: 1000px;
+    width: 100%;
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -200,11 +203,9 @@ export default {
 
 .course-purchase .information {
     width: 100%;
-    height: 200px;
+    height: fit-content;
     display: flex;
     flex-direction: column;
-    margin-bottom: 30px;
-    margin-top: 20px;
 }
 
 .course-purchase .information h1 {
@@ -221,6 +222,7 @@ export default {
     flex-direction: row;
     font-size: 20px;
     margin-top: 30px;
+    text-align: center;
 }
 
 .course-purchase .menu .text-kursus {
@@ -230,8 +232,11 @@ export default {
     flex-direction: column;
     color: black;
     justify-content: center;
-    font-weight: 600;
+}
+
+.course-purchase .menu .text-kursus p {
     font-size: 20px;
+    font-weight: 600;
 }
 
 .course-purchase .menu .text-menu {
@@ -241,7 +246,7 @@ export default {
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    gap: 150px;
+    gap: 115px;
     font-size: 20px;
     color: black;
 }
@@ -260,6 +265,7 @@ export default {
     margin-bottom: 20px;
     background-color: #6A2C70;
     color: white;
+    text-align: center;
 }
 
 .course-purchase .list .kursus {
@@ -284,8 +290,10 @@ export default {
     display: flex;
     flex-direction: row;
     align-items: center;
-    padding-left: 40px;
-    gap: 105px;
+    justify-content: center;
+    gap: 70px;
+    font-size: 20px;
+    color: white;
 }
 
 .course-purchase .list .text p {

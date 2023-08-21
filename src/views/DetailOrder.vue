@@ -31,7 +31,7 @@ const snapToken = localStorage.getItem("snapToken");
 }
 
 .receipt h1 {
-    width: 58%;
+    width: 65%;
     height: 100%;
     font-size: 42px;
     font-weight: bold;
@@ -40,14 +40,14 @@ const snapToken = localStorage.getItem("snapToken");
 }
 
 .receipt-detail {
-    width: 58%;
+    width: 65%;
     height: auto;
     display: flex;
     flex-direction: column;
     align-items: center;
     border: 1px solid #C1C1C1;
     border-radius: 20px;
-    padding: 20px;
+    padding: 40px;
     margin-bottom: 50px;
 }
 </style>

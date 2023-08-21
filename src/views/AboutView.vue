@@ -58,25 +58,23 @@ import Footer from '../components/Footer.vue'
             <img src="@/assets/image/picture-example.png" alt="">
           </div>
           <h3>Darrell Ahmed Galen</h3>
-          <h4>JABATAN</h4>
-          <p>“Lorem ipsum dolor sit amet consectetur. Ullamcorper cursus dictum dolor auctor. Vitae eget pellentesque id
-            nunc nisi gravida”.</p>
+          <h4>Back End</h4>
+          <p>“Ilmu pengetahuan ibarat padang pasir dan bintang di malam yang gelap, untuk itu kejarlah ilmu sekuat daya dan upaya”.</p>
         </div>
         <div class="person">
           <div class="image">
             <img src="@/assets/image/picture-example.png" alt="">
           </div>
           <h3>Husnul Khotimah</h3>
-          <h4>JABATAN</h4>
-          <p>“Lorem ipsum dolor sit amet consectetur. Ullamcorper cursus dictum dolor auctor. Vitae eget pellentesque id
-            nunc nisi gravida”.</p>
+          <h4>Back End</h4>
+          <p>“Pendidikan adalah senjata paling mematikan di dunia karena dengan itu kamu dapat mengubah dunia”.</p>
         </div>
         <div class="person">
           <div class="image">
-            <img src="@/assets/image/picture-example.png" alt="">
+            <img src="@/assets/image/jolangak.png" alt="">
           </div>
           <h3>Jolang Alif Khan</h3>
-          <h4>JABATAN</h4>
+          <h4>Front End</h4>
           <p>“Unisains sangat cocok untuk membantu menambah pengetahuanmu tentang sains. ditambah dengan fitur menarik, tentu akan membuatmu semakin tertarik”.</p>
         </div>
       </div>
@@ -139,7 +137,7 @@ import Footer from '../components/Footer.vue'
   width: 750px;
   height: 750px;
   position: absolute;
-  top: 49.7%;
+  top: 51.6%;
   left: 60%;
   transform: translate(-50%, -50%);
 }

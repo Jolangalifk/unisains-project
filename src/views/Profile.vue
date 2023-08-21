@@ -1,12 +1,12 @@
 <script setup>
 import Navbar from '../components/Navbar.vue';
-import MyCourse from '../components/MyCourse.vue';
+import ProgressBar from '../components/ProgressBar.vue';
 import Logout from '../components/Logout.vue';
 import axios from 'axios';
 import { ref, onMounted } from 'vue';
 
+const myCourse = ref([]);
 const profileData = ref(null);
-const myCourseHasCourses = ref(false);
 const showPopup = ref(false);
 
 const getUserToken = () => {
@@ -28,14 +28,17 @@ const fetchProfileData = async () => {
             },
         });
         profileData.value = response.data;
+        myCourse.value = response.data.data.my_course;
+        console.log(myCourse.value)
         console.log(profileData.value);
-        myCourseHasCourses.value = response.data.my_course.length > 0;
     } catch (error) {
         console.error(error);
     }
 };
 
-onMounted(fetchProfileData);
+onMounted(() => {
+    fetchProfileData();
+})
 </script>
 
 <template>
@@ -54,14 +57,33 @@ onMounted(fetchProfileData);
                     </div>
                     <div class="profile-button">
                         <a><router-link to="/profile/profile-settings/edit-profile">Pengaturan akun</router-link></a>
-                        <a><router-link to="/bantuan">Bantuan</router-link></a>
+                        <a><router-link to="/help-center">Bantuan</router-link></a>
                         <button @click="logout">Keluar</button>
                     </div>
                 </div>
             </div>
             <div class="course-wrapper">
-                <MyCourse />
-                <div class="more-course-btn" v-if="myCourseHasCourses">
+                <div class="my-course">
+                    <div class="course-text">
+                        <h1>Kursus saya</h1>
+                    </div>
+                    <div class="course-content">
+                        <div class="course-content-row">
+                            <div class="card-course" v-for="my_course in myCourse" :key="my_course.id">
+                                <router-link :to="'/course/module/' + my_course.course_id">
+                                    <div class="card-course-image">
+                                        <img :src="my_course.course.thumbnail" alt="">
+                                    </div>
+                                    <div class="card-course-text">
+                                        <h3>{{ my_course.course.title_course }}</h3>
+                                        <p>{{ my_course.course.description }}</p>
+                                    </div>
+                                </router-link>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="more-course-btn">
                     <button>
                         <a><router-link to="/lihat-lebih-banyak">Lihat lebih banyak</router-link></a>
                         <img src="@/assets/icon/arrow-right-orange.svg" alt="">
@@ -134,6 +156,36 @@ onMounted(fetchProfileData);
     text-decoration: none;
 }
 
+.my-course {
+    width: 1350px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-left: 100px;
+}
+
+.course-text h1 {
+    font-size: 32px;
+    font-weight: 700;
+    margin: 65px 0 50px 0;
+}
+
+.course-content {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.course-content-row {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+}
+
 .profile-button button {
     width: 60px;
     height: 25px;
@@ -186,6 +238,64 @@ onMounted(fetchProfileData);
     width: 45px;
     height: 45px;
     margin-left: 20px;
+}
+
+.card-course {
+    width: 375px;
+    height: fit-content;
+    border-radius: 20px;
+    margin-right: 30px;
+    margin-bottom: 30px;
+    border: 1px solid #B83B5E;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    transition: all 0.3s ease-in-out;
+}
+
+.card-course a {
+    text-decoration: none;
+}
+
+.card-course:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.2);
+}
+
+.card-course-image img {
+    width: 349px;
+    height: 200px;
+    border-radius: 20px;
+}
+
+.card-course-text {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-top: 10px;
+}
+
+.card-course-text h3 {
+    font-size: 14px;
+    font-weight: 800;
+    margin-bottom: 7px;
+    color: #000000;
+}
+
+.card-course-text p {
+    color: #000000;
+    font-size: 11px;
+    font-weight: 400;
+    margin-bottom: 5px;
+    text-align: justify;
+    max-height: 40px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
 }
 
 .more-course-btn button a,

@@ -2,10 +2,12 @@
 import NavbarProfileSettings from '../components/NavbarProfileSettings.vue';
 import axios from 'axios';
 import { ref, onMounted, watch } from 'vue';
+import Swal from 'sweetalert2';
 
 const firstName = ref('');
 const lastName = ref('');
 const username = ref('');
+const email = ref('');
 const avatar = ref(null);
 const previewImage = ref('');
 
@@ -40,6 +42,7 @@ const saveProfile = async () => {
             formData.append('first_name', firstName.value);
             formData.append('last_name', lastName.value);
             formData.append('username', username.value);
+            formData.append('email', email.value);
             if (avatar.value) {
                 formData.append('avatar', avatar.value);
             }
@@ -52,13 +55,19 @@ const saveProfile = async () => {
             });
 
             console.log('Profile updated successfully!');
-            // Show success notification
-            alert('Data berhasil di ubah');
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil',
+                text: 'Profile berhasil diubah!.',
+            });
         }
     } catch (error) {
         console.error('Error updating profile:', error);
-        // Show error notification
-        alert('Terjadi kesalahan saat mengedit data');
+        Swal.fire({
+            icon: 'error',
+            title: 'Gagal',
+            text: 'Terjadi kesalahan saat mengubah profile.',
+        });
     }
 };
 
@@ -81,6 +90,7 @@ onMounted(async () => {
             firstName.value = profileData.value.data.user.first_name;
             lastName.value = profileData.value.data.user.last_name;
             username.value = profileData.value.data.user.username;
+            email.value = profileData.value.data.user.email;
 
             // Set initial preview image
             if (profileData.value && profileData.value.data.user.image) {
@@ -111,10 +121,18 @@ onMounted(async () => {
                         </div>
                     </div>
                 </div>
-                <div class="username">
-                    <h1>Username</h1>
-                    <div class="username-input">
-                        <input type="text" placeholder="Username" v-model="username">
+                <div class="wrapper-username-email">
+                    <div class="username">
+                        <h1>Username</h1>
+                        <div class="username-input">
+                            <input type="text" placeholder="Username" v-model="username">
+                        </div>
+                    </div>
+                    <div class="username">
+                        <h1>Email</h1>
+                        <div class="username-input">
+                            <input type="text" placeholder="Username" v-model="email">
+                        </div>
                     </div>
                 </div>
                 <div class="avatar">
@@ -231,6 +249,14 @@ form {
     flex-direction: row;
     align-items: center;
     justify-content: center;
+    margin-bottom: 10px;
+    margin-right: 30px;
+}
+
+.wrapper-username-email{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
     margin-bottom: 10px;
 }
 
@@ -360,7 +386,7 @@ input[type="file"] {
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    background-color: #F08A5D;
+    background-color: #B83B5E;
     border-radius: 20px;
     cursor: pointer;
     margin-top: 70px;
