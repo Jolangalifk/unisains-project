@@ -40,6 +40,10 @@ const getCourseData = async () => {
     }
 };
 
+function toLinkChat() {
+    window.open(courseData.value.link_chat, '_blank');
+}
+
 const selectModule = (module) => {
     selectedModule.value = module;
     console.log(selectedModule.value);
@@ -152,6 +156,9 @@ onMounted(() => {
                     <img :src="getAr" :alt="getAr">
                 </div>
                 <div class="shadow"></div>
+                <div class="chat" @click="toLinkChat()">
+                    <img src="../assets/icon/chat-module.svg" alt="">
+                </div>
             </div>
             <div class="sidebar-module">
                 <h1>Daftar Modul</h1>
@@ -273,6 +280,23 @@ onMounted(() => {
     left: 0;
     z-index: 999;
     background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #ffffff 100%);
+}
+
+.content-module .chat {
+    width: 80px;
+    height: 80px;
+    position: fixed;
+    margin-top: 200px;
+    top: 0;
+    left: 0;
+    z-index: 999;
+    background-color: white;
+    border-radius: 0 10px 10px 0;
+    border: 1px solid #00000031;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
 }
 
 .content-module .thumbnail-module {
