@@ -146,6 +146,9 @@ onMounted(getSummaryModules);
     position: fixed;
     bottom: 0;
 }
+.bottom-nav a{
+    text-decoration: none;
+}
 .bottom-nav .btn {
     display: flex;
     align-items: center;
