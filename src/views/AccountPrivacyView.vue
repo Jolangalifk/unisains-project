@@ -40,7 +40,9 @@ onMounted(fetchProfileData);
                     silahkan klik button di bawah ini</h1>
             </div>
             <div class="btn-edit">
-                <button>Ubah sandi</button>
+                <router-link to="/forgot-password">
+                    <button>Ubah sandi</button>
+                </router-link>
             </div>
         </div>
     </div>
