@@ -15,7 +15,7 @@
                     <div class="form-group">
                         <label for="Password"></label>
                         <img src="@/assets/icon/password-icon.svg" alt="">
-                        <input :type="showPassword ? 'text' : 'password'" placeholder="Masukkan Password"
+                        <input :type="showPassword ? 'text' : 'password'" placeholder="Masukkan Kata Sandi"
                             v-model="password">
                         <button type="button" class="toggle-password" @click="togglePasswordVisibility">
                             <img class="toggle-password-icon" src="../assets/icon/eye-icon.svg" v-if="!showPassword"
@@ -24,7 +24,7 @@
                                 alt="" />
                         </button>
                     </div>
-                    <router-link to="/forgot-password">Lupa password?</router-link>
+                    <router-link to="/forgot-password">Lupa Sandi?</router-link>
                     <p class="error-message" v-if="loginError">{{ loginErrorMessage }}</p>
                     <button type="submit" class="button-login">Login</button>
                 </form>
@@ -76,7 +76,7 @@ export default {
         async Login() {
             if (!this.email || !this.password) {
                 this.loginError = true;
-                this.loginErrorMessage = 'Silahkan isi email dan password terlebih dahulu.';
+                this.loginErrorMessage = 'Silahkan isi email dan kata sandi terlebih dahulu.';
                 return;
             }
             try {
@@ -104,7 +104,7 @@ export default {
                 });
                 console.error(error);
                 this.loginError = true; // Set nilai loginError menjadi true
-                this.loginErrorMessage = 'Email atau password yang anda masukkan salah.'; // Set pesan kesalahan yang ingin ditampilkan
+                this.loginErrorMessage = 'Email atau kata sandi yang anda masukkan salah.'; // Set pesan kesalahan yang ingin ditampilkan
             } finally {
                 this.isLoading = false; // Nonaktifkan overlay loading setelah proses login selesai
             }
