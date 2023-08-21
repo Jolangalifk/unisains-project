@@ -57,7 +57,7 @@ onMounted(() => {
                     </div>
                     <div class="profile-button">
                         <a><router-link to="/profile/profile-settings/edit-profile">Pengaturan akun</router-link></a>
-                        <a><router-link to="/bantuan">Bantuan</router-link></a>
+                        <a><router-link to="/help-center">Bantuan</router-link></a>
                         <button @click="logout">Keluar</button>
                     </div>
                 </div>
