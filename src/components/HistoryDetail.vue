@@ -10,7 +10,7 @@
             </div>
             <div class="menu">
                 <div class="text-kursus">
-                    Kursus
+                    <p>Kursus</p>
                 </div>
                 <div class="text-menu">
                     <p>Tanggal</p>
@@ -28,12 +28,12 @@
                     <p>Rp {{ formattedHarga(transaction.total_price) }}</p>
                 </div>
             </div>
-            <div v-if="transaction.status === 'success'">
+            <div v-if="transaction.status === 'Selesai'">
                 <router-link class="button" to="/history-course">
                     <button class="close"><a href="">Tutup</a></button>
                 </router-link>
             </div>
-            <div v-else-if="transaction.status === 'pending'">
+            <div v-else-if="transaction.status === 'Belum Dibayar'">
                 <router-link class="button" to="/history-course">
                     <button class="close"><a href="">Tutup</a></button>
                     <button class="lanjutkan" @click="payWithMidtrans">Lanjutkan</button>
@@ -232,8 +232,11 @@ export default {
     flex-direction: column;
     color: black;
     justify-content: center;
-    font-weight: 600;
+}
+
+.course-purchase .menu .text-kursus p {
     font-size: 20px;
+    font-weight: 600;
 }
 
 .course-purchase .menu .text-menu {
