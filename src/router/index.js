@@ -206,6 +206,11 @@ const router = createRouter({
       path: '/help-center',
       name: 'help-center',
       component: () => import('../views/HelpCenter.vue')
+    },
+    {
+      path: '/course/search',
+      name: 'course-search',
+      component: () => import('../views/Search.vue')
     }
   ]
 })
