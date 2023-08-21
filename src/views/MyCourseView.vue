@@ -122,6 +122,7 @@ onMounted(() => {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     justify-items: center;
+    gap: 50px;
 }
 
 .course-content-row .card-course {
