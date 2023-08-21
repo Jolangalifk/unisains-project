@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import axios from 'axios';
 import { useRoute } from 'vue-router';
 
@@ -10,9 +10,11 @@ const getUserToken = () => {
     return token ? token.replace(/['"]+/g, '') : '';
 };
 
+let isLoading = ref(true);
 let courseData = ref([]);
 const moduleData = ref([]);
 const selectedModule = ref(null);
+const getAr = ref(null);
 
 const getCourseData = async () => {
     try {
@@ -27,10 +29,14 @@ const getCourseData = async () => {
         );
         courseData.value = response.data.course;
         moduleData.value = response.data.course.modules;
+        getAr.value = response.data.course.ars[0].ar;
+        console.log(getAr.value);
         console.log(courseData.value);
         console.log(moduleData.value);
+        isLoading.value = false;
     } catch (error) {
         console.log(error);
+        isLoading.value = false;
     }
 };
 
@@ -38,6 +44,14 @@ const selectModule = (module) => {
     selectedModule.value = module;
     console.log(selectedModule.value);
 };
+
+const isLastModule = computed(() => {
+    if (selectedModule.value !== null) {
+        const selectedModuleId = selectedModule.value;
+        return selectedModuleId === 4; // Mengganti 4 dengan ID modul terakhir
+    }
+    return false;
+});
 
 const getSelectedModuleThumbnail = () => {
     if (selectedModule.value !== null) {
@@ -118,9 +132,11 @@ onMounted(() => {
 
 </script>
 <template>
-    <div class="module-container">
+    <div class="module-container" v-if="!isLoading">
         <div class="course-title">
-            <img src="../assets/icon/arrow-left-midnight.svg" alt="">
+            <router-link to="/profile/my-course">
+                <img src="../assets/icon/arrow-left-midnight.svg" alt="">
+            </router-link>
             <h1>{{ courseData.title_course }}</h1>
         </div>
         <div class="container">
@@ -131,6 +147,10 @@ onMounted(() => {
                 <p>
                     {{ getSelectedModuleLesson() }}
                 </p>
+                <div class="ar-img">
+                    <h1>Pindai AR Disini!</h1>
+                    <img :src="getAr" :alt="getAr">
+                </div>
                 <div class="shadow"></div>
             </div>
             <div class="sidebar-module">
@@ -143,15 +163,28 @@ onMounted(() => {
             </div>
         </div>
         <div class="bottom-nav">
-            <div class="btn btn-previous_module"  @click="navigateToModule(-1)">
+            <div class="btn btn-previous_module" @click="navigateToModule(-1)">
                 <img src="../assets/icon/expand-left-midnight.svg" alt="">
                 <a>Sebelumnya</a>
             </div>
             <h1>{{ getSelectedModuleTitle() }}</h1>
-            <div class="btn btn-next_module" @click="navigateToModule(1)">
-                <a>Selanjutnya</a>
-                <img src="../assets/icon/expand-right-midnight.svg" alt="">
+            <div v-if="isLastModule">
+                <router-link :to="`/course/module/summary/${route.params.id}`" class="btn btn-next_module">
+                    <a>Rangkuman</a>
+                    <img src="../assets/icon/expand-right-midnight.svg" alt="">
+                </router-link>
             </div>
+            <div v-else>
+                <div class="btn btn-next_module" @click="navigateToModule(1)">
+                    <a>Selanjutnya</a>
+                    <img src="../assets/icon/expand-right-midnight.svg" alt="">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div v-else>
+        <div class="else-content">
+            <h3>Loading...</h3>
         </div>
     </div>
 </template>
@@ -179,6 +212,7 @@ onMounted(() => {
     width: 50px;
     height: 50px;
     margin-right: 20px;
+    margin-top: 5px;
 }
 
 .course-title h1 {
@@ -195,7 +229,7 @@ onMounted(() => {
 }
 
 ::-webkit-scrollbar {
-  display: none;
+    display: none;
 }
 
 .container .content-module {
@@ -204,6 +238,31 @@ onMounted(() => {
     height: 100%;
     background-color: #ffffff;
     padding: 20px 70px;
+}
+
+.ar-img {
+    width: 100%;
+    height: 650px;
+    display: flex;
+    justify-content: flex-start;
+    object-fit: cover;
+    flex-direction: column;
+    align-items: center;
+}
+
+.ar-img h1 {
+    font-size: 30px;
+    font-weight: 600;
+    color: #B83B5E;
+    margin-bottom: 20px;
+}
+
+.ar-img img {
+    width: 400px;
+    height: 400px;
+    object-fit: cover;
+    border: 2px solid #00000031;
+    border-radius: 10px;
 }
 
 .content-module .shadow {
@@ -310,6 +369,7 @@ onMounted(() => {
     background-color: #fff;
     transition: .5s;
     cursor: pointer;
+    text-decoration: none;
 }
 
 .bottom-nav .btn:hover {
@@ -329,5 +389,20 @@ onMounted(() => {
     font-weight: 500;
     color: #000;
     text-decoration: none;
+}
+
+.else-content {
+    width: 100%;
+    height: 950px;
+    display: flex;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+}
+
+.else-content h3 {
+    font-size: 24px;
+    font-weight: 600;
+    color: #6A2C70;
 }
 </style>
