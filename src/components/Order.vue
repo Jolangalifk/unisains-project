@@ -32,7 +32,13 @@
             </div>
         </div>
         <div v-else>
-            Loading...
+            <!-- Tampilkan pesan loading atau error jika data belum tersedia atau terjadi kesalahan -->
+            <div v-if="isLoading" class="lds-facebook">
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+            <p v-else-if="error">Terjadi kesalahan saat mengambil data.</p>
         </div>
     </div>
 </template>
@@ -41,6 +47,7 @@
 import { ref, onMounted, onBeforeUnmount } from 'vue';
 import axios from "axios";
 import { useRoute, useRouter } from 'vue-router';
+import Swal from 'sweetalert2';
 
 const idTrx = localStorage.getItem('idTrx');
 const selectedCourse = ref(null);
@@ -99,8 +106,8 @@ export default {
         document.head.appendChild(script);
     },
     methods: {
-        formattedHarga (harga) {
-            return harga.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+        formattedHarga(harga) {
+            return harga.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
         },
         async getData() {
             try {
@@ -133,7 +140,11 @@ export default {
                 snap.pay(snapToken, {
                     onSuccess: function (result) {
                         // Payment successful, handle success logic here
-                        alert('Payment successful! Transaction ID: ' + result.transaction_id);
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Pembayaran Berhasil!',
+                            text: 'Terima Kasih sudah membeli kursus kami, Selamat belajar!',
+                        });
                         //clear data local storage
                         localStorage.removeItem('idTrx');
                         localStorage.removeItem('pembayaran');
@@ -142,8 +153,11 @@ export default {
                     },
                     onError: function (result) {
                         // Payment failed, handle error logic here
-                        alert('Payment failed. Status code: ' + result.status_code);
-                        // Redirect or show error message as needed
+                        Swal.fire({
+                            icon: 'Error',
+                            title: 'Terjadi Kesalahan!',
+                            text: 'Pembayaran Gagal!',
+                        });
                     }
                 });
             } catch (error) {
@@ -285,5 +299,51 @@ export default {
 .course-purchase .button .bayar-nanti {
     background-color: white;
     color: #6A2C70;
+}
+
+.lds-facebook {
+    display: inline-block;
+    position: fixed;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+}
+
+.lds-facebook div {
+    display: inline-block;
+    position: absolute;
+    left: 6px;
+    width: 13px;
+    background: #6A2C70;
+    animation: lds-facebook 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;
+}
+
+.lds-facebook div:nth-child(1) {
+    left: 6px;
+    animation-delay: -0.24s;
+}
+
+.lds-facebook div:nth-child(2) {
+    left: 26px;
+    animation-delay: -0.12s;
+}
+
+.lds-facebook div:nth-child(3) {
+    left: 45px;
+    animation-delay: 0;
+}
+
+@keyframes lds-facebook {
+
+    0%,
+    100% {
+        top: 6px;
+        height: 51px;
+    }
+
+    50% {
+        top: 19px;
+        height: 26px;
+    }
 }
 </style>

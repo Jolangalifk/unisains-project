@@ -1,62 +1,3 @@
-<script setup>
-import { ref, onMounted } from 'vue';
-import Logout from './Logout.vue';
-import axios from 'axios';
-
-const profileData = ref({});
-const isLoggedIn = ref(false);
-const showProfileMenu = ref(false);
-const showPopup = ref(false);
-const username = ref('');
-
-const getUserToken = () => {
-    const token = localStorage.getItem('token');
-    return token ? token.replace(/['"]+/g, '') : '';
-};
-
-const toggleProfileMenu = () => {
-    showProfileMenu.value = !showProfileMenu.value;
-};
-
-const logout = () => {
-    showPopup.value = true;
-};
-
-const fetchProfileData = async () => {
-    const userToken = getUserToken();
-    console.log(userToken);
-    try {
-        const response = await axios.get('https://admin.unisains.com/api/v1/profile/show', {
-            headers: {
-                Authorization: `Bearer ${userToken}`,
-            },
-        });
-        profileData.value = response.data.data.user;
-    } catch (error) {
-        console.error(error);
-    }
-};
-
-onMounted(async () => {
-    isLoggedIn.value = checkUserloginStatus();
-
-    function checkUserloginStatus() {
-        // get token
-        const token = localStorage.getItem('token');
-        return token ? true : false;
-    }
-
-    const userInfo = localStorage.getItem('user-info');
-    if (userInfo) {
-        const parsedUserInfo = JSON.parse(userInfo);
-        username.value = parsedUserInfo.first_name + ' ' + parsedUserInfo.last_name;
-    }
-
-    console.log(isLoggedIn.value);
-    await fetchProfileData();
-});
-</script>
-
 <template>
     <div class="navbar">
         <div class="logo">
@@ -78,11 +19,12 @@ onMounted(async () => {
             </ul>
         </div>
         <div class="account-after-login" v-if="isLoggedIn">
-            <button class="search btn">
-                <router-link to="/search">
+            <div class="search-ku">
+                <input v-model="searchValue" type="text" placeholder="Cari...">
+                <button class="search btn" @click="performSearch">
                     <img src="@/assets/icon/search-icon.svg" alt="">
-                </router-link>
-            </button>
+                </button>
+            </div>
             <button class="cart btn">
                 <router-link to="/cart-course">
                     <img src="@/assets/icon/cart-icon.svg" alt="">
@@ -124,7 +66,8 @@ onMounted(async () => {
                         <div class="profile-content">
                             <div class="profile-info">
                                 <ul>
-                                    <li><router-link to="/profile/profile-settings/edit-profile">Pengaturan Akun</router-link></li>
+                                    <li><router-link to="/profile/profile-settings/edit-profile">Pengaturan
+                                            Akun</router-link></li>
                                     <li><router-link to="/history-course">Riwayat transaksi</router-link></li>
                                 </ul>
                             </div>
@@ -151,6 +94,77 @@ onMounted(async () => {
         </div>
     </div>
 </template>
+
+<script setup>
+import { ref, onMounted } from 'vue';
+import Logout from './Logout.vue';
+import axios from 'axios';
+import { useRouter } from 'vue-router';
+
+
+const profileData = ref({});
+const isLoggedIn = ref(false);
+const showProfileMenu = ref(false);
+const showPopup = ref(false);
+const username = ref('');
+
+const router = useRouter();
+
+const getUserToken = () => {
+    const token = localStorage.getItem('token');
+    return token ? token.replace(/['"]+/g, '') : '';
+};
+
+const toggleProfileMenu = () => {
+    showProfileMenu.value = !showProfileMenu.value;
+};
+
+const logout = () => {
+    showPopup.value = true;
+};
+
+const searchValue = ref('');
+
+const performSearch = () => {
+    if (searchValue.value) {
+        router.push({ name: 'course-search', query: { search: searchValue.value } });
+    }
+};
+
+const fetchProfileData = async () => {
+    const userToken = getUserToken();
+    console.log(userToken);
+    try {
+        const response = await axios.get('https://admin.unisains.com/api/v1/profile/show', {
+            headers: {
+                Authorization: `Bearer ${userToken}`,
+            },
+        });
+        profileData.value = response.data.data.user;
+    } catch (error) {
+        console.error(error);
+    }
+};
+
+onMounted(async () => {
+    isLoggedIn.value = checkUserloginStatus();
+
+    function checkUserloginStatus() {
+        // get token
+        const token = localStorage.getItem('token');
+        return token ? true : false;
+    }
+
+    const userInfo = localStorage.getItem('user-info');
+    if (userInfo) {
+        const parsedUserInfo = JSON.parse(userInfo);
+        username.value = parsedUserInfo.first_name + ' ' + parsedUserInfo.last_name;
+    }
+
+    console.log(isLoggedIn.value);
+    await fetchProfileData();
+});
+</script>
 
 <style scoped>
 .navbar {
@@ -180,8 +194,7 @@ onMounted(async () => {
 }
 
 .menu {
-    width: 50%;
-    align-items: center;
+    width: 40%;
 }
 
 .menu ul {
@@ -203,9 +216,11 @@ onMounted(async () => {
 }
 
 .account-after-login {
-    width: 16%;
+    width: auto;
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    gap: 20px;
 }
 
 .account-after-login .btn {
@@ -223,13 +238,40 @@ onMounted(async () => {
     font-family: poppins;
 }
 
-.account-after-login .search {
-    background-color: transparent;
+.account-after-login .search-ku {
     display: flex;
-    color: black;
-    border: none;
+    flex-direction: row;
     align-items: center;
-    padding-left: 30px;
+    width: fit-content;
+    background-color: white;
+    border: 1px solid #c1c1c1;
+    border-radius: 150px;
+    margin: 0 auto;
+}
+
+.account-after-login .search-ku input {
+    width: 300px;
+    height: 50px;
+    border-radius: 50px;
+    border: none;
+    padding-left: 20px;
+    outline: none;
+    font-size: 16px;
+    font-family: poppins;
+}
+
+.account-after-login .search-ku button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.account-after-login .search-ku button img {
+    display: flex;
 }
 
 .account-after-login .search a {

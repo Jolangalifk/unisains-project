@@ -16,7 +16,7 @@
                     <p>{{ item.code_transaction }}</p>
                 </div>
                 <div class="button-detail">
-                    <button class="nilai" @click="openPopup(item.course.id)">Nilai</button>
+                    <button class="nilai" @click="openPopup(item.course.id, item)">Nilai</button>
                 </div>
                 <div class="button-detail">
                     <button @click="goToDetail(item.id)">Detail</button>
@@ -45,7 +45,7 @@
                         placeholder="berikan ulsanmu disini!"></textarea>
                     <br>
                     <!-- get hide course id with model course_Id -->
-                    <input type="hidden" v-model="course_Id">
+                    <input type="hidden" v-model="course_Id.value">
                     <div class="button-submit">   
                         <button class="close" @click="closePopup()">Tutup</button>
                         <input class="submit" type="submit" value="Kirim">
@@ -71,9 +71,17 @@ let comment = ref("");
 
 const isPopupVisible = ref(false);
 
-const openPopup = (courseId) => {
-    course_Id = courseId;
-    isPopupVisible.value = true;
+const openPopup = (courseId, item) => {
+    course_Id.value = courseId;
+    if (item.is_rated) {
+        Swal.fire({
+            icon: 'info',
+            title: 'Info',
+            text: 'Anda sudah memberikan rating untuk kursus ini.',
+        });
+    } else {
+        isPopupVisible.value = true;
+    }
 };
 
 const closePopup = () => {
@@ -82,24 +90,21 @@ const closePopup = () => {
 
 const submitForm = async () => {
     const url = "https://admin.unisains.com/api/v1/course/rate";
-    const token = localStorage.getItem('token'); // Ganti dengan bearer token Anda
+    const token = localStorage.getItem('token');
 
     const formData = new FormData();
-    formData.append("course_id", course_Id);
+    formData.append("course_id", course_Id.value);
     formData.append("rate", rateText.value);
     formData.append("comment", comment.value);
 
     try {
-        const response = await fetch(url, {
-            method: "POST",
+        const response = await axios.post(url, formData, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
-            body: formData,
         });
 
-        if (response.ok) {
-            // shwo success alert
+        if (response.status === 200) {
             Swal.fire({
                 icon: 'success',
                 title: 'Berhasil',
@@ -107,22 +112,18 @@ const submitForm = async () => {
             });
             console.log("Data submitted successfully!");
             closePopup();
-            // Reset form fields if needed
-            course_Id = null;
+            course_Id.value = null;
             rateText.value = null;
             comment.value = "";
         } else {
-            // Show error alert
             Swal.fire({
                 icon: 'error',
                 title: 'Error',
                 text: 'Gagal mengirim rating. Silakan coba lagi nanti.',
             });
-            closePopup();
             console.error("Failed to submit data.");
         }
     } catch (error) {
-        // Show error alert
         Swal.fire({
             icon: 'error',
             title: 'Error',
@@ -131,6 +132,7 @@ const submitForm = async () => {
         console.error("An error occurred:", error);
     }
 };
+
 
 const formatDate = (date) => {
     // Implement your date formatting logic here
