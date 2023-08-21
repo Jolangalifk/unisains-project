@@ -32,17 +32,19 @@ import Modal from '../components/Modal.vue'
                     <router-link :to="{ path: '/anatomy-course', query: { scrollToTop: true } }">
                         <img src="@/assets/image/biologi-category.png" alt="">
                     </router-link>
-                    <h3>Biologi</h3>
+                    <h3>Anatomi</h3>
                 </div>
             </div>
-            <div class="wrapper-box">
+            <div class="wrapper-box-biologi">
                 <div class="course">
-                    <img src="@/assets/image/kimia-category.png" alt="">
+                    <img src="@/assets/image/kimia-category-bg.png" alt="">
                     <h3>Kimia</h3>
+                    <img class="lock" src="@/assets/icon/lock-icon.svg" alt="">
                 </div>
                 <div class="course">
-                    <img src="@/assets/image/fisika-category.png" alt="">
+                    <img src="@/assets/image/fisika-category-bg.png" alt="">
                     <h3>Fisika</h3>
+                    <img class="lock" src="@/assets/icon/lock-icon.svg" alt="">
                 </div>
             </div>
         </div>
@@ -88,15 +90,12 @@ import Modal from '../components/Modal.vue'
                     postur dengan mendukung kerangka</p>
             </div>
             <div class="text">
-                <h3>Biologi</h3>
-                <p>Biologi atau ilmu hayat adalah kajian tentang kehidupan, dan organisme hidup, termasuk struktur, fungsi,
-                    pertumbuhan, evolusi, persebaran, dan taksonominya. Ilmu biologi modern membahas pengetahuan yang sangat
-                    luas, eklektik, serta terdiri dari berbagai macam cabang dan subdisiplin. Secara umum, seluruh cabang
-                    keilmuan biologi disatukan oleh konsep dasar yang mengatur semua penelitian biologi, yaitu konsep
-                    tentang sel, gen, dan evolusi. Sel diakui sebagai satuan dasar kehidupan, gen diakui sebagai satuan
-                    dasar pewarisan, dan evolusi diasumsikan sebagai mekanisme yang mendorong terciptanya spesies baru.
-                    Selain itu, kelangsungan hidup dari makhluk hidup diyakini terjadi karena adanya perilaku konsumsi,
-                    perubahan energi serta dengan regulasi yang menjaga kestabiilan dan vitaltas keadaan dalam tubuh.</p>
+                <h3>Anatomi</h3>
+                <p>Anatomi atau ilmu tasrih adalah ilmu yang mempelajari struktur dan fungsi bagian makhluk hidup.
+                    Istilah anatomi digunakan untuk ilmu tentang struktur tubuh manusia dan hewan, sedangkan struktur
+                    tumbuhan dipelajari dalam anatomi tumbuhan. Anatomi dan fisiologi (ilmu faal) menjadi sepasang disiplin
+                    ilmu terkait, dan keduanya sering dipelajari bersama-sama. Anatomi manusia merupakan salah satu ilmu
+                    dasar esensial yang diterapkan dalam kedokteran.</p>
             </div>
         </div>
         <div class="list-course">
@@ -105,9 +104,9 @@ import Modal from '../components/Modal.vue'
                 <p>Ikuti salah atu kursus Astronomi dan pelajari apa saja yang ada didalamnya. Anda akan belajar mulai dari
                     mempelajari materi hingga tantangan atau quizz yang akan diberikan ketika selesai mempelajarinya. Pilih
                     dari berbagai kursus yang menarik.</p>
-                    <router-link :to="{ path: '/astronomy-course', query: { scrollToTop: true } }">
-                        <button class="explore">Jelajahi Astronomi</button>
-                    </router-link>
+                <router-link :to="{ path: '/astronomy-course', query: { scrollToTop: true } }">
+                    <button class="explore">Jelajahi Astronomi</button>
+                </router-link>
             </div>
             <div class="card-main">
                 <div class="card-scroll">
@@ -121,9 +120,9 @@ import Modal from '../components/Modal.vue'
                 <p>Ikuti salah atu kursus Biologi dan pelajari apa saja yang ada didalamnya. Anda akan belajar mulai dari
                     mempelajari materi hingga tantangan atau quizz yang akan diberikan ketika selesai mempelajarinya. Pilih
                     dari berbagai kursus yang menarik.</p>
-                    <router-link :to="{ path: '/anatomy-course', query: { scrollToTop: true } }">
-                        <button class="explore">Jelajahi Astronomi</button>
-                    </router-link>
+                <router-link :to="{ path: '/anatomy-course', query: { scrollToTop: true } }">
+                    <button class="explore">Jelajahi Anatomi</button>
+                </router-link>
             </div>
             <div class="card-main">
                 <div class="card-scroll">
@@ -166,11 +165,12 @@ import Modal from '../components/Modal.vue'
 
 .course-category {
     width: 100%;
-    height: 1000px;
+    height: fit-content;
     display: flex;
     flex-direction: column;
     align-items: center;
     padding-top: 100px;
+    padding-bottom: 100px;
 }
 
 .course-category h3 {
@@ -224,6 +224,44 @@ import Modal from '../components/Modal.vue'
     color: #F08A5D;
     position: absolute;
 }
+
+.wrapper-box-biologi {
+    width: 83%;
+    height: 360px;
+    display: flex;
+    justify-content: space-evenly;
+    margin-top: 50px;
+}
+
+.wrapper-box-biologi .course {
+    width: 700px;
+    height: 300px;
+    background-color: #F08A5D;
+    border-radius: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.wrapper-box-biologi .course h3 {
+    font-size: 36px;
+    font-weight: bold;
+    color: #808080;
+    position: absolute;
+}
+
+.wrapper-box-biologi .course .lock {
+    width: 70px;
+    height: 70px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
 
 .astronomi {
     width: 100%;

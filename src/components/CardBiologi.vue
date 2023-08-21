@@ -125,8 +125,6 @@ function formattedHarga(harga) {
 .scroll-course {
     display: flex;
     flex-direction: row;
-    justify-content: center;
-    align-items: center;
 }
 .card {
     width: 350px;
