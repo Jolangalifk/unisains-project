@@ -173,25 +173,42 @@ const addToCart = async () => {
             return;
         }
 
-        const response = await axios.post(
-            'https://admin.unisains.com/api/v1/course/cart/store',
-            {
-                course_id: courseData.value.id,
-            },
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            }
-        );
+        const courseId = courseData.value.id;
 
-        if (response.status === 200) {
-            // Kursus berhasil ditambahkan ke keranjang (wishlist)
+        // Cek apakah kursus sudah ada di keranjang
+        if (courseData.value.in_cart) {
             Swal.fire({
-                icon: 'success',
-                title: 'Berhasil',
-                text: 'Kursus berhasil ditambahkan ke keranjang.',
+                icon: 'info',
+                title: 'Info',
+                text: 'Kursus ini sudah ada di keranjang.',
             });
+        } else {
+            const response = await axios.post(
+                'https://admin.unisains.com/api/v1/course/cart/store',
+                {
+                    course_id: courseId,
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+
+            if (response.status === 200) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil',
+                    text: 'Kursus berhasil ditambahkan ke keranjang.',
+                });
+            } else {
+                // Menampilkan pesan Swal jika respons tidak sesuai yang diharapkan
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Terjadi kesalahan saat menambahkan kursus ke keranjang.',
+                });
+            }
         }
     } catch (error) {
         console.error(error);
@@ -202,6 +219,7 @@ const addToCart = async () => {
         });
     }
 };
+
 
 const addToWishlist = async () => {
     try {
