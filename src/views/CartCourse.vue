@@ -70,18 +70,29 @@ const goToDetailCourse = (courseId) => {
 };
 
 const toggleCheckbox = (kursus) => {
-    kursus.isChecked = kursus.isChecked;
-
     if (kursus.isChecked) {
-        dataCourse.value.push(kursus.course);
-        selectedCourseId.value = kursus.course.id;
-        console.log(dataCourse.value)
-    } else {
-        const index = dataCourse.value.indexOf(kursus.course);
-        if (index !== -1) {
-            dataCourse.value.splice(index, 1);
-            selectedCourseId.value = null;
+        if (dataCourse.value.length > 0) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Maaf, hanya bisa memilih satu kursus.',
+            });
+            kursus.isChecked = false;
+            return;
         }
+
+        // Uncheck semua kursus lainnya
+        cartData.value.forEach(item => {
+            if (item !== kursus) {
+                item.isChecked = false;
+            }
+        });
+
+        dataCourse.value = [kursus.course];
+        selectedCourseId.value = kursus.course.id;
+    } else {
+        dataCourse.value = [];
+        selectedCourseId.value = null;
     }
 };
 
