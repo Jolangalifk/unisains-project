@@ -18,6 +18,11 @@
                     <button @click="deleteFromCart(kursus.id)">Hapus</button>
                 </div>
             </div>
+            <div v-if="isLoading" class="lds-facebook">
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
             <div class="summary-wp">
                 <div class="ringkasan">
                     <h1>Ringkasan Pesanan</h1>
@@ -54,6 +59,7 @@ const cartData = ref([]);
 const dataCourse = ref([]);
 const router = useRouter();
 const selectedCourseId = ref(null);
+const isLoading = ref(false);
 
 const formattedHarga = (harga) => {
     return parseInt(harga).toLocaleString('id-ID');
@@ -80,6 +86,7 @@ const toggleCheckbox = (kursus) => {
 };
 
 const fetchCartData = async () => {
+    isLoading.value = true;
     try {
         const getUserInfo = localStorage.getItem('user-info');
         const user = JSON.parse(getUserInfo);
@@ -104,6 +111,7 @@ const fetchCartData = async () => {
                 };
             });
         }
+        isLoading.value = false;
     } catch (error) {
         console.error(error);
         Swal.fire({
@@ -238,6 +246,52 @@ main {
     flex-direction: column;
 }
 
+.lds-facebook {
+    display: inline-block;
+    position: fixed;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+}
+
+.lds-facebook div {
+    display: inline-block;
+    position: absolute;
+    left: 6px;
+    width: 13px;
+    background: #6A2C70;
+    animation: lds-facebook 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;
+}
+
+.lds-facebook div:nth-child(1) {
+    left: 6px;
+    animation-delay: -0.24s;
+}
+
+.lds-facebook div:nth-child(2) {
+    left: 26px;
+    animation-delay: -0.12s;
+}
+
+.lds-facebook div:nth-child(3) {
+    left: 45px;
+    animation-delay: 0;
+}
+
+@keyframes lds-facebook {
+
+    0%,
+    100% {
+        top: 6px;
+        height: 51px;
+    }
+
+    50% {
+        top: 19px;
+        height: 26px;
+    }
+}
+
 .cart-title {
     width: 82%;
     margin: 0 auto;
@@ -340,6 +394,14 @@ main {
     flex-direction: row;
     align-items: center;
     cursor: pointer;
+}
+
+.clickable-area img {
+    width: 200px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 5px;
+    object-fit: cover;
 }
 
 .summary-wp {
