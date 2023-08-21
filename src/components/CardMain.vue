@@ -56,9 +56,6 @@ const handlePopup = async (id) => {
         previewCourseId.value = id;
         await fetchPreviewData(id);
         popup.value = true;
-        localStorage.setItem('redirectCourseId', id);
-    } else {
-        router.push(`/detail-course/${id}`);
     }
 };
 
@@ -69,10 +66,15 @@ const closePreview = () => {
 const goToDetailCourse = (id) => {
     if (isLoggedIn.value) {
         router.push(`/detail-course/${id}`);
+        scrollToTop();
     } else {
-        localStorage.setItem('redirectCourseId', id);
         router.push('/login');
     }
+};
+
+const scrollToTop = () => {
+    // Pindahkan tampilan ke posisi atas halaman
+    window.scrollTo(0, 0);
 };
 
 onMounted(async () => {
@@ -97,15 +99,15 @@ const fetchData = async () => {
 };
 
 const fetchPreviewData = async (id) => {
-    try {
-        const response = await axios.get(
-            `https://admin.unisains.com/api/v1/course/preview/${id}`
-        );
-        previewData.value = response.data.data.course; // Perbarui baris ini
-        console.log(previewData.value);
-    } catch (error) {
-        console.error(error);
-    }
+  try {
+    const response = await axios.get(
+      `https://admin.unisains.com/api/v1/course/preview/${id}`
+    );
+    previewData.value = response.data.data.course; // Perbarui baris ini
+    console.log(previewData.value);
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 function formattedHarga(harga) {
@@ -113,15 +115,14 @@ function formattedHarga(harga) {
 }
 
 </script>
+
+  
   
 <style  scoped>
 .scroll-course {
     display: flex;
     flex-direction: row;
-    justify-content: center;
-    align-items: center;
 }
-
 .card {
     width: 350px;
     height: 360px;
@@ -250,13 +251,14 @@ function formattedHarga(harga) {
     margin-bottom: 10px;
 }
 
+
 .preview-content p {
     white-space: normal;
     /* Setiap baris teks akan dibungkus */
     max-height: 100px;
     /* Tinggi maksimum yang diinginkan */
     margin-top: 30px;
-    margin-bottom: 70px;
+    margin-bottom: 30px;
 }
 
 button.selengkapnya {

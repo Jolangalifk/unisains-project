@@ -12,7 +12,7 @@
                 </div>
                 <div class="text-menu">
                     <p>Tanggal</p>
-                    <p>Status</p>
+                    <p>Batas pembayaran</p>
                     <p>Harga</p>
                 </div>
             </div>
@@ -22,12 +22,12 @@
                 </div>
                 <div class="text">
                     <p>{{ transaction.date }}</p>
-                    <p>{{ transaction.status }}</p>
-                    <p>Rp {{ transaction.total_price }}</p>
+                    <p>{{ transaction.expired_date }}</p>
+                    <p>Rp {{ formattedHarga(transaction.total_price) }}</p>
                 </div>
             </div>
             <div class="button">
-                <button class="bayar-nanti">Bayar Nanti</button>
+                <router-link to="/history-course"><button class="bayar-nanti">Bayar Nanti</button></router-link>
                 <button @click="payWithMidtrans">Lanjutkan</button>
             </div>
         </div>
@@ -62,23 +62,6 @@ const getUserToken = () => {
     return token ? JSON.parse(token) : '';
 };
 
-// const fetchData = async () => {
-//     try {
-//         const userToken = getUserToken();
-
-//         const response = await axios.get(`https://admin.unisains.com/api/v1/transaction/show/${idTrx}`, {
-//             headers: {
-//                 Authorization: `Bearer ${userToken}`,
-//             },
-//         });
-
-//         transaction.value = response.data.data.transaction;
-//     } catch (error) {
-//         console.error(error);
-//         transaction.value = null;
-//     }
-// };
-
 export default {
     data() {
         return {
@@ -109,13 +92,16 @@ export default {
             this.transaction = null;
         }
     },
-    mounted() {
+    mounted() { 
         const script = document.createElement("script");
         script.src = "https://app.sandbox.midtrans.com/snap/snap.js";
         script.setAttribute("data-client-key", "SB-Mid-client-bEgJRNJrEQtjBn4p");
         document.head.appendChild(script);
     },
     methods: {
+        formattedHarga (harga) {
+            return harga.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+        },
         async getData() {
             try {
                 const getUserToken = localStorage.getItem('token');
@@ -171,7 +157,7 @@ export default {
 
 <style scoped>
 .course-purchase {
-    width: 1000px;
+    width: 100%;
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -179,11 +165,9 @@ export default {
 
 .course-purchase .information {
     width: 100%;
-    height: 200px;
+    height: fit-content;
     display: flex;
     flex-direction: column;
-    margin-bottom: 30px;
-    margin-top: 20px;
 }
 
 .course-purchase .information h1 {
@@ -200,6 +184,7 @@ export default {
     flex-direction: row;
     font-size: 20px;
     margin-top: 30px;
+    text-align: center;
 }
 
 .course-purchase .menu .text-kursus {
@@ -220,7 +205,7 @@ export default {
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    gap: 150px;
+    gap: 115px;
     font-size: 20px;
     color: black;
 }
@@ -239,6 +224,7 @@ export default {
     margin-bottom: 20px;
     background-color: #6A2C70;
     color: white;
+    text-align: center;
 }
 
 .course-purchase .list .kursus {
@@ -263,8 +249,10 @@ export default {
     display: flex;
     flex-direction: row;
     align-items: center;
-    padding-left: 40px;
-    gap: 105px;
+    justify-content: center;
+    gap: 70px;
+    font-size: 20px;
+    color: white;
 }
 
 .course-purchase .list .text p {
@@ -278,11 +266,11 @@ export default {
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    gap: 30px;
+    gap: 20px;
 }
 
 .course-purchase .button button {
-    width: 490px;
+    width: 570px;
     height: 70px;
     border: 1px solid #6A2C70;
     border-radius: 10px;
@@ -291,7 +279,6 @@ export default {
     font-size: 20px;
     font-weight: 600;
     cursor: pointer;
-
     font-family: poppins;
 }
 

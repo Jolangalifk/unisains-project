@@ -7,6 +7,7 @@ import AstronomyCourse from './AstronomyCourse.vue'
 import AnatomyCourse from './AnatomyCourse.vue'
 import Modal from '../components/Modal.vue'
 
+
 </script>
 
 <template>
@@ -15,28 +16,35 @@ import Modal from '../components/Modal.vue'
         <div class="main-page">
             <h1><span class="orange"> Belajar </span> Menjadi lebih mudah dengan <span class="orange"> Unisains. </span>
             </h1>
+            <img src="@/assets/image/ilustration6.png" alt="">
         </div>
         <div class="course-category">
             <h3>Cari kursus dengan kategori</h3>
             <p>cari kursus yang ingin kamu pelajari dengan memilih kategori dibawah ini ya!</p>
             <div class="wrapper-box">
                 <div class="course">
-                    <img src="@/assets/image/astronomi-category.png" alt="">
+                    <router-link :to="{ path: '/astronomy-course', query: { scrollToTop: true } }">
+                        <img src="@/assets/image/astronomi-category.png" alt="">
+                    </router-link>
                     <h3>Astronomi</h3>
                 </div>
                 <div class="course">
-                    <img src="@/assets/image/biologi-category.png" alt="">
-                    <h3>Biologi</h3>
+                    <router-link :to="{ path: '/anatomy-course', query: { scrollToTop: true } }">
+                        <img src="@/assets/image/biologi-category.png" alt="">
+                    </router-link>
+                    <h3>Anatomi</h3>
                 </div>
             </div>
-            <div class="wrapper-box">
+            <div class="wrapper-box-biologi">
                 <div class="course">
-                    <img src="@/assets/image/kimia-category.png" alt="">
+                    <img src="@/assets/image/kimia-category-bg.png" alt="">
                     <h3>Kimia</h3>
+                    <img class="lock" src="@/assets/icon/lock-icon.svg" alt="">
                 </div>
                 <div class="course">
-                    <img src="@/assets/image/fisika-category.png" alt="">
+                    <img src="@/assets/image/fisika-category-bg.png" alt="">
                     <h3>Fisika</h3>
+                    <img class="lock" src="@/assets/icon/lock-icon.svg" alt="">
                 </div>
             </div>
         </div>
@@ -82,15 +90,12 @@ import Modal from '../components/Modal.vue'
                     postur dengan mendukung kerangka</p>
             </div>
             <div class="text">
-                <h3>Biologi</h3>
-                <p>Biologi atau ilmu hayat adalah kajian tentang kehidupan, dan organisme hidup, termasuk struktur, fungsi,
-                    pertumbuhan, evolusi, persebaran, dan taksonominya. Ilmu biologi modern membahas pengetahuan yang sangat
-                    luas, eklektik, serta terdiri dari berbagai macam cabang dan subdisiplin. Secara umum, seluruh cabang
-                    keilmuan biologi disatukan oleh konsep dasar yang mengatur semua penelitian biologi, yaitu konsep
-                    tentang sel, gen, dan evolusi. Sel diakui sebagai satuan dasar kehidupan, gen diakui sebagai satuan
-                    dasar pewarisan, dan evolusi diasumsikan sebagai mekanisme yang mendorong terciptanya spesies baru.
-                    Selain itu, kelangsungan hidup dari makhluk hidup diyakini terjadi karena adanya perilaku konsumsi,
-                    perubahan energi serta dengan regulasi yang menjaga kestabiilan dan vitaltas keadaan dalam tubuh.</p>
+                <h3>Anatomi</h3>
+                <p>Anatomi atau ilmu tasrih adalah ilmu yang mempelajari struktur dan fungsi bagian makhluk hidup.
+                    Istilah anatomi digunakan untuk ilmu tentang struktur tubuh manusia dan hewan, sedangkan struktur
+                    tumbuhan dipelajari dalam anatomi tumbuhan. Anatomi dan fisiologi (ilmu faal) menjadi sepasang disiplin
+                    ilmu terkait, dan keduanya sering dipelajari bersama-sama. Anatomi manusia merupakan salah satu ilmu
+                    dasar esensial yang diterapkan dalam kedokteran.</p>
             </div>
         </div>
         <div class="list-course">
@@ -99,7 +104,9 @@ import Modal from '../components/Modal.vue'
                 <p>Ikuti salah atu kursus Astronomi dan pelajari apa saja yang ada didalamnya. Anda akan belajar mulai dari
                     mempelajari materi hingga tantangan atau quizz yang akan diberikan ketika selesai mempelajarinya. Pilih
                     dari berbagai kursus yang menarik.</p>
-                <router-link to="/astronomy-course"><button class="explore">Jelajahi Astronomi</button></router-link>
+                <router-link :to="{ path: '/astronomy-course', query: { scrollToTop: true } }">
+                    <button class="explore">Jelajahi Astronomi</button>
+                </router-link>
             </div>
             <div class="card-main">
                 <div class="card-scroll">
@@ -113,7 +120,9 @@ import Modal from '../components/Modal.vue'
                 <p>Ikuti salah atu kursus Biologi dan pelajari apa saja yang ada didalamnya. Anda akan belajar mulai dari
                     mempelajari materi hingga tantangan atau quizz yang akan diberikan ketika selesai mempelajarinya. Pilih
                     dari berbagai kursus yang menarik.</p>
-                <router-link to="/anatomy-course"><button class="explore">Jelajahi Astronomi</button></router-link>
+                <router-link :to="{ path: '/anatomy-course', query: { scrollToTop: true } }">
+                    <button class="explore">Jelajahi Anatomi</button>
+                </router-link>
             </div>
             <div class="card-main">
                 <div class="card-scroll">
@@ -129,6 +138,10 @@ import Modal from '../components/Modal.vue'
 .main-page {
     width: 100%;
     height: 980px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
     background-image: url('@/assets/image/course-bg.png');
 }
 
@@ -137,8 +150,6 @@ import Modal from '../components/Modal.vue'
     font-size: 110px;
     font-weight: bold;
     color: black;
-    padding-top: 200px;
-    margin-left: 200px;
     line-height: 1.3;
 }
 
@@ -147,13 +158,19 @@ import Modal from '../components/Modal.vue'
     font-weight: bold;
 }
 
+.main-page img {
+    width: 600px;
+    height: auto;
+}
+
 .course-category {
     width: 100%;
-    height: 1000px;
+    height: fit-content;
     display: flex;
     flex-direction: column;
     align-items: center;
     padding-top: 100px;
+    padding-bottom: 100px;
 }
 
 .course-category h3 {
@@ -207,6 +224,44 @@ import Modal from '../components/Modal.vue'
     color: #F08A5D;
     position: absolute;
 }
+
+.wrapper-box-biologi {
+    width: 83%;
+    height: 360px;
+    display: flex;
+    justify-content: space-evenly;
+    margin-top: 50px;
+}
+
+.wrapper-box-biologi .course {
+    width: 700px;
+    height: 300px;
+    background-color: #F08A5D;
+    border-radius: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.wrapper-box-biologi .course h3 {
+    font-size: 36px;
+    font-weight: bold;
+    color: #808080;
+    position: absolute;
+}
+
+.wrapper-box-biologi .course .lock {
+    width: 70px;
+    height: 70px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
 
 .astronomi {
     width: 100%;
@@ -385,7 +440,7 @@ import Modal from '../components/Modal.vue'
 
 .list-course {
     width: 100%;
-    height: 1000px;
+    height: auto;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -433,11 +488,11 @@ import Modal from '../components/Modal.vue'
 
 .card-main {
     width: 1560px;
-    height: 500px;
     display: flex;
     flex-direction: row;
     align-items: center;
     padding-top: 50px;
+    padding-bottom: 50px;
     overflow-x: scroll;
     white-space: nowrap;
 }
