@@ -33,7 +33,7 @@
                     <button class="close"><a href="">Tutup</a></button>
                 </router-link>
             </div>
-            <div v-else-if="transaction.status === 'pending'">
+            <div v-else-if="transaction.status === 'Belum Dibayar'">
                 <router-link class="button" to="/history-course">
                     <button class="close"><a href="">Tutup</a></button>
                     <button class="lanjutkan" @click="payWithMidtrans">Lanjutkan</button>
