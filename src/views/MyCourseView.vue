@@ -37,7 +37,7 @@ onMounted(() => {
                 <router-link to="/profile">Kembali</router-link>
             </div>
             <div class="mycourse-text">
-                <h1>Pengaturan akun</h1>
+                <h1>Kursus saya</h1>
             </div>
         </div>
         <div class="course-container">
@@ -65,7 +65,8 @@ onMounted(() => {
     flex-direction: column;
     align-items: flex-start;
 }
-.nav{
+
+.nav {
     width: 100%;
     height: fit-content;
     display: flex;
@@ -76,6 +77,7 @@ onMounted(() => {
     z-index: 9999;
     position: fixed;
 }
+
 .back-btn {
     width: 170px;
     height: 70px;
@@ -85,11 +87,13 @@ onMounted(() => {
     background-color: #B83B5E;
     border-radius: 50px;
 }
+
 .back-btn img {
     width: 45px;
     height: 45px;
     margin-left: 15px;
 }
+
 .back-btn a {
     font-size: 18px;
     font-weight: 600;
@@ -97,6 +101,7 @@ onMounted(() => {
     margin-left: 7px;
     text-decoration: none;
 }
+
 .mycourse-text h1 {
     font-size: 42px;
     font-weight: 600;
@@ -125,6 +130,12 @@ onMounted(() => {
     border: 1px solid #C1C1C1;
     border-radius: 10px;
     overflow: hidden;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.card-course:hover {
+    transform: scale(1.05);
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, .3);
 }
 
 .card-course a {
@@ -133,8 +144,10 @@ onMounted(() => {
 }
 
 .card-course .card-course-image {
+    position: relative;
     width: 100%;
     height: 190px;
+    overflow: hidden;
 }
 
 .card-course .card-course-image img {
@@ -142,6 +155,11 @@ onMounted(() => {
     height: 100%;
     object-fit: cover;
     object-position: center;
+    transition: transform 0.3s ease-in-out;
+}
+
+.card-course:hover .card-course-image img {
+    transform: scale(1.2);
 }
 
 .card-course .card-course-text {
@@ -155,7 +173,7 @@ onMounted(() => {
     font-weight: bold;
     line-height: 1.5;
     margin-bottom: 10px;
-    
+
 }
 
 .card-course-text p {
