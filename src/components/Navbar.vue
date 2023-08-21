@@ -178,8 +178,7 @@ onMounted(async () => {
 }
 
 .menu {
-    width: 50%;
-    align-items: center;
+    width: 40%;
 }
 
 .menu ul {
