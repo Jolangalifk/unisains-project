@@ -406,6 +406,10 @@ onMounted(async () => {
     font-size: 20px;
     font-weight: 600;
     margin-bottom: 5px;
+    max-width: 170px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .profile-info {
@@ -414,6 +418,16 @@ onMounted(async () => {
 
 .profile-info-account {
     flex: 1;
+}
+
+.profile-info-account p {
+    font-size: 14px;
+    font-weight: 400;
+    margin-bottom: 5px;
+    max-width: 170px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .profile-info ul {
