@@ -422,6 +422,7 @@ main {
     border-radius: 10px;
     border: 1px solid #C1C1C1;
     margin-top: 20px;
+    margin-bottom: 50px;
 }
 
 .summary-wp .ringkasan {
