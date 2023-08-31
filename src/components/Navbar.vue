@@ -2,6 +2,8 @@
 import { ref, onMounted } from 'vue';
 import Logout from './Logout.vue';
 import axios from 'axios';
+import { computed } from 'vue';
+import { cartCount } from '@/utils/eventBus';
 
 const profileData = ref({});
 const isLoggedIn = ref(false);
@@ -87,7 +89,9 @@ onMounted(async () => {
                 <router-link to="/cart-course">
                     <img src="@/assets/icon/cart-icon.svg" alt="">
                 </router-link>
-            </button>
+                <!-- <span class="cart-length">{{ cartItemsLength }}</span> -->
+                <span class="cart-count">{{ cartCount }}</span>
+            </button>            
             <div class="profile-container" v-if="profileData">
                 <button class="profile-btn" @click="toggleProfileMenu">
                     <div class="avatar">
