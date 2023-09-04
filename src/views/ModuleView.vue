@@ -148,13 +148,15 @@ onMounted(() => {
                 <div class="thumbnail-module">
                     <img :src="getSelectedModuleThumbnail()" alt="Thumbnail">
                 </div>
-                <p>
-                    {{ getSelectedModuleLesson() }}
-                </p>
-                <div class="ar-img">
-                    <h1>Pindai AR Disini!</h1>
-                    <img :src="getAr" :alt="getAr">
-                </div>
+                <div class="container-text-ar">
+                    <p>
+                        {{ getSelectedModuleLesson() }}
+                    </p>
+                    <div class="ar-img">
+                        <h1>Pindai AR Disini!</h1>
+                        <img :src="getAr" :alt="getAr">
+                    </div>
+                </div> 
                 <div class="shadow"></div>
                 <div class="chat" @click="toLinkChat()">
                     <img src="../assets/icon/chat-module.svg" alt="">
@@ -222,10 +224,17 @@ onMounted(() => {
     margin-top: 5px;
 }
 
+.course-title h2 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #401A43;
+}
+
 .course-title h1 {
     font-size: 20px;
     font-weight: 600;
     color: #B83B5E;
+    text-align: center;
 }
 
 .module-container .container {
@@ -247,14 +256,29 @@ onMounted(() => {
     padding: 20px 70px;
 }
 
+.container-text-ar{
+    width: 100%;
+    height: fit-content;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 70px;
+    margin-top: 50px;
+}
+
+.container-text-ar p {
+    text-indent: 50px;
+}
+
 .ar-img {
     width: 100%;
-    height: 650px;
+    height: 450px;
     display: flex;
     justify-content: flex-start;
     object-fit: cover;
     flex-direction: column;
     align-items: center;
+    margin-left: 70px;
 }
 
 .ar-img h1 {
@@ -265,11 +289,12 @@ onMounted(() => {
 }
 
 .ar-img img {
-    width: 400px;
-    height: 400px;
+    width: 300px;
+    height: 300px;
     object-fit: cover;
     border: 2px solid #00000031;
     border-radius: 10px;
+    align-content: center;
 }
 
 .content-module .shadow {
