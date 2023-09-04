@@ -17,7 +17,12 @@
                 </div>
                 <div class="button-detail">
                     <!-- Tambahkan kondisi untuk menampilkan tombol "Nilai" -->
-                    <button v-if="item.course.is_purchased && !item.is_rated" class="nilai" @click="openPopup(item.course.id, item)">Nilai</button>
+                    <button v-if="item.course.is_purchased && !item.is_rated" class="nilai"
+                        @click="openPopup(item.course.id, item)">Ulasan</button>
+                    <button v-else-if="item.course.is_purchased && item.is_rated" class="nilai"
+                        @click="openPopup(item.course.id, item)">
+                        Ubah Ulasan
+                    </button>
                 </div>
                 <div class="button-detail">
                     <button @click="goToDetail(item.id)">Detail</button>
@@ -47,7 +52,7 @@
                     <br>
                     <!-- get hide course id with model course_Id -->
                     <input type="hidden" v-model="course_Id.value">
-                    <div class="button-submit">   
+                    <div class="button-submit">
                         <button class="close" @click="closePopup()">Tutup</button>
                         <input class="submit" type="submit" value="Kirim">
                     </div>
@@ -68,7 +73,7 @@ const router = useRouter();
 const route = useRoute();
 let rateText = ref(null);
 let course_Id = ref(null);
-let comment = ref("");
+const comment = ref('');
 
 const isPopupVisible = ref(false);
 
@@ -169,7 +174,7 @@ onMounted(async () => {
 });
 
 function formattedHarga(harga) {
-    return harga.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+    return harga.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
 }
 
 </script>
@@ -240,7 +245,7 @@ function formattedHarga(harga) {
     border: none;
     border-radius: 10px;
     color: white;
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 600;
     cursor: pointer;
     font-family: poppins;
@@ -310,45 +315,45 @@ function formattedHarga(harga) {
     display: flex;
     flex-direction: row-reverse;
     justify-content: flex-end;
-  }
-  
-  .radio-input {
+}
+
+.radio-input {
     position: fixed;
     opacity: 0;
     pointer-events: none;
-  }
-  
-  .radio-label {
+}
+
+.radio-label {
     cursor: pointer;
     font-size: 0;
-    color: rgba(0,0,0,0.2);
+    color: rgba(0, 0, 0, 0.2);
     transition: color 0.1s ease-in-out;
-  }
-  
-  .radio-label:before {
+}
+
+.radio-label:before {
     content: "★";
     display: inline-block;
     font-size: 70px;
-  }
-  
-  .radio-input:checked ~ .radio-label {
+}
+
+.radio-input:checked~.radio-label {
     color: #ffc700;
     color: gold;
-  }
-  
-  .radio-label:hover,
-  .radio-label:hover ~ .radio-label {
+}
+
+.radio-label:hover,
+.radio-label:hover~.radio-label {
     color: goldenrod;
-  }
-  
-  .radio-input:checked + .radio-label:hover,
-  .radio-input:checked + .radio-label:hover ~ .radio-label,
-  .radio-input:checked ~ .radio-label:hover,
-  .radio-input:checked ~ .radio-label:hover ~ .radio-label,
-  .radio-label:hover ~ .radio-input:checked ~ .radio-label {
+}
+
+.radio-input:checked+.radio-label:hover,
+.radio-input:checked+.radio-label:hover~.radio-label,
+.radio-input:checked~.radio-label:hover,
+.radio-input:checked~.radio-label:hover~.radio-label,
+.radio-label:hover~.radio-input:checked~.radio-label {
     color: darkgoldenrod;
-  }
-  
+}
+
 
 .popup-content form textarea {
     width: 100%;
