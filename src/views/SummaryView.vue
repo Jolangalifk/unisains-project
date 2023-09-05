@@ -126,6 +126,7 @@ onMounted(getSummaryModules);
     font-size: 18px;
     font-weight: 500;
     text-align: justify;
+    text-indent: 50px;
 }
 .border-right {
     width: 130px;
