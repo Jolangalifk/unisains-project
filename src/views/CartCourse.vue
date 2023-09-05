@@ -54,12 +54,17 @@ import Footer from '@/components/Footer.vue'
 import Swal from 'sweetalert2';
 import axios from 'axios';
 import { useRoute, useRouter } from 'vue-router';
+import { useStore } from 'vuex';
+import { updateCartCount } from '@/utils/eventBus.js';
 
 const cartData = ref([]);
 const dataCourse = ref([]);
 const router = useRouter();
 const selectedCourseId = ref(null);
 const isLoading = ref(false);
+const cartCount = ref(0);
+const store = useStore();
+
 
 const formattedHarga = (harga) => {
     return parseInt(harga).toLocaleString('id-ID');
@@ -121,6 +126,13 @@ const fetchCartData = async () => {
                     id: item.id, // Anda perlu menyesuaikan ini dengan atribut id yang ada di respons API
                 };
             });
+            cartCount.value = cartData.value.length;
+            console.log(cartCount.value);
+            // store.commit('updateCartCount', cartCount.value);
+            // eventBus.$emit('updateCartCount', cartCount.value);
+            updateCartCount(cartCount.value);
+            // set cartCount di localStorage
+            localStorage.setItem('cart-count', cartCount.value);
         }
         isLoading.value = false;
     } catch (error) {
@@ -171,6 +183,7 @@ const deleteFromCart = async (courseId) => {
                 console.error('Unexpected response status:', response.status);
             }
         }
+        fetchCartData();
     } catch (error) {
         console.error('Delete request failed:', error);
         if (error.response) {
