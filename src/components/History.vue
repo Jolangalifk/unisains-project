@@ -20,7 +20,7 @@
                     <button v-if="item.course.is_purchased && !item.is_rated" class="nilai"
                         @click="openPopup(item.course.id, item)">Ulasan</button>
                     <button v-else-if="item.course.is_purchased && item.is_rated" class="nilai"
-                        @click="openPopup(item.course.id, item)">
+                        @click="openPopupUpdate(item.rate.id, item)">
                         Ubah Ulasan
                     </button>
                 </div>
@@ -59,6 +59,36 @@
                 </form>
             </div>
         </div>
+        <div v-else-if="isPopupVisibleUpdate" class="popup-overlay">
+            <div class="popup-content">
+                <form @submit.prevent="submitFormUpdate">
+                    <br>
+                    <p>Silahkan beri ulasan untuk kursus ini 1232</p>
+                    <div class="star-rating">
+                        <input class="radio-input" type="radio" id="star5" name="star-input" value="5" v-model="rateText" />
+                        <label class="radio-label" for="star5" title="5 stars">5 stars</label>
+                        <input class="radio-input" type="radio" id="star4" name="star-input" value="4" v-model="rateText" />
+                        <label class="radio-label" for="star4" title="4 stars">4 stars</label>
+                        <input class="radio-input" type="radio" id="star3" name="star-input" value="3" v-model="rateText" />
+                        <label class="radio-label" for="star3" title="3 stars">3 stars</label>
+                        <input class="radio-input" type="radio" id="star2" name="star-input" value="2" v-model="rateText" />
+                        <label class="radio-label" for="star2" title="2 stars">2 stars</label>
+                        <input class="radio-input" type="radio" id="star1" name="star-input" value="1" v-model="rateText" />
+                        <label class="radio-label" for="star1" title="1 star">1 star</label>
+                    </div>
+                    <br>
+                    <textarea id="w3review" name="w3review" rows="10" cols="50" v-model="comment"
+                        placeholder="berikan ulsanmu disini!"></textarea>
+                    <br>
+                    <!-- get hide course id with model course_Id -->
+                    <input type="hidden" v-model="comment_Id.value">
+                    <div class="button-submit">
+                        <button class="close" @click="closePopupUpdate()">Tutup</button>
+                        <input class="submit" type="submit" value="Kirim">
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -74,8 +104,10 @@ const route = useRoute();
 let rateText = ref(null);
 let course_Id = ref(null);
 const comment = ref('');
+const comment_Id = ref(null);
 
 const isPopupVisible = ref(false);
+const isPopupVisibleUpdate = ref(false);
 
 const openPopup = (courseId, item) => {
     course_Id.value = courseId;
@@ -90,8 +122,30 @@ const openPopup = (courseId, item) => {
     }
 };
 
+const openPopupUpdate = async (courseId, item) => {
+    course_Id.value = courseId;
+    if (!item.is_rated) {
+        // Tambahkan logika untuk mengecek apakah item belum dirating
+        Swal.fire({
+            icon: 'info',
+            title: 'Info',
+            text: 'Anda belum memberikan rating untuk kursus ini.',
+        });
+    } else {
+        // Tambahkan logika untuk menampilkan data ulasan yang sudah ada
+        rateText.value = item.rate.rate;
+        comment.value = item.rate.comment;
+        comment_Id.value = item.rate.id;
+        isPopupVisibleUpdate.value = true;
+    }
+};
+
 const closePopup = () => {
     isPopupVisible.value = false;
+};
+
+const closePopupUpdate = () => {
+    isPopupVisibleUpdate.value = false;
 };
 
 const submitForm = async () => {
@@ -139,6 +193,63 @@ const submitForm = async () => {
     }
 };
 
+const submitFormUpdate = async () => {
+    const url = `https://admin.unisains.com/api/v1/course/rate/update/${comment_Id.value}`;
+    const token = localStorage.getItem('token');
+
+    const requestData = {
+        rate: rateText.value,
+        comment: comment.value
+    };
+
+    try {
+        const response = await axios.post(url, requestData, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
+        });
+
+        if (response.status === 200) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil',
+                text: 'Data berhasil diperbarui!',
+            });
+            console.log("Data updated successfully!");
+
+            // Perbarui komentar pada indeks yang sesuai dalam array listHistory
+            const updatedReviewIndex = listHistory.value.findIndex(item => item.rate.id === comment_Id.value);
+            if (updatedReviewIndex !== -1) {
+                listHistory.value[updatedReviewIndex].rate.comment = comment.value;
+                listHistory.value[updatedReviewIndex].rate.rate = rateText.value; // Update juga rating
+            }
+
+            closePopupUpdate();
+            comment_Id.value = null;
+            rateText.value = '';
+            comment.value = "";
+
+            // Memuat ulang data reviews setelah berhasil mengirim permintaan POST
+            fetchReviews();
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Gagal mengirim rating. Silakan coba lagi nanti.',
+            });
+            console.error("Failed to update data.");
+        }
+    } catch (error) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Gagal mengirim rating. Silakan coba lagi nanti.',
+        });
+        console.error("An error occurred:", error);
+    }
+};
+
+
 
 const formatDate = (date) => {
     // Implement your date formatting logic here
@@ -151,7 +262,8 @@ const goToDetail = (transactionId) => {
     console.log(transactionId);
 };
 
-onMounted(async () => {
+
+const fetchReviews = async () => {
     try {
         const getUserInfo = localStorage.getItem('user-info');
         const user = JSON.parse(getUserInfo);
@@ -160,17 +272,18 @@ onMounted(async () => {
             headers: {
                 'Authorization': `Bearer ${token}`,
             }
-        })
+        });
 
         listHistory.value = response.data.data.transactions;
-        console.log(listHistory.value);
-        // if (response.data.status === 200) {
-        //     listHistory.value = response.data.data;
-        // }
+        console.info(listHistory.value);
     } catch (error) {
         console.error(error);
         alert('Terjadi kesalahan saat mengambil data transaksi.');
     }
+};
+
+onMounted(() => {
+    fetchReviews(); // Panggil fungsi fetchReviews saat komponen di-mount
 });
 
 function formattedHarga(harga) {
