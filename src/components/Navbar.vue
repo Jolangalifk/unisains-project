@@ -25,10 +25,11 @@
                     <img src="@/assets/icon/search-icon.svg" alt="">
                 </button>
             </div>
-            <button class="cart btn">
+            <button class="cart-btn">
                 <router-link to="/cart-course">
                     <img src="@/assets/icon/cart-icon.svg" alt="">
                 </router-link>
+                <span class="cart-count">{{ cartCount }}</span>
             </button>
             <div class="profile-container" v-if="profileData">
                 <button class="profile-btn" @click="toggleProfileMenu">
@@ -100,6 +101,8 @@ import { ref, onMounted } from 'vue';
 import Logout from './Logout.vue';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
+// import { computed } from 'vue';
+// import { cartCount } from '@/utils/eventBus';
 
 
 const profileData = ref({});
@@ -107,7 +110,7 @@ const isLoggedIn = ref(false);
 const showProfileMenu = ref(false);
 const showPopup = ref(false);
 const username = ref('');
-
+const cartCount = ref(0);
 const router = useRouter();
 
 const getUserToken = () => {
@@ -146,6 +149,21 @@ const fetchProfileData = async () => {
     }
 };
 
+const fetchCartCount = async () => {
+    const userToken = getUserToken();
+    console.log(userToken);
+    try {
+        const response = await axios.get('https://admin.unisains.com/api/v1/profile/cart-count', {
+            headers: {
+                Authorization: `Bearer ${userToken}`,
+            },
+        });
+        cartCount.value = response.data.data['cart-count']; // Mengambil data cart-count dari respons API
+    } catch (error) {
+        console.error(error);
+    }
+};
+
 onMounted(async () => {
     isLoggedIn.value = checkUserloginStatus();
 
@@ -163,6 +181,7 @@ onMounted(async () => {
 
     console.log(isLoggedIn.value);
     await fetchProfileData();
+    await fetchCartCount();
 });
 </script>
 
@@ -282,21 +301,27 @@ onMounted(async () => {
     margin-right: 20px;
 }
 
-.account-after-login .cart {
-    background-color: transparent;
+.account-after-login .cart-btn {
     display: flex;
-    color: black;
-    border: none;
     align-items: center;
-    padding-left: 30px;
+    border: none;
+    background-color: transparent;
 }
 
-.account-after-login .cart a {
-    text-decoration: none;
-    color: black;
-    font-size: 18px;
-    font-weight: 600;
-    margin-right: 20px;
+.account-after-login .cart-btn .cart-icon {
+    margin-right: 10px;
+}
+
+.account-after-login .cart-btn .cart-count {
+    background-color: #ff5733; 
+    color: white; 
+    border-radius: 50%; 
+    padding: 5px 10px; 
+    font-size: 12px;
+    position: absolute; 
+    margin-left: 20px;
+    margin-top: -20px;
+    border: 1px solid #fff;
 }
 
 .account-after-login .profile {
