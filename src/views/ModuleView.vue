@@ -52,11 +52,12 @@ const selectModule = (module) => {
 const isLastModule = computed(() => {
     if (selectedModule.value !== null) {
         const selectedModuleId = selectedModule.value;
-        return selectedModuleId === 4; // Mengganti 4 dengan ID modul terakhir
+        return selectedModuleId === moduleData.value[moduleData.value.length - 1].id;
     }
     return false;
 });
 
+console.log(selectedModule.value);
 const getSelectedModuleThumbnail = () => {
     if (selectedModule.value !== null) {
         const selectedModuleId = selectedModule.value;
