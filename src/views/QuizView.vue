@@ -23,6 +23,10 @@ const answered = computed(() => selectedAnswer.value !== null); // To check if a
 let answeredQuestions = ref([]);
 let idQuiz = ref([]);
 const userScore = ref(null);
+const selectedButtonId = ref(null);
+let selectedAnswerId = ref(null);
+const selectedAnswers = ref({});
+
 
 const getQuizzezData = async () => {
     try {
@@ -36,8 +40,8 @@ const getQuizzezData = async () => {
             }
         );
         courseData.value = response.data.course;
-        quizData.value = response.data.quizzez;
-        answerData.value = response.data.quizzez;
+        quizData.value = response.data.questions;
+        answerData.value = response.data.questions.answers;
         console.log(courseData.value);
         console.log(quizData.value);
         console.log(answerData.value);
@@ -114,10 +118,33 @@ const goToQuizScore = () => {
 };
 
 const selectAnswer = (value, id) => {
-    selectedAnswer.value = value;
-    selectedIdQuiz.value = id;
-    submitAnswer();
+    if (selectedAnswers.value[currentQuestionIndex.value] === id) {
+        // Jika `selectedAnswers` pada indeks `currentQuestionIndex` sama dengan `id`, hapus pemilihan
+        selectedAnswer.value = null;
+        selectedAnswers.value[currentQuestionIndex.value] = null;
+    } else {
+        selectedAnswer.value = value;
+        selectedAnswers.value[currentQuestionIndex.value] = id;
+        submitAnswer();
+    }
+
+    // Fungsi untuk menentukan warna tombol terpilih
+    const updateButtonColor = () => {
+        const buttons = document.querySelectorAll('.multiple-choice button');
+        buttons.forEach((button) => {
+            const answerId = button.getAttribute('data-answer-id');
+            if (answerId === id.toString()) {
+                button.classList.add('btn-selected');
+            } else {
+                button.classList.remove('btn-selected');
+            }
+        });
+    };
+
+    // Memanggil fungsi untuk memperbarui warna tombol terpilih
+    updateButtonColor();
 };
+
 
 const submitAnswer = () => {
     if (selectedAnswer.value !== null && selectedIdQuiz.value !== null) {
@@ -128,10 +155,6 @@ const submitAnswer = () => {
     }
     console.log(answeredQuestions.value);
     console.log(idQuiz.value);
-};
-
-const isAnswered = (index) => {
-    return answeredQuestions.value[currentQuestionIndex.value] === index;
 };
 
 const goToNextQuestion = () => {
@@ -179,7 +202,9 @@ onMounted(() => {
                 <div class="input-container">
                     <div class="multiple-choice">
                         <button v-for="(answer, index) in sortAnswers(quizData[currentQuestionIndex].answers)" :key="index"
-                            @click="selectAnswer(answer.value, answer.id)" :disabled="isAnswered(index)" class="btn-answer">
+                            @click="selectAnswer(answer.value, answer.id)"
+                            :class="{ 'btn-answer': true, 'btn-selected': answer.id === selectedAnswers[currentQuestionIndex] }"
+                            :data-answer-id="answer.id">
                             {{ answer.value + '. ' + answer.answer }}
                         </button>
                     </div>
@@ -369,6 +394,11 @@ onMounted(() => {
 }
 
 .multiple-choice button:focus {
+    background-color: #6A2C70;
+    color: #FFFFFF;
+}
+
+.multiple-choice button.btn-selected {
     background-color: #6A2C70;
     color: #FFFFFF;
 }
