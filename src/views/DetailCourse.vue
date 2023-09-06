@@ -4,16 +4,20 @@
         <!-- Tampilan data kursus -->
         <div class="preview">
             <img :src="courseData.thumbnail" alt="">
-            <h3>Rp {{ formattedHarga(courseData.price) }}</h3>
+            <h3 v-if="courseData.price > 0">Rp{{ formattedHarga(courseData.price) }}</h3>
+            <h3 v-else> {{courseData.price}} </h3>
             <p> {{ courseData.title_course }} </p>
             <div class="button">
-                <button class="pesan" @click="addToCart">Masukkan keranjang</button>
+                <button class="pesan" @click="addToCart" v-if="!courseData.in_cart">Masukkan ke Keranjang</button>
+                <button class="pesan" @click="showCartAlert" v-else>Sudah di Keranjang</button>
                 <button class="keranjang" @click="addToWishlist">
                     <img :src="wishlistButtonImage" alt="">
                 </button>
             </div>
             <div class="beli">
-                <button class="pesan" @click="checkout(courseData.id)">Beli Sekarang</button>
+                <button class="pesan" @click="checkout(courseData.id)" v-if="!courseData.is_purchased">Beli
+                    Sekarang</button>
+                <button class="pesan" @click="showPurchasedAlert" v-else>Sudah dibeli</button>
             </div>
             <p class="item" v-for="item in courseData.contents" :key="item.id">{{ item.description }}</p>
         </div>
@@ -92,6 +96,22 @@ const router = useRouter();
 const route = useRoute();
 const wishlistData = ref([]);
 
+
+const showCartAlert = () => {
+    Swal.fire({
+        icon: 'info',
+        title: 'Info',
+        text: 'Kursus ini sudah ada di keranjang.',
+    });
+};
+
+const showPurchasedAlert = () => {
+    Swal.fire({
+        icon: 'info',
+        title: 'Info',
+        text: 'Kursus ini sudah pernah dibeli.',
+    });
+};
 
 const isCourseInWishlist = (courseId) => {
     return wishlistData.value.some(item => item.course.id === courseId);
@@ -173,16 +193,28 @@ const addToCart = async () => {
             return;
         }
 
+        // Jika kursus sudah dibeli, tampilkan pesan Swal dan jangan lanjutkan
+        if (courseData.value.is_purchased) {
+            Swal.fire({
+                icon: 'info',
+                title: 'Info',
+                text: 'Kursus ini sudah pernah dibeli.',
+            });
+            return;
+        }
+
         const courseId = courseData.value.id;
 
         // Cek apakah kursus sudah ada di keranjang
         if (courseData.value.in_cart) {
+            // Jika sudah ada di keranjang, tampilkan pesan Swal yang sesuai
             Swal.fire({
                 icon: 'info',
                 title: 'Info',
                 text: 'Kursus ini sudah ada di keranjang.',
             });
         } else {
+            // Jika belum ada di keranjang, tambahkan ke keranjang
             const response = await axios.post(
                 'https://admin.unisains.com/api/v1/course/cart/store',
                 {
@@ -226,6 +258,16 @@ const addToWishlist = async () => {
         const token = localStorage.getItem('token');
         if (!token) {
             alert('Anda harus login terlebih dahulu untuk menambahkan ke wishlist.');
+            return;
+        }
+
+        // Jika kursus sudah dibeli, tampilkan pesan Swal dan jangan lanjutkan
+        if (courseData.value.is_purchased) {
+            Swal.fire({
+                icon: 'info',
+                title: 'Info',
+                text: 'Kursus ini sudah pernah dibeli.',
+            });
             return;
         }
 
