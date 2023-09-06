@@ -99,7 +99,7 @@ export default {
             this.transaction = null;
         }
     },
-    mounted() { 
+    mounted() {
         const script = document.createElement("script");
         script.src = "https://app.sandbox.midtrans.com/snap/snap.js";
         script.setAttribute("data-client-key", "SB-Mid-client-bEgJRNJrEQtjBn4p");
@@ -135,37 +135,66 @@ export default {
         },
         async payWithMidtrans() {
             try {
-                const snapToken = localStorage.getItem('snapToken');
                 const self = this;
-                snap.pay(snapToken, {
-                    onSuccess: function (result) {
-                        // Payment successful, handle success logic here
+
+                // Jika harga kursus adalah "free", maka langsung munculkan popup sukses
+                if (this.transaction.total_price === 'free') {
+                    // Ubah status "is_purchased" menjadi true (simulasi pembelian berhasil)
+                    this.transaction.is_purchased = true;
+
+                    // Handle pesan sukses
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Pembelian Berhasil!',
+                        text: 'Terima Kasih sudah membeli kursus kami, Selamat belajar!',
+                    });
+
+                    // Redirect atau tampilkan pesan sukses sesuai kebutuhan
+                    self.$router.push('/payment-success');
+                } else {
+                    // Jika harga kursus tidak "free," lakukan pembayaran sesuai biasanya
+                    const snapToken = localStorage.getItem('snapToken');
+                    if (!snapToken) {
+                        // Jika snapToken tidak tersedia, maka munculkan pesan kesalahan
                         Swal.fire({
-                            icon: 'success',
-                            title: 'Pembayaran Berhasil!',
-                            text: 'Terima Kasih sudah membeli kursus kami, Selamat belajar!',
-                        });
-                        //clear data local storage
-                        localStorage.removeItem('idTrx');
-                        localStorage.removeItem('pembayaran');
-                        // Redirect or show success message as needed
-                        self.$router.push('/payment-success');
-                    },
-                    onError: function (result) {
-                        // Payment failed, handle error logic here
-                        Swal.fire({
-                            icon: 'Error',
+                            icon: 'error',
                             title: 'Terjadi Kesalahan!',
-                            text: 'Pembayaran Gagal!',
+                            text: 'Snap Token tidak tersedia. Silakan coba lagi nanti.',
+                        });
+                    } else {
+                        snap.pay(snapToken, {
+                            onSuccess: function (result) {
+                                // Handle pembayaran sukses di sini
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Pembayaran Berhasil!',
+                                    text: 'Terima Kasih sudah membeli kursus kami, Selamat belajar!',
+                                });
+
+                                //clear data local storage
+                                localStorage.removeItem('idTrx');
+                                localStorage.removeItem('pembayaran');
+
+                                // Redirect atau tampilkan pesan sukses sesuai kebutuhan
+                                self.$router.push('/payment-success');
+                            },
+                            onError: function (result) {
+                                // Handle pembayaran gagal di sini
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Terjadi Kesalahan!',
+                                    text: 'Pembayaran Gagal!',
+                                });
+                            }
                         });
                     }
-                });
+                }
             } catch (error) {
-                // Handle any error that occurs during the payment process
+                // Handle kesalahan yang terjadi selama proses pembayaran
                 alert('Error Payment');
             }
-        }
-    }
+        },
+    },
 }
 </script>
 
