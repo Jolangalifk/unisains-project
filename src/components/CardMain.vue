@@ -4,14 +4,16 @@
             <div v-if="isLoggedIn" class="card" @click="goToDetailCourse(kursus.id)">
                 <img :src="kursus.thumbnail" alt="">
                 <h4>{{ kursus.title_course }}</h4>
-                <h3>Rp {{ formattedHarga(kursus.price) }}</h3>
+                <h3 v-if="kursus.price > 0">Rp{{ formattedHarga(kursus.price) }}</h3>
+                <h3 v-else> {{kursus.price}} </h3>
                 <p>{{ kursus.category.name_category }}</p>
             </div>
             <div v-else class="card" @click="handlePopup(kursus.id)">
                 <img :src="kursus.thumbnail" alt="">
                 <h4>{{ kursus.title_course }}</h4>
                 <p>{{ kursus.category.name_category }}</p>
-                <h3>Rp {{ formattedHarga(kursus.price) }}</h3>
+                <h3 v-if="kursus.price > 0">Rp{{ formattedHarga(kursus.price) }}</h3>
+                <h3 v-else> {{kursus.price}} </h3>
             </div>
         </div>
         <!-- Pop up preview -->
