@@ -16,7 +16,7 @@
                     </div>
                 </div>
                 <div class="list">
-                    <History />
+                    <History/>
                 </div>
             </div>
         </div>
@@ -89,5 +89,19 @@ import History from '@/components/History.vue'
     margin-top: 20px;
     margin-bottom: 50px;
     gap: 20px;
+}
+
+.list-else {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100px; 
+    background-color: white; 
+    border: 1px solid #ccc; 
+    margin-top: 50px;
+    border-radius: 10px; 
+    font-size: 18px; 
+    font-weight: 600;
+    color: black; 
 }
 </style>
