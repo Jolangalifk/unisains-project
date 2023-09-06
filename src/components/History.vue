@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="listHistory.length > 0">
         <div v-for="(item, index) in listHistory" :key="index" class="list-history">
             <div class="list">
                 <div class="kursus">
@@ -24,7 +24,10 @@
                         Ubah Ulasan
                     </button>
                 </div>
-                <div class="button-detail">
+                <div v-if="!item.course.is_purchased" class="button-detail-pending">
+                    <button @click="goToDetail(item.id)">Detail</button>
+                </div>
+                <div v-else-if="item.course.is_purchased" class="button-detail">
                     <button @click="goToDetail(item.id)">Detail</button>
                 </div>
             </div>
@@ -48,7 +51,7 @@
                     </div>
                     <br>
                     <textarea id="w3review" name="w3review" rows="10" cols="50" v-model="comment"
-                        placeholder="berikan ulsanmu disini!"></textarea>
+                        placeholder="berikan ulasanmu disini!"></textarea>
                     <br>
                     <!-- get hide course id with model course_Id -->
                     <input type="hidden" v-model="course_Id.value">
@@ -63,7 +66,7 @@
             <div class="popup-content">
                 <form @submit.prevent="submitFormUpdate">
                     <br>
-                    <p>Silahkan beri ulasan untuk kursus ini 1232</p>
+                    <p>Silahkan ubah ulasan untuk kursus ini </p>
                     <div class="star-rating">
                         <input class="radio-input" type="radio" id="star5" name="star-input" value="5" v-model="rateText" />
                         <label class="radio-label" for="star5" title="5 stars">5 stars</label>
@@ -78,7 +81,7 @@
                     </div>
                     <br>
                     <textarea id="w3review" name="w3review" rows="10" cols="50" v-model="comment"
-                        placeholder="berikan ulsanmu disini!"></textarea>
+                        placeholder="berikan ulasanmu disini!"></textarea>
                     <br>
                     <!-- get hide course id with model course_Id -->
                     <input type="hidden" v-model="comment_Id.value">
@@ -89,6 +92,9 @@
                 </form>
             </div>
         </div>
+    </div>
+    <div v-else class="list-else">
+        <p>Belum ada transaksi untuk saat ini</p>
     </div>
 </template>
 
@@ -168,7 +174,7 @@ const submitForm = async () => {
             Swal.fire({
                 icon: 'success',
                 title: 'Berhasil',
-                text: 'Data berhasil dikirim!',
+                text: 'Ulasan berhasil dikirim!, silahkan tunggu konfirmasi dari admin.',
             });
             console.log("Data submitted successfully!");
             closePopup();
@@ -213,7 +219,7 @@ const submitFormUpdate = async () => {
             Swal.fire({
                 icon: 'success',
                 title: 'Berhasil',
-                text: 'Data berhasil diperbarui!',
+                text: 'Ulasan berhasil diperbarui!',
             });
             console.log("Data updated successfully!");
 
@@ -274,13 +280,19 @@ const fetchReviews = async () => {
             }
         });
 
-        listHistory.value = response.data.data.transactions;
-        console.info(listHistory.value);
+        if (response.status === 200) {
+            listHistory.value = response.data.data.transactions;
+            console.info(listHistory.value);
+        } else {
+            console.error('Failed to fetch data: Unexpected status code', response.status);
+            // Handle the error here, e.g., by showing an error message to the user.
+        }
     } catch (error) {
-        console.error(error);
-        alert('Terjadi kesalahan saat mengambil data transaksi.');
+        console.error('An error occurred while fetching data:', error);
+        // Handle the error here, e.g., by showing an error message to the user.
     }
 };
+
 
 onMounted(() => {
     fetchReviews(); // Panggil fungsi fetchReviews saat komponen di-mount
@@ -365,6 +377,35 @@ function formattedHarga(harga) {
 }
 
 .list-history .list .button-detail button:hover {
+    background-color: white;
+    color: #B83B5E;
+    transition: 0.5s;
+    border: 1px solid #B83B5E;
+}
+
+.list-history .list .button-detail-pending {
+    width: auto;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.list-history .list .button-detail-pending button {
+    width: 330px;
+    height: 50px;
+    background-color: #B83B5E;
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: poppins;
+}
+
+.list-history .list .button-detail-pending button:hover {
     background-color: white;
     color: #B83B5E;
     transition: 0.5s;

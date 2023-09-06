@@ -54,52 +54,15 @@ import { useRoute } from 'vue-router';
 const selectedCourse = ref(null);
 const transaction = ref(null);
 
-const orderId = useRoute();
-// const router = useRouter(); // Tambahkan router dari vue-router
-
-// Fungsi untuk mengambil data kursus yang dipilih dari localStorage berdasarkan id kursus
-const getSelectedCourse = () => {
-    const courseData = localStorage.getItem(`selectedCourse_${orderId}`);
-    selectedCourse.value = courseData ? JSON.parse(courseData) : null;
-};
-
-// Fungsi untuk mengambil token dari local storage
-const getUserToken = () => {
-    const token = localStorage.getItem('token');
-    return token ? JSON.parse(token) : '';
-};
-
 export default {
     data() {
         return {
             transaction,
-            //  payWithMidtrans,
             snapToken: null,
         };
     },
     async created() {
         this.getData();
-        try {
-            const userToken = localStorage.getItem('token');
-            const idTrx = useRoute().params.id;
-
-            // Mengambil data kursus dari localStorage berdasarkan orderId
-            const courseData = localStorage.getItem(`selectedCourse_${idTrx}`);
-            this.selectedCourse = courseData ? JSON.parse(courseData) : null;
-
-            // Mengambil data transaksi dari API berdasarkan orderId
-            const response = await axios.get(`https://admin.unisains.com/api/v1/transaction/show/${idTrx}`, {
-                headers: {
-                    Authorization: `Bearer ${userToken}`,
-                },
-            });
-            this.transaction = response.data.data.transaction;
-            console.log(this.transaction);
-            console.log(courseId);
-        } catch (error) {
-            console.error(error);
-            this.transaction = null;
-        }
     },
     mounted() {
         const script = document.createElement("script");
@@ -113,26 +76,20 @@ export default {
         },
         async getData() {
             try {
-                const getUserToken = localStorage.getItem('token');
-                const idTrx = useRoute().params.id;
-                const response = await axios.post(
-                    "https://admin.unisains.com/api/v1/transaction/checkout",
-                    {
-                        transaction_id: idTrx, // Menggunakan transaction_id sebagai data body permintaan
-                    },
-                    {
-                        headers: {
-                            Authorization: `Bearer ${getUserToken}`, // Memanggil getUserToken() untuk mendapatkan token
-                        },
-                    }
-                );
+                const userToken = localStorage.getItem('token');
+                const route = useRoute();
+                const transactionId = route.params.id;
 
-                // Mengakses data token dari response dan menampilkannya menggunakan console.log
-                console.log(response.data.snap_token);
-                localStorage.setItem('snapToken', response.data.snap_token);
+                const response = await axios.get(`https://admin.unisains.com/api/v1/transaction/show/${transactionId}`, {
+                    headers: {
+                        Authorization: `Bearer ${userToken}`,
+                    },
+                });
+
+                this.transaction = response.data.data.transaction;
             } catch (error) {
                 console.error(error);
-                // Handle error jika terjadi kesalahan saat mengambil data transaksi
+                this.transaction = null;
             }
         },
         async payWithMidtrans() {
@@ -161,37 +118,9 @@ export default {
             }
         }
     },
-    setup() {
-        const router = useRoute();
-        const transaction = ref(null);
-        const transactionId = router.params.id;
-
-        onMounted(async () => {
-            try {
-                const userToken = localStorage.getItem('token');
-
-                const response = await axios.get(`https://admin.unisains.com/api/v1/transaction/show/${transactionId}`, {
-                    headers: {
-                        Authorization: `Bearer ${userToken}`,
-                    },
-                });
-
-                transaction.value = response.data.data.transaction;
-            } catch (error) {
-                console.error(error);
-                transaction.value = null;
-            }
-        });
-
-        // You can add other functions or variables here as needed
-
-        return {
-            transaction,
-            // Add other variables/functions you want to expose to the template
-        };
-    },
 };
 </script>
+
 
 <style scoped>
 .course-purchase {

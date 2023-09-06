@@ -19,6 +19,10 @@ import Navbar from '../components/Navbar.vue';
 import Footer from '../components/Footer.vue';
 
 const snapToken = localStorage.getItem('snapToken');
+
+window.onload = () => {
+    window.scrollTo(0, 0);
+};
 </script>
 
 <style scoped>
@@ -32,7 +36,7 @@ const snapToken = localStorage.getItem('snapToken');
 }
 
 .receipt h1 {
-    width: 65%;
+    width: 70%;
     height: 100%;
     font-size: 42px;
     font-weight: bold;
@@ -41,7 +45,7 @@ const snapToken = localStorage.getItem('snapToken');
 }
 
 .receipt-detail {
-    width: 65%;
+    width: 70%;
     height: auto;
     display: flex;
     flex-direction: column;
