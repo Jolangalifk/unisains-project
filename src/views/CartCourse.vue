@@ -17,6 +17,9 @@
                     </div>
                     <button @click="deleteFromCart(kursus.id)">Hapus</button>
                 </div>
+                <div class="not-found" v-if="cartData.length === 0 && !isLoading">
+                    <p class="empty-cart">Keranjang kosong. Tambahkan kursus ke keranjang Anda!</p>
+                </div>
             </div>
             <div v-if="isLoading" class="lds-facebook">
                 <div></div>
@@ -259,6 +262,7 @@ main {
     height: fit-content;
     display: flex;
     flex-direction: row;
+    margin-bottom: 100px;
 }
 
 .cart-course {
@@ -268,6 +272,27 @@ main {
     display: flex;
     flex-wrap: wrap;
     flex-direction: column;
+}
+
+.not-found {
+    width: 100%;
+    height: 325px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    border: 1px solid #c1c1c1;
+    border-radius: 10px;
+    margin-top: 20px;
+}
+
+.not-found .empty-cart {
+    text-align: center;
+    padding: 20px;
+    color: black;
+    font-size: 18px;
+    font-weight: 600;
 }
 
 .lds-facebook {
