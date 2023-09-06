@@ -23,12 +23,16 @@
                 <div class="text">
                     <p>{{ transaction.date }}</p>
                     <p>{{ transaction.expired_date }}</p>
-                    <p>Rp {{ formattedHarga(transaction.total_price) }}</p>
+                    <h3 v-if="transaction.total_price > 0">Rp{{ formattedHarga(transaction.total_price) }}</h3>
+                    <h3 v-else> {{ transaction.total_price }} </h3>
                 </div>
             </div>
             <div class="button">
-                <router-link to="/history-course"><button class="bayar-nanti">Bayar Nanti</button></router-link>
-                <button @click="payWithMidtrans">Lanjutkan</button>
+                <router-link to="/history-course">
+                    <button class="bayar-nanti" v-if="transaction.course.price !== 'free'">Bayar Nanti</button>
+                    <button class="bayar-nanti-done" v-else>Tutup</button>
+                </router-link>
+                <button @click="payWithMidtrans" v-if="transaction.course.price !== 'free'">Lanjutkan</button>
             </div>
         </div>
         <div v-else>
@@ -99,6 +103,48 @@ export default {
             this.transaction = null;
         }
     },
+    created() {
+        this.getData();
+        try {
+            const userToken = localStorage.getItem('token');
+            const courseId = useRoute().params.id;
+
+            // Mengambil data kursus dari localStorage berdasarkan orderId
+            const courseData = localStorage.getItem(`selectedCourse_${courseId}`);
+            this.selectedCourse = courseData ? JSON.parse(courseData) : null;
+
+            // Mengambil data transaksi dari API berdasarkan orderId
+            axios.get(`https://admin.unisains.com/api/v1/transaction/show/${idTrx}`, {
+                headers: {
+                    Authorization: `Bearer ${userToken}`,
+                },
+            }).then(response => {
+                const course = response.data.data.transaction.course;
+                // Periksa apakah harga kursus adalah "free"
+                if (course.price === "free") {
+                    // Kursus gratis, tandai sebagai is_purchased true dan tampilkan popup berhasil
+                    this.transaction = {
+                        ...response.data.data.transaction,
+                        is_purchased: true,
+                    };
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Kursus Gratis Berhasil Dibeli!',
+                        text: 'Selamat belajar!',
+                    });
+                } else {
+                    // Kursus berbayar, lanjutkan dengan mengambil snapToken
+                    this.transaction = response.data.data.transaction;
+                }
+            }).catch(error => {
+                console.error(error);
+                this.transaction = null;
+            });
+        } catch (error) {
+            console.error(error);
+            this.transaction = null;
+        }
+    },
     mounted() {
         const script = document.createElement("script");
         script.src = "https://app.sandbox.midtrans.com/snap/snap.js";
@@ -135,66 +181,37 @@ export default {
         },
         async payWithMidtrans() {
             try {
+                const snapToken = localStorage.getItem('snapToken');
                 const self = this;
-
-                // Jika harga kursus adalah "free", maka langsung munculkan popup sukses
-                if (this.transaction.total_price === 'free') {
-                    // Ubah status "is_purchased" menjadi true (simulasi pembelian berhasil)
-                    this.transaction.is_purchased = true;
-
-                    // Handle pesan sukses
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Pembelian Berhasil!',
-                        text: 'Terima Kasih sudah membeli kursus kami, Selamat belajar!',
-                    });
-
-                    // Redirect atau tampilkan pesan sukses sesuai kebutuhan
-                    self.$router.push('/payment-success');
-                } else {
-                    // Jika harga kursus tidak "free," lakukan pembayaran sesuai biasanya
-                    const snapToken = localStorage.getItem('snapToken');
-                    if (!snapToken) {
-                        // Jika snapToken tidak tersedia, maka munculkan pesan kesalahan
+                snap.pay(snapToken, {
+                    onSuccess: function (result) {
+                        // Payment successful, handle success logic here
                         Swal.fire({
-                            icon: 'error',
-                            title: 'Terjadi Kesalahan!',
-                            text: 'Snap Token tidak tersedia. Silakan coba lagi nanti.',
+                            icon: 'success',
+                            title: 'Pembayaran Berhasil!',
+                            text: 'Terima Kasih sudah membeli kursus kami, Selamat belajar!',
                         });
-                    } else {
-                        snap.pay(snapToken, {
-                            onSuccess: function (result) {
-                                // Handle pembayaran sukses di sini
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'Pembayaran Berhasil!',
-                                    text: 'Terima Kasih sudah membeli kursus kami, Selamat belajar!',
-                                });
-
-                                //clear data local storage
-                                localStorage.removeItem('idTrx');
-                                localStorage.removeItem('pembayaran');
-
-                                // Redirect atau tampilkan pesan sukses sesuai kebutuhan
-                                self.$router.push('/payment-success');
-                            },
-                            onError: function (result) {
-                                // Handle pembayaran gagal di sini
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'Terjadi Kesalahan!',
-                                    text: 'Pembayaran Gagal!',
-                                });
-                            }
+                        //clear data local storage
+                        localStorage.removeItem('idTrx');
+                        localStorage.removeItem('pembayaran');
+                        // Redirect or show success message as needed
+                        self.$router.push('/payment-success');
+                    },
+                    onError: function (result) {
+                        // Payment failed, handle error logic here
+                        Swal.fire({
+                            icon: 'Error',
+                            title: 'Terjadi Kesalahan!',
+                            text: 'Pembayaran Gagal!',
                         });
                     }
-                }
+                });
             } catch (error) {
-                // Handle kesalahan yang terjadi selama proses pembayaran
+                // Handle any error that occurs during the payment process
                 alert('Error Payment');
             }
-        },
-    },
+        }
+    }
 }
 </script>
 
@@ -239,6 +256,10 @@ export default {
     justify-content: center;
     font-weight: 600;
     font-size: 20px;
+}
+
+.course-purchase .menu .text-kursus p {
+    font-weight: 600;
 }
 
 .course-purchase .menu .text-menu {
@@ -313,7 +334,7 @@ export default {
 }
 
 .course-purchase .button button {
-    width: 570px;
+    width: 650px;
     height: 70px;
     border: 1px solid #6A2C70;
     border-radius: 10px;
@@ -328,6 +349,19 @@ export default {
 .course-purchase .button .bayar-nanti {
     background-color: white;
     color: #6A2C70;
+}
+
+.course-purchase .button .bayar-nanti-done {
+    width: 1250px;
+    height: 70px;
+    border: 1px solid #6A2C70;
+    border-radius: 10px;
+    background-color: white;
+    color: #6A2C70;
+    font-size: 20px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: poppins;
 }
 
 .lds-facebook {
