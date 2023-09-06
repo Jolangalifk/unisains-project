@@ -3,7 +3,10 @@
         <Navbar />
         <h1 class="wishlist-title">Wishlist</h1>
         <div class="wrapper">
-            <div class="wishlist-course">
+            <div class="wishlist-course">   
+                <div class="not-found" v-if="wishlistData.length === 0 && !isLoading">
+                    <p class="empty-cart">Wishlist kosong. Tambahkan kursus ke wishlist Anda!</p>
+                </div>
                 <div v-for="(kursus, index) in wishlistData" :key="index" class="wishlist">
                     <div class="clickable-area" @click="goToDetailCourse(kursus.course.id)">
                         <img :src="kursus.course.thumbnail" alt="Course Thumbnail" />
@@ -53,7 +56,7 @@ const fetchWishlistData = async () => {
     try {
         const getUserInfo = localStorage.getItem('user-info');
         const user = JSON.parse(getUserInfo);
-        const token = user.token;  
+        const token = user.token;
 
         const response = await axios.get(
             'https://admin.unisains.com/api/v1/course/wishlist/all',
@@ -238,7 +241,7 @@ main {
     border-radius: 10px;
     margin-left: 50px;
     cursor: pointer;
-    display: flex; 
+    display: flex;
     align-items: center;
     justify-content: center;
 }
@@ -262,5 +265,26 @@ main {
     flex-direction: row;
     align-items: center;
     cursor: pointer;
+}
+
+.not-found {
+    width: 100%;
+    height: 325px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    border: 1px solid #c1c1c1;
+    border-radius: 10px;
+    margin-top: 20px;
+}
+
+.not-found .empty-cart {
+    text-align: center;
+    padding: 20px;
+    color: black;
+    font-size: 18px;
+    font-weight: 600;
 }
 </style>
