@@ -3,11 +3,17 @@
     <Navbar />
     <h2>Hasil Pencarian</h2>
     <div class="scroll-course">
+      <!-- Tambahkan kondisi untuk menampilkan pesan jika kursus tidak ditemukan -->
+      <div class="not-found" v-if="searchResults.length === 0">
+        <p>Kursus tidak ditemukan.</p>
+      </div>
+      <!-- Iterasi melalui hasil pencarian jika ada -->
       <div class="course" v-for="course in searchResults" :key="course.id">
         <div class="card" @click="goToDetailCourse(course.id)">
           <img :src="course.thumbnail" alt="">
           <h4>{{ course.title_course }}</h4>
-          <h3>Rp {{ formattedHarga(course.price) }}</h3>
+          <h3 v-if="course.price > 0">Rp{{ formattedHarga(course.price) }}</h3>
+          <h3 v-else> {{ course.price }} </h3>
           <p>{{ course.category.name_category }}</p>
         </div>
       </div>
@@ -29,20 +35,20 @@ const searchResults = ref([]);
 
 const goToDetailCourse = (id) => {
   if (isLoggedIn.value) {
-      router.push(`/detail-course/${id}`);
-      scrollToTop();
+    router.push(`/detail-course/${id}`);
+    scrollToTop();
   } else {
-      router.push('/login');
+    router.push('/login');
   }
 };
 
 onMounted(async () => {
-    isLoggedIn.value = checkUserLoginStatus();
+  isLoggedIn.value = checkUserLoginStatus();
 });
 
 const checkUserLoginStatus = () => {
-    const token = localStorage.getItem('token');
-    return token ? true : false;
+  const token = localStorage.getItem('token');
+  return token ? true : false;
 };
 
 const scrollToTop = () => {
@@ -100,6 +106,24 @@ onMounted(() => {
   height: auto;
   margin-bottom: 100px;
   overflow: hidden;
+}
+
+.search-results .scroll-course::-webkit-scrollbar {
+  display: none;
+}
+
+.search-results .scroll-course .not-found {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 50px;
+}
+
+.search-results .scroll-course .not-found p {
+  font-size: 20px;
+  color: black;
 }
 
 .card {
