@@ -99,7 +99,11 @@ export default {
                 snap.pay(snapToken, {
                     onSuccess: function (result) {
                         // Payment successful, handle success logic here
-                        alert('Payment successful! Transaction ID: ' + result.transaction_id);
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Pembayaran Berhasil!',
+                            text: 'Terima Kasih sudah membeli kursus kami, Selamat belajar!',
+                        });
                         //clear data local storage
                         localStorage.removeItem('idTrx');
                         localStorage.removeItem('pembayaran');

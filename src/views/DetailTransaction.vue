@@ -17,12 +17,21 @@
 import HistoryDetail from '../components/HistoryDetail.vue';
 import Navbar from '../components/Navbar.vue';
 import Footer from '../components/Footer.vue';
+import { onMounted } from 'vue';
 
 const snapToken = localStorage.getItem('snapToken');
 
-window.onload = () => {
+const scrollToTopIfNeeded = () => {
+  const queryParams = new URLSearchParams(window.location.search);
+  if (queryParams.has('scrollToTop')) {
+    // Pindahkan tampilan ke posisi atas halaman
     window.scrollTo(0, 0);
+  }
 };
+
+onMounted(() => {
+    scrollToTopIfNeeded();
+});
 </script>
 
 <style scoped>
