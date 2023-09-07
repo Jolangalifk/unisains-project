@@ -117,7 +117,9 @@ const goToQuizScore = () => {
     }
 };
 
-const selectAnswer = (value, id) => {
+const selectAnswer = (value, id, question_id) => {
+    selectedIdQuiz.value = question_id;
+    selectedAnswerId.value = value;
     if (selectedAnswers.value[currentQuestionIndex.value] === id) {
         // Jika `selectedAnswers` pada indeks `currentQuestionIndex` sama dengan `id`, hapus pemilihan
         selectedAnswer.value = null;
@@ -202,7 +204,7 @@ onMounted(() => {
                 <div class="input-container">
                     <div class="multiple-choice">
                         <button v-for="(answer, index) in sortAnswers(quizData[currentQuestionIndex].answers)" :key="index"
-                            @click="selectAnswer(answer.value, answer.id)"
+                            @click="selectAnswer(answer.value, answer.id, quizData[currentQuestionIndex].id)"
                             :class="{ 'btn-answer': true, 'btn-selected': answer.id === selectedAnswers[currentQuestionIndex] }"
                             :data-answer-id="answer.id">
                             {{ answer.value + '. ' + answer.answer }}
