@@ -3,15 +3,17 @@
         <div v-for="(kursus, index) in courseData" :key="index">
             <div v-if="isLoggedIn" class="card" @click="goToDetailCourse(kursus.id)">
                 <img :src="kursus.thumbnail" alt="">
-                <h4>{{ kursus.title_course }}</h4>     
-                <h3>Rp {{ formattedHarga(kursus.price) }}</h3>
+                <h4>{{ kursus.title_course }}</h4>
+                <h3 v-if="kursus.price > 0">Rp{{ formattedHarga(kursus.price) }}</h3>
+                <h3 v-else> {{ kursus.price }} </h3>
                 <p>{{ kursus.category.name_category }}</p>
             </div>
             <div v-else class="card" @click="handlePopup(kursus.id)">
                 <img :src="kursus.thumbnail" alt="">
                 <h4>{{ kursus.title_course }}</h4>
                 <p>{{ kursus.category.name_category }}</p>
-                <h3>Rp {{ formattedHarga(kursus.price) }}</h3>
+                <h3 v-if="kursus.price > 0">Rp{{ formattedHarga(kursus.price) }}</h3>
+                <h3 v-else> {{ kursus.price }} </h3>
             </div>
         </div>
         <!-- Pop up preview -->
@@ -93,32 +95,32 @@ const fetchData = async () => {
 };
 
 const fetchPreviewData = async (id) => {
-  try {
-    const response = await axios.get(
-      `https://admin.unisains.com/api/v1/course/preview/${id}`
-    );
-    previewData.value = response.data.data.course; // Perbarui baris ini
-    console.log(previewData.value);
-  } catch (error) {
-    console.error(error);
-  }
+    try {
+        const response = await axios.get(
+            `https://admin.unisains.com/api/v1/course/preview/${id}`
+        );
+        previewData.value = response.data.data.course; // Perbarui baris ini
+        console.log(previewData.value);
+    } catch (error) {
+        console.error(error);
+    }
 };
 
 const formattedHarga = (harga) => {
-  return harga.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    return harga.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 };
 
 </script>
   
   
 <style  scoped>
-
 .scroll-course {
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
 }
+
 .card {
     width: 350px;
     height: 360px;
