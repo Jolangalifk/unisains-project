@@ -16,9 +16,14 @@
                     <p>{{ item.code_transaction }}</p>
                 </div>
                 <div class="button-detail">
-                    <!-- Tambahkan kondisi untuk menampilkan tombol "Nilai" -->
                     <button v-if="item.course.is_purchased && !item.is_rated" class="nilai"
-                        @click="openPopup(item.course.id, item)">Ulasan</button>
+                        @click="openPopup(item.course.id, item)">
+                        Ulasan
+                    </button>
+                    <button v-else-if="item.course.is_purchased && item.is_rated && item.rate.status === 'pending'"
+                        class="nilai" @click="handlePendingClick(item.rate.id, item)">
+                        Menunggu
+                    </button>
                     <button v-else-if="item.course.is_purchased && item.is_rated" class="nilai"
                         @click="openPopupUpdate(item.rate.id, item)">
                         Ubah Ulasan
@@ -114,6 +119,46 @@ const comment_Id = ref(null);
 
 const isPopupVisible = ref(false);
 const isPopupVisibleUpdate = ref(false);
+
+const item = ref({
+  course: {
+    is_purchased: true, // Ganti dengan status pembelian pengguna
+  },
+  is_rated: true, // Ganti dengan status ulasan pengguna
+  rate: {
+    id: 1, // Ganti dengan id ulasan pengguna
+    status: 'pending', // Ganti dengan status ulasan pengguna
+  },
+});
+
+const handlePendingClick = (rateId, item) => {
+  // Simpan status ulasan ke database dengan status 'pending' di sini
+  // Setelah berhasil, tampilkan pemberitahuan
+  submitPendingReview(rateId, item);
+};
+
+const submitPendingReview = async (rateId, item) => {
+  try {
+    // Simpan ulasan dengan status 'pending' ke database di sini
+    // Anda dapat menggunakan axios atau library lain untuk mengirim permintaan HTTP
+    // Setelah berhasil menyimpan ulasan, tampilkan pemberitahuan
+    await saveReviewWithPendingStatus(rateId);
+
+    // Tampilkan pemberitahuan SweetAlert2
+    Swal.fire({
+      icon: 'info',
+      title: 'Ulasan Anda terkirim!',
+      text: 'Harap tunggu konfirmasi dari admin.',
+      confirmButtonText: 'Ok',
+    });
+  } catch (error) {
+    console.error('Gagal menyimpan ulasan:', error);
+  }
+};
+
+const saveReviewWithPendingStatus = async (rateId) => {
+  // Logika untuk menyimpan ulasan dengan status 'pending' ke database
+};
 
 const openPopup = (courseId, item) => {
     course_Id.value = courseId;
