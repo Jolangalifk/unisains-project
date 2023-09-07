@@ -133,6 +133,7 @@ export default {
                 alert('Error Payment');
             }
         }
+
     },
 };
 </script>
