@@ -120,17 +120,6 @@ const comment_Id = ref(null);
 const isPopupVisible = ref(false);
 const isPopupVisibleUpdate = ref(false);
 
-const item = ref({
-  course: {
-    is_purchased: true, // Ganti dengan status pembelian pengguna
-  },
-  is_rated: true, // Ganti dengan status ulasan pengguna
-  rate: {
-    id: 1, // Ganti dengan id ulasan pengguna
-    status: 'pending', // Ganti dengan status ulasan pengguna
-  },
-});
-
 const handlePendingClick = (rateId, item) => {
   // Simpan status ulasan ke database dengan status 'pending' di sini
   // Setelah berhasil, tampilkan pemberitahuan
