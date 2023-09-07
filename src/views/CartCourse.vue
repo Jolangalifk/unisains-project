@@ -207,7 +207,12 @@ const checkout = async () => {
     const courseId = selectedCourseId.value;
     if (!courseId) {
         // Tampilkan pesan bahwa tidak ada kursus yang dipilih
-        // ...
+        Swal.fire({
+            icon: 'error',
+            title: 'Gagal',
+            text: 'Silakan pilih kursus terlebih dahulu untuk melanjutkan pembayaran.',
+        });
+        return; // Keluar dari fungsi checkout jika tidak ada kursus yang dipilih
     }
 
     const getUserInfo = localStorage.getItem('user-info');
