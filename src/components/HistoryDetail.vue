@@ -98,22 +98,34 @@ export default {
                 const self = this;
                 snap.pay(snapToken, {
                     onSuccess: function (result) {
-                        // Payment successful, handle success logic here
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Pembayaran Berhasil!',
-                            text: 'Terima Kasih sudah membeli kursus kami, Selamat belajar!',
-                        });
-                        //clear data local storage
-                        localStorage.removeItem('idTrx');
-                        localStorage.removeItem('pembayaran');
-                        // Redirect or show success message as needed
-                        self.$router.push('/payment-success');
+                        // Pastikan bahwa pembayaran berhasil
+                        if (result.transaction_status === 'capture') {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Pembayaran Berhasil!',
+                                text: 'Terima Kasih sudah membeli kursus kami, Selamat belajar!',
+                            });
+                            //clear data local storage
+                            localStorage.removeItem('idTrx');
+                            localStorage.removeItem('pembayaran');
+                            // Redirect or show success message as needed
+                            self.$router.push('/payment-success');
+                        } else {
+                            // Pembayaran tidak berhasil, tangani pesan kesalahan
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Terjadi Kesalahan!',
+                                text: 'Pembayaran Gagal!',
+                            });
+                        }
                     },
                     onError: function (result) {
-                        // Payment failed, handle error logic here
-                        alert('Payment failed. Status code: ' + result.status_code);
-                        // Redirect or show error message as needed
+                        // Handle error logic here
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Terjadi Kesalahan!',
+                            text: 'Pembayaran Gagal!',
+                        });
                     }
                 });
             } catch (error) {
