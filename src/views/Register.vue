@@ -17,7 +17,7 @@
                     </div>
                     <div class="form-group">
                         <label for="Username"></label>
-                        <img src="@/assets/icon/email-icon.svg" alt="">
+                        <img src="@/assets/icon/user-icon.svg" alt="">
                         <input type="text" placeholder="Masukkan Username" v-model="username">
                     </div>
                     <div class="form-group">
