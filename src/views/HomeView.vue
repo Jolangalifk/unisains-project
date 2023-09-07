@@ -23,8 +23,8 @@ import HcBiologi from '../components/HcBiologi.vue';
         <h3>Bergabung dengan kursus kami</h3>
         <p>Kursus dengan fitur menarik yang belum dimiliki kursus pada umumnya.</p>
         <button>
-          <router-link to="/register" class="custom-link">
-            <a>Daftar!</a>
+          <router-link to="/course" class="custom-link">
+            <a>Ayo!</a>
             <img src="@/assets/icon/arrow-right.svg" alt="">
           </router-link>
         </button>
@@ -256,13 +256,13 @@ import HcBiologi from '../components/HcBiologi.vue';
   font-family: poppins;
   font-size: 20px;
   font-weight: 600;
-  margin-left: 15px;
+  margin-left: 20px;
 }
 
 .informasi button img {
   width: 50px;
   height: 50px;
-  margin-left: 20px;
+  margin-left: 35px;
 }
 
 .informasi .img-wrapper {
