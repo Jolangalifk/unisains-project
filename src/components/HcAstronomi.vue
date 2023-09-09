@@ -145,6 +145,7 @@ const formattedHarga = (harga) => {
     font-weight: bold;
     margin-top: 20px;
     margin-left: 15px;
+    color: black;
 }
 
 .card .svg {
@@ -158,6 +159,7 @@ const formattedHarga = (harga) => {
     margin-top: 10px;
     margin-left: 15px;
     text-align: left;
+    color: black;
 }
 
 .card h3 {
@@ -166,6 +168,7 @@ const formattedHarga = (harga) => {
     margin-top: 20px;
     margin-left: 15px;
     margin-bottom: 10px;
+    color: black;
 }
 
 /* CSS for Pop up preview */
