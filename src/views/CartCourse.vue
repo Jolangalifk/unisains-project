@@ -260,6 +260,7 @@ main {
     display: flex;
     flex-direction: column;
     align-items: center;
+    background-color: white;
 }
 
 .wrapper {
@@ -399,7 +400,16 @@ main {
     height: auto;
     font-size: 20px;
     font-weight: bold;
+    color: black;
 }
+
+.card h3 {
+    width: auto;
+    height: auto;
+    font-size: 20px;
+    font-weight: bold;
+    color: black;
+}   
 
 .card span {
     font-size: 16px;
@@ -410,6 +420,7 @@ main {
 .card p {
     font-size: 14px;
     text-align: left;
+    color: black;
 }
 
 .card .clickable-area h3 {
