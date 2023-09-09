@@ -155,6 +155,7 @@ import HcBiologi from '../components/HcBiologi.vue';
   justify-content: center;
   align-items: center;
   background-image: url('@/assets/image/background-page.png');
+  background-color: white;
 }
 
 
@@ -177,6 +178,7 @@ import HcBiologi from '../components/HcBiologi.vue';
   padding: 8rem 2rem;
   position: relative;
   background-image: url('@/assets/image/background-page.png');
+  background-color: white;
 }
 
 .informasi .iklan {
@@ -555,6 +557,7 @@ import HcBiologi from '../components/HcBiologi.vue';
   display: flex;
   flex-direction: row;
   align-items: center;
+  background-color: white;
 }
 
 .practical .text {
