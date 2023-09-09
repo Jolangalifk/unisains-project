@@ -94,11 +94,20 @@ import Footer from '../components/Footer.vue'
 </template>
 
 <style scoped>
+main {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+}
+
 .about {
   width: 100%;
   height: 980px;
   display: flex;
   align-items: center;
+  background-color: white;
 }
 
 .about .text {
@@ -147,6 +156,7 @@ import Footer from '../components/Footer.vue'
   height: 1080px;
   align-items: center;
   justify-content: center;
+  background-color: white;
 }
 
 .unisains .text {
@@ -180,6 +190,7 @@ import Footer from '../components/Footer.vue'
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  background-color: white;
 }
 
 .wrapper .wrapper-box {
@@ -249,6 +260,7 @@ import Footer from '../components/Footer.vue'
   display: flex;
   align-items: center;
   justify-content: center;
+  background-color: white;
 }
 
 .person {
@@ -300,6 +312,7 @@ import Footer from '../components/Footer.vue'
   display: flex;
   align-items: center;
   justify-content: center;
+  background-color: white;
 }
 
 .help-center .wrapper {
@@ -331,6 +344,7 @@ import Footer from '../components/Footer.vue'
   width: 90%;
   font-size: 24px;
   margin-top: 30px;
+  color: black;
 }
 
 .help-center .text .email {
