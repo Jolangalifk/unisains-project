@@ -152,6 +152,7 @@ function formattedHarga(harga) {
     font-weight: bold;
     margin-top: 20px;
     margin-left: 15px;
+    color: black;
 }
 
 .card .svg {
@@ -165,6 +166,7 @@ function formattedHarga(harga) {
     margin-top: 10px;
     margin-left: 15px;
     text-align: left;
+    color: black;
 }
 
 .card h3 {
@@ -172,6 +174,7 @@ function formattedHarga(harga) {
     font-weight: bold;
     margin-top: 10px;
     margin-left: 15px;
+    color: black;
 }
 
 /* CSS for Pop up preview */

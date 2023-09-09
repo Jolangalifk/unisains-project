@@ -171,6 +171,7 @@ import Modal from '../components/Modal.vue'
     align-items: center;
     padding-top: 100px;
     padding-bottom: 100px;
+    background-color: white;
 }
 
 .course-category h3 {
@@ -270,6 +271,7 @@ import Modal from '../components/Modal.vue'
     flex-direction: row;
     align-items: center;
     padding-top: 100px;
+    background-color: white;
 }
 
 .astronomi .text {
@@ -357,6 +359,7 @@ import Modal from '../components/Modal.vue'
     flex-direction: row;
     align-items: center;
     padding-top: 100px;
+    background-color: white;
 }
 
 .biologi .text {
@@ -445,6 +448,7 @@ import Modal from '../components/Modal.vue'
     flex-direction: column;
     align-items: center;
     padding-top: 100px;
+    background-color: white;
 }
 
 .list-course h3 {
