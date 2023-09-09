@@ -341,6 +341,7 @@ function formattedHarga(harga) {
     height: 750px;
     display: flex;
     align-items: center;
+    background-color: white;
 }
 
 .preview {
@@ -553,6 +554,7 @@ function formattedHarga(harga) {
     display: flex;
     flex-direction: column;
     align-content: space-between;
+    background-color: white;
 }
 
 .course-modul {
