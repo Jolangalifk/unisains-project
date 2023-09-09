@@ -482,10 +482,12 @@ onMounted(async () => {
 }
 
 .profile-info {
+    color: #000;
     flex: 1;
 }
 
 .profile-info-account {
+    color: #000;
     flex: 1;
 }
 
