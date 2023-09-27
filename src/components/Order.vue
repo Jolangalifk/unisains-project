@@ -29,10 +29,10 @@
             </div>
             <div class="button">
                 <router-link to="/history-course">
-                    <button class="bayar-nanti" v-if="transaction.course.price !== 'gratis'">Bayar Nanti</button>
+                    <button class="bayar-nanti" v-if="transaction.course.price !== 'Gratis'">Bayar Nanti</button>
                     <button class="bayar-nanti-done" v-else>Tutup</button>
                 </router-link>
-                <button @click="payWithMidtrans" v-if="transaction.course.price !== 'gratis'">Lanjutkan</button>
+                <button @click="payWithMidtrans" v-if="transaction.course.price !== 'Gratis'">Lanjutkan</button>
             </div>
         </div>
         <div v-else>
@@ -121,7 +121,7 @@ export default {
             }).then(response => {
                 const course = response.data.data.transaction.course;
                 // Periksa apakah harga kursus adalah "free"
-                if (course.price === "gratis") {
+                if (course.price === "Gratis") {
                     // Kursus gratis, tandai sebagai is_purchased true dan tampilkan popup berhasil
                     this.transaction = {
                         ...response.data.data.transaction,
